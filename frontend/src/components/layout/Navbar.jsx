@@ -20,12 +20,17 @@ const Navbar = () => {
                     <button className="icon-btn" onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Menu">
                         <ion-icon name={isMenuOpen ? "close-outline" : "menu-outline"}></ion-icon>
                     </button>
+                    {/* Only visible on mobile */}
+                    <button className="icon-btn wishlist-mobile-btn" aria-label="Wishlist">
+                        <ion-icon name="heart-outline"></ion-icon>
+                    </button>
                 </div>
 
                 <Link to="/" className="logo-text">Brunati</Link>
 
                 <div className="nav-group right">
-                    <button className="icon-btn" aria-label="Wishlist">
+                    {/* Only visible on desktop */}
+                    <button className="icon-btn wishlist-desktop-btn" aria-label="Wishlist">
                         <ion-icon name="heart-outline"></ion-icon>
                     </button>
                     <button className="icon-btn" aria-label="Cart">

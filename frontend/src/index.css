@@ -1,3 +1,5 @@
+@import './styles/desktop-slider.css';
+
 /* ========================================
    CORE DESIGN SYSTEM & VARIABLES
    (Restored from Legacy)
@@ -30,6 +32,29 @@
         --floating-gap: 8px;
         --radius: 14px;
         --header-height: 50px;
+    }
+    
+    .apple-header {
+        width: 98%;
+        margin: 10px auto;
+        padding: 0 15px;
+    }
+
+    .nav-group {
+        gap: 8px;
+    }
+
+    .icon-btn {
+        padding: 8px;
+        font-size: 18px;
+    }
+
+    .wishlist-mobile-btn {
+        display: flex;
+    }
+
+    .wishlist-desktop-btn {
+        display: none;
     }
 }
 
@@ -68,29 +93,32 @@ h1, h2, h3, .logo-text, .founder-name {
 }
 
 .apple-header {
-    width: 100%;
-    max-width: 100%;
+    width: 95%;
+    max-width: 1400px;
+    margin: 15px auto;
     height: var(--header-height);
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 40px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    transition: all 0.4s ease;
+    padding: 0 30px; /* Refined padding for the rounded bar */
+    border: 1px solid rgba(0, 0, 0, 0.08); /* Full border for rounded look */
+    border-radius: 50px; /* Fully rounded */
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     position: relative;
     overflow: hidden;
     color: var(--text-main);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
 }
 
 .apple-header.scrolled {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
-    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.05);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .apple-header .icon-btn, .apple-header .logo-text {
@@ -115,7 +143,7 @@ h1, h2, h3, .logo-text, .founder-name {
 .nav-group {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 15px; /* Increased from 5px for better visibility */
 }
 
 .icon-btn {
@@ -132,6 +160,10 @@ h1, h2, h3, .logo-text, .founder-name {
 }
 
 .icon-btn:hover { background: rgba(0,0,0,0.04); transform: translateY(-2px); }
+
+.wishlist-mobile-btn {
+    display: none;
+}
 
 /* DROP MENU */
 .dropdown-menu {
@@ -235,8 +267,8 @@ h1, h2, h3, .logo-text, .founder-name {
 .tabs::-webkit-scrollbar { display: none; }
 
 .tab-btn { 
-    padding: 12px 28px; 
-    border-radius: 0; 
+    padding: 12px 32px; 
+    border-radius: 50px; /* Fully rounded */
     border: 1px solid #e5e5e5; 
     background: transparent; 
     font-size: 0.85rem; 
@@ -579,10 +611,27 @@ h1, h2, h3, .logo-text, .founder-name {
     gap: 20px;
     overflow-x: auto;
     padding: 0 24px 40px;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0,0,0,0.1) transparent;
+    -webkit-overflow-scrolling: touch;
 }
-.scroll-container::-webkit-scrollbar { display: none; }
+
+.scroll-container::-webkit-scrollbar {
+    height: 4px;
+}
+
+.scroll-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.1);
+    border-radius: 10px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(0,0,0,0.2);
+}
 
 .scent-carousel-base {
     width: 100vw;
@@ -629,6 +678,26 @@ h1, h2, h3, .logo-text, .founder-name {
     flex-direction: column;
     justify-content: space-between;
     min-height: 220px;
+    transition: transform 0.3s ease;
+}
+
+.review-card:hover {
+    transform: translateY(-5px);
+}
+
+.review-card .stars {
+    color: #D4AF37; /* Metallic Gold */
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.review-text {
+    font-style: italic;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    color: var(--text-main);
+    line-height: 1.6;
+    margin-bottom: 20px;
 }
 
 @media (max-width: 480px) {
@@ -800,7 +869,40 @@ footer {
     
     .modal-content { padding: 25px; border-radius: 20px; }
     
-    .nav-group.right button:last-child { display: none; } /* Hide profile on small screens to save space */
+    .apple-header {
+        width: 100%;
+        margin: 0;
+        border-radius: 0;
+        border-right: none;
+        border-left: none;
+        border-top: none;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 10px;
+    }
+
+    .logo-text {
+        position: static; /* Fixed: No longer overlaps icons */
+        transform: none;
+        left: auto;
+        flex: 1;
+        text-align: center;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+    }
+
+    .nav-group {
+        flex: 1;
+        gap: 5px;
+    }
+
+    .nav-group.right {
+        justify-content: flex-end;
+    }
+
+    .icon-btn {
+        padding: 6px;
+    }
 }
 
 /* ADMIN PANEL STYLES */
@@ -942,3 +1044,4 @@ footer {
     }
     .card-details h3 { font-size: 1.5rem; }
 }
+
