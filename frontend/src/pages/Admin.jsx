@@ -47,13 +47,13 @@ const Admin = () => {
             <div className="container" id="dashboard">
                 <h2 style={{ marginBottom: '25px' }}>Welcome back</h2>
                 <button className="btn dash-btn" onClick={() => alert('Opening Products...')}>
-                    Product & Price Listing
+                    Product & price listing
                 </button>
                 <button className="btn dash-btn" onClick={() => alert('Tracking Orders...')}>
-                    Track Order
+                    Track order
                 </button>
-                <button className="btn logout-btn" onClick={() => setIsLoggedIn(false)} style={{ backgroundColor: '#86868b' }}>
-                    Sign Out
+                <button className="btn logout-btn" onClick={() => setIsLoggedIn(false)}>
+                    Sign out
                 </button>
             </div>
         </div>
