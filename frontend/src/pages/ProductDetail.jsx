@@ -154,12 +154,7 @@ const ProductDetail = () => {
                 </div>
             </main>
 
-            <section className="content-wrap" style={{ paddingTop: '40px' }}>
-                <h2 className="section-title">The Story</h2>
-                <div style={{ marginTop: '40px', borderRadius: '32px', overflow: 'hidden', height: '500px' }}>
-                    <img src={product.storyVisual} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Story Visual" />
-                </div>
-            </section>
+
         </div>
     );
 };

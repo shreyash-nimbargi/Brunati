@@ -2,7 +2,7 @@ import React from 'react';
 import Hero from '../components/landing/Hero';
 import Collections from '../components/landing/Collections';
 import ScentArt from '../components/landing/ScentArt';
-import Story from '../components/landing/Story';
+
 
 const Home = () => {
 
@@ -39,7 +39,7 @@ const Home = () => {
                 </div>
             </section>
 
-            <Story />
+
         </main>
     );
 };
