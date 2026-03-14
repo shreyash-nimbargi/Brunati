@@ -3,10 +3,19 @@ import { Link } from 'react-router-dom';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 50);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     return (
         <div className="nav-wrapper">
-            <header className="apple-header" id="mainHeader">
+            <header className={`apple-header ${scrolled ? 'scrolled' : ''}`} id="mainHeader">
                 <div className="nav-group left">
                     <button className="icon-btn" onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Menu">
                         <ion-icon name={isMenuOpen ? "close-outline" : "menu-outline"}></ion-icon>
