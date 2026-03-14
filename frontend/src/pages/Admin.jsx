@@ -52,7 +52,7 @@ const Admin = () => {
                 <button className="btn dash-btn" onClick={() => alert('Tracking Orders...')}>
                     Track order
                 </button>
-                <button className="btn logout-btn" onClick={() => setIsLoggedIn(false)} style={{ backgroundColor: '#86868b' }}>
+                <button className="btn logout-btn" onClick={() => setIsLoggedIn(false)}>
                     Sign out
                 </button>
             </div>

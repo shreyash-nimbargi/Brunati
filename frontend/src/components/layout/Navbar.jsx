@@ -20,14 +20,14 @@ const Navbar = () => {
                     <button className="icon-btn" onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Menu">
                         <ion-icon name={isMenuOpen ? "close-outline" : "menu-outline"}></ion-icon>
                     </button>
-                    <button className="icon-btn" aria-label="Wishlist">
-                        <ion-icon name="heart-outline"></ion-icon>
-                    </button>
                 </div>
 
                 <Link to="/" className="logo-text">Brunati</Link>
 
                 <div className="nav-group right">
+                    <button className="icon-btn" aria-label="Wishlist">
+                        <ion-icon name="heart-outline"></ion-icon>
+                    </button>
                     <button className="icon-btn" aria-label="Cart">
                         <ion-icon name="bag-handle-outline"></ion-icon>
                     </button>
