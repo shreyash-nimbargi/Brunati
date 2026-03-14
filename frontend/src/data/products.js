@@ -1,0 +1,80 @@
+export const productsData = {
+    dominus: {
+        name: "Dominus Emperor",
+        badge: "Men • Extrait de Parfum",
+        price: 1795,
+        secondaryPrice: 1095,
+        description: "A bold and regal fragrance designed for the modern visionary. Speaking volumes with notes of rich oud, sensual patchouli, and a hint of saffron.",
+        images: ["media/dominus/1.png", "media/dominus/2.png", "media/dominus/3.png"],
+        storyVisual: "media/dominus/DE.png",
+        accords: ["Warm Spicy", "Woody", "Tobacco", "Whiskey", "Oud", "Sweet", "Amber", "Balsamic", "Vanilla", "Smoky"],
+        topNotes: "Whiskey",
+        middleNotes: "Spicy Notes, Cinnamon, Coriander",
+        baseNotes: "Tobacco, Agarwood (Oud), Incense, Sandalwood, Patchouli, Benzoin, Vanilla, Cedar"
+    },
+    aqua: {
+        name: "Brunati Aqua",
+        badge: "Unisex • Extrait de Parfum",
+        price: 1795,
+        secondaryPrice: 1095,
+        description: "Crystalline depths of the Mediterranean captured in a bottle. A surge of mineral freshness, aromatic herbs, and marine notes.",
+        images: ["media/aqua/1.png", "media/aqua/2.png", "media/aqua/3.png"],
+        storyVisual: "media/aqua/DE.png",
+        accords: ["Aromatic", "Marine", "Fresh Spicy", "Woody", "Citrus", "Earthy"],
+        topNotes: "Sea Notes, Bergamot",
+        middleNotes: "Sage, Geranium, Rosemary",
+        baseNotes: "Incense, Patchouli"
+    },
+    mistia: {
+        name: "Mestia",
+        badge: "Women • Extrait de Parfum",
+        price: 1795,
+        secondaryPrice: 1095,
+        description: "An ethereal dance of white florals and creamy sandalwood. Designed for the woman who finds strength in grace.",
+        images: ["media/mistia/1.png", "media/mistia/2.png", "media/mistia/3.png"],
+        storyVisual: "media/mistia/DE.png",
+        accords: ["Floral", "White Floral", "Musky", "Powdery", "Woody"],
+        topNotes: "White Florals, Pear",
+        middleNotes: "Tuberose, Jasmine",
+        baseNotes: "Sandalwood, Musk"
+    },
+    dusk: {
+        name: "Citrine Dusk",
+        badge: "Unisex • Extrait de Parfum",
+        price: 1795,
+        secondaryPrice: 1095,
+        description: "The warmth of a golden sunset. A sophisticated blend of citrus zest, amber, and warm woody base notes for an elegant presence.",
+        images: ["media/dusk/1.png", "media/dusk/2.png", "media/dusk/3.png"],
+        storyVisual: "media/dusk/DE.png",
+        accords: ["Citrus", "Amber", "Woody", "Powdery", "Fresh"],
+        topNotes: "Citrus Zest, Bergamot",
+        middleNotes: "Amber, Spicy Notes",
+        baseNotes: "Sandalwood, Oakmoss"
+    },
+    midnight: {
+        name: "Midnight Glammer",
+        badge: "Women • Extrait de Parfum",
+        price: 1795,
+        secondaryPrice: 1095,
+        description: "Provocative and deep. Dark Cherry and Tonka Bean meet a base of smoky Vetiver for a mysterious allure.",
+        images: ["media/midnight/1.png", "media/midnight/2.png", "media/midnight/3.png"],
+        storyVisual: "media/midnight/DE.png",
+        accords: ["Fruity", "Sweet", "Vanilla", "Balsamic", "Smoky"],
+        topNotes: "Dark Cherry, Almond",
+        middleNotes: "Tonka Bean, Rose de Grasse",
+        baseNotes: "Vetiver, Vanilla, Cedar"
+    },
+    gift1: {
+        name: "The Discovery Kit",
+        badge: "Set • Premium Samples",
+        price: 499,
+        secondaryPrice: 499,
+        description: "Experience the complete collection. 5 iconic scents in travel-ready vials for the ultimate olfactory journey.",
+        images: ["https://images.unsplash.com/photo-154939602-43ebca2327af?w=600"],
+        storyVisual: "https://images.unsplash.com/photo-154939602-43ebca2327af?w=1200",
+        accords: ["Various", "Luxury", "Premium"],
+        topNotes: "Assorted",
+        middleNotes: "Assorted",
+        baseNotes: "Assorted"
+    }
+};

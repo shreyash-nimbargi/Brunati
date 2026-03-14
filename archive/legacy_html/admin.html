@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Portal</title>
+
+<link rel="stylesheet" href="admin.css">
+
+</head>
+<body>
+
+<div class="container" id="login-container">
+    <h2>Admin Login</h2>
+
+    <input type="text" id="username" placeholder="Username" autocomplete="off">
+    <input type="password" id="passcode" placeholder="Passcode">
+
+    <button class="btn" onclick="handleLogin()">Sign In</button>
+
+    <p id="error" class="error-msg">Invalid credentials. Try again.</p>
+</div>
+
+
+<div class="container" id="dashboard">
+    <h2>Welcome back</h2>
+
+    <button class="btn dash-btn" onclick="alert('Opening Products...')">
+        Product & Price Listing
+    </button>
+
+    <button class="btn dash-btn" onclick="alert('Tracking Orders...')">
+        Track Order
+    </button>
+
+    <button class="btn dash-btn" style="visibility: hidden;">Hidden</button>
+
+    <button class="btn logout-btn" onclick="location.reload()">
+        Sign Out
+    </button>
+
+</div>
+
+<script src="admin.js"></script>
+
+</body>
+</html>

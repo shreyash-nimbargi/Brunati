@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <style>
+        :root {
+            --header-height: 54px;
+            --glass-bg: rgba(255, 255, 255, 0.85); 
+            --blur-strength: 20px;
+            --floating-gap: 12px;
+            --radius: 18px;
+            --text-main: #1d1d1f;
+            --accent: #0071e3;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+            background-color: #f5f5f7;
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* --- NAVIGATION UI --- */
+        .nav-wrapper {
+            position: fixed;
+            top: var(--floating-gap);
+            left: var(--floating-gap);
+            right: var(--floating-gap);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .apple-header {
+            width: 100%;
+            max-width: 1200px;
+            height: var(--header-height);
+            background-color: var(--glass-bg);
+            backdrop-filter: blur(var(--blur-strength));
+            -webkit-backdrop-filter: blur(var(--blur-strength));
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            box-sizing: border-box;
+            border-radius: var(--radius);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-group, .logo-text { transition: opacity 0.3s ease, transform 0.3s ease; }
+
+        .apple-header.search-active .nav-group,
+        .apple-header.search-active .logo-text {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.95);
+        }
+
+        .header-search-container {
+            position: absolute;
+            top: 0;
+            left: 20px;
+            right: 20px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(10px);
+            transition: all 0.4s ease;
+        }
+
+        .apple-header.search-active .header-search-container {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0);
+        }
+
+        #searchInput {
+            flex: 1;
+            border: none;
+            background: none;
+            outline: none;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            font-family: inherit;
+        }
+
+        .close-search-btn {
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            background: none;
+            border: none;
+        }
+
+        .nav-group { display: flex; align-items: center; gap: 8px; flex: 1; }
+        .nav-group.right { justify-content: flex-end; }
+        .logo-text { font-family: 'Cinzel', serif; font-weight: 700; letter-spacing: 2px; font-size: 1.4rem; text-decoration: none; color: var(--text-main); position: absolute; left: 50%; transform: translateX(-50%); }
+        .icon-btn { background: none; border: none; cursor: pointer; color: var(--text-main); display: flex; align-items: center; font-size: 22px; padding: 8px; border-radius: 50%; transition: background 0.2s; }
+        .icon-btn:hover { background: rgba(0,0,0,0.05); }
+
+        .dropdown-menu {
+            width: 100%; max-width: 1200px; background-color: var(--glass-bg); backdrop-filter: blur(var(--blur-strength));
+            margin-top: 8px; border-radius: var(--radius); border: 1px solid rgba(255,255,255,0.4);
+            display: none; flex-direction: column; padding: 10px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .dropdown-menu.active { display: flex; animation: slideIn 0.3s ease forwards; }
+        .menu-item { padding: 12px 25px; text-decoration: none; color: var(--text-main); font-size: 0.95rem; transition: background 0.2s; }
+        .menu-item:hover { background: rgba(0,0,0,0.03); }
+
+        /* --- AUTH MODAL STYLING --- */
+        .auth-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .auth-overlay.active { display: flex; opacity: 1; }
+
+        .auth-card {
+            background: var(--glass-bg);
+            width: 90%;
+            max-width: 400px;
+            padding: 40px;
+            border-radius: 28px;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            text-align: center;
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .auth-overlay.active .auth-card { transform: scale(1); }
+
+        .auth-card h2 { font-size: 24px; font-weight: 600; margin-bottom: 8px; }
+        .auth-card p { font-size: 14px; color: #6e6e73; margin-bottom: 30px; }
+
+        .input-group { margin-bottom: 15px; text-align: left; position: relative; }
+        .input-group input {
+            width: 100%;
+            padding: 14px 16px;
+            padding-right: 45px;
+            border-radius: 12px;
+            border: 1px solid #d2d2d7;
+            background: rgba(255,255,255,0.5);
+            font-size: 16px;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .input-group input:focus { border-color: var(--accent); }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #86868b;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            background: var(--accent);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+        .auth-btn:hover { opacity: 0.9; }
+        .auth-btn:disabled { background: #d2d2d7; cursor: not-allowed; }
+
+        .switch-auth { margin-top: 20px; font-size: 14px; color: var(--accent); cursor: pointer; }
+        
+        #otp-timer { font-size: 12px; color: #ff3b30; margin-top: 8px; font-weight: 500; }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div class="nav-wrapper">
+        <header class="apple-header" id="mainHeader">
+            <div class="nav-group left">
+                <button class="icon-btn" id="menuBtn">
+                    <ion-icon name="menu-outline" id="menuIcon"></ion-icon>
+                </button>
+                <button class="icon-btn" id="searchTrigger">
+                    <ion-icon name="search-outline"></ion-icon>
+                </button>
+            </div>
+
+            <a href="#" class="logo-text">BRUNATI</a>
+
+            <div class="nav-group right">
+                <button class="icon-btn"><ion-icon name="bag-handle-outline"></ion-icon></button>
+                <button class="icon-btn" id="authTrigger"><ion-icon name="person-outline"></ion-icon></button>
+            </div>
+
+            <div class="header-search-container">
+                <ion-icon name="search-outline" style="font-size: 20px; opacity: 0.5;"></ion-icon>
+                <input type="text" id="searchInput" placeholder="">
+                <button class="close-search-btn" id="cancelSearch">
+                    <ion-icon name="close-outline"></ion-icon>
+                </button>
+            </div>
+        </header>
+
+        <nav class="dropdown-menu" id="dropdownMenu">
+            <a href="#" class="menu-item">Shop All</a>
+            <a href="#" class="menu-item">Bestsellers</a>
+            <a href="#" class="menu-item">Our Story</a>
+        </nav>
+    </div>
+
+    <div class="auth-overlay" id="authOverlay">
+        <div class="auth-card" id="authCard">
+            <div id="signin-view">
+                <h2>Sign In</h2>
+                <p>Welcome back to Brunati.</p>
+                <div class="input-group">
+                    <input type="text" placeholder="Mobile Number" id="loginPhone">
+                </div>
+                <div class="input-group">
+                    <input type="password" placeholder="Password" id="loginPass">
+                    <span class="toggle-password" onclick="togglePasswordVisibility('loginPass', this)">
+                        <ion-icon name="eye-outline"></ion-icon>
+                    </span>
+                </div>
+                <button class="auth-btn">Sign In</button>
+                <div class="switch-auth" onclick="toggleAuth('signup')">New to Brunati? Create account</div>
+            </div>
+
+            <div id="signup-view" style="display: none;">
+                <h2>Create Account</h2>
+                <p>Join the world of premium scents.</p>
+                <div class="input-group">
+                    <input type="text" placeholder="Full Name" id="regName">
+                </div>
+                <div class="input-group">
+                    <input type="text" placeholder="Contact Number" id="regPhone">
+                </div>
+
+                <div id="registration-details" style="display: none;">
+                    <div class="input-group">
+                        <input type="password" placeholder="Set Password" id="regPass">
+                        <span class="toggle-password" onclick="togglePasswordVisibility('regPass', this)">
+                            <ion-icon name="eye-outline"></ion-icon>
+                        </span>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" placeholder="4-Digit OTP" id="regOtp" maxlength="4">
+                    </div>
+                    <div id="otp-timer">OTP expires in: <span id="timer-count">02:00</span></div>
+                </div>
+
+                <button class="auth-btn" id="regBtn" onclick="handleRegistrationFlow()">Get OTP</button>
+                <div class="switch-auth" onclick="toggleAuth('signin')">Already have an account? Sign in</div>
+            </div>
+            
+            <button class="icon-btn" style="position: absolute; top: 15px; right: 15px;" onclick="closeAuth()">
+                <ion-icon name="close-circle-outline" style="font-size: 28px; opacity: 0.6;"></ion-icon>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const mainHeader = document.getElementById('mainHeader');
+        const searchTrigger = document.getElementById('searchTrigger');
+        const cancelSearch = document.getElementById('cancelSearch');
+        const searchInput = document.getElementById('searchInput');
+        const menuBtn = document.getElementById('menuBtn');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        const menuIcon = document.getElementById('menuIcon');
+        
+        // Auth Elements
+        const authTrigger = document.getElementById('authTrigger');
+        const authOverlay = document.getElementById('authOverlay');
+        const signinView = document.getElementById('signin-view');
+        const signupView = document.getElementById('signup-view');
+        const regDetails = document.getElementById('registration-details');
+        const regBtn = document.getElementById('regBtn');
+        const timerSpan = document.getElementById('timer-count');
+
+        let timerInterval;
+
+        // --- PASSWORD VISIBILITY ---
+        function togglePasswordVisibility(id, el) {
+            const input = document.getElementById(id);
+            const icon = el.querySelector('ion-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.setAttribute('name', 'eye-off-outline');
+            } else {
+                input.type = 'password';
+                icon.setAttribute('name', 'eye-outline');
+            }
+        }
+
+        // --- SEARCH TYPING EFFECT ---
+        const perfumes = ["Brunati Aqua...", "Dominus Emperor...", "Mestia...", "Citrus Dusk...", "Midnight Glammer..."];
+        let pIdx = 0, cIdx = 0, isDeleting = false;
+
+        function type() {
+            const current = perfumes[pIdx];
+            searchInput.placeholder = current.substring(0, cIdx);
+            if (!isDeleting) {
+                cIdx++;
+                if (cIdx > current.length) { isDeleting = true; setTimeout(type, 1500); return; }
+            } else {
+                cIdx--;
+                if (cIdx < 0) { isDeleting = false; pIdx = (pIdx + 1) % perfumes.length; setTimeout(type, 500); return; }
+            }
+            setTimeout(type, isDeleting ? 40 : 80);
+        }
+        type();
+
+        // Header Logic
+        searchTrigger.addEventListener('click', () => {
+            mainHeader.classList.add('search-active');
+            dropdownMenu.classList.remove('active');
+            menuIcon.setAttribute('name', 'menu-outline');
+            setTimeout(() => searchInput.focus(), 100);
+        });
+        cancelSearch.addEventListener('click', () => {
+            mainHeader.classList.remove('search-active');
+            searchInput.value = '';
+        });
+        menuBtn.addEventListener('click', () => {
+            if (mainHeader.classList.contains('search-active')) mainHeader.classList.remove('search-active');
+            const isOpen = dropdownMenu.classList.toggle('active');
+            menuIcon.setAttribute('name', isOpen ? 'close-outline' : 'menu-outline');
+        });
+
+        // --- AUTH FLOW ---
+        authTrigger.addEventListener('click', () => authOverlay.classList.add('active'));
+        function closeAuth() {
+            authOverlay.classList.remove('active');
+            resetAuthForms();
+        }
+        authOverlay.addEventListener('click', (e) => { if(e.target === authOverlay) closeAuth(); });
+
+        function toggleAuth(view) {
+            resetAuthForms();
+            if(view === 'signup') {
+                signinView.style.display = 'none';
+                signupView.style.display = 'block';
+            } else {
+                signinView.style.display = 'block';
+                signupView.style.display = 'none';
+            }
+        }
+
+        function resetAuthForms() {
+            clearInterval(timerInterval);
+            regDetails.style.display = 'none';
+            regBtn.innerText = "Get OTP";
+            regBtn.disabled = false;
+            document.getElementById('regPhone').disabled = false;
+        }
+
+        function startTimer() {
+            let duration = 120; // 2 minutes
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                let mins = Math.floor(duration / 60);
+                let secs = duration % 60;
+                timerSpan.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                if (--duration < 0) {
+                    clearInterval(timerInterval);
+                    alert("OTP Expired. Please try again.");
+                    resetAuthForms();
+                }
+            }, 1000);
+        }
+
+        function handleRegistrationFlow() {
+            const phone = document.getElementById('regPhone').value;
+            const name = document.getElementById('regName').value;
+            
+            if (regDetails.style.display === 'none') {
+                // Step 1: Request OTP
+                if (phone.length < 10 || name.length < 2) {
+                    alert("Please enter a valid Name and Mobile Number");
+                    return;
+                }
+                
+                alert("Simulating: OTP sent to " + phone);
+                regDetails.style.display = 'block';
+                document.getElementById('regPhone').disabled = true;
+                regBtn.innerText = "Verify & Create Account";
+                startTimer();
+            } else {
+                // Step 2: Verify and Create
+                const otp = document.getElementById('regOtp').value;
+                const pass = document.getElementById('regPass').value;
+                
+                if (otp.length === 4 && pass.length >= 6) {
+                    alert("Success! Account created for " + name);
+                    closeAuth();
+                } else {
+                    alert("Please enter a 4-digit OTP and a password (min 6 chars)");
+                }
+            }
+        }
+    </script>
+</body>
+</html>
