@@ -36,3 +36,5 @@ exports.getProductBySlug = async (req, res) => {
     res.json(product);
 
 };
+
+

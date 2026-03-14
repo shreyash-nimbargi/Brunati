@@ -28,6 +28,7 @@ app.use("/api/orders", require("./routes/orderRoutes"));
 app.use("/api/reviews", require("./routes/reviewRoutes"));
 app.use("/api/samples", require("./routes/sampleRoutes"));
 app.use("/api/announcements", require("./routes/announcementRoutes"));
+app.use("/api/admin", require("./routes/adminRoutes"));
 
 app.get('/', (req, res) => {
   res.send("API is running...");
