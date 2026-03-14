@@ -10,18 +10,25 @@ const ScentArt = () => {
                 </p>
             </div>
             
-            <div className="scroll-container">
-                {[
-                    "media/mistia/1.png",
-                    "media/midnight/1.png",
-                    "media/dusk/1.png",
-                    "media/dominus/1.png",
-                    "media/aqua/1.png"
-                ].map((img, idx) => (
-                    <div key={idx} className="scent-slide-wrapper">
-                        <img src={img} className="scent-slide-img" alt={`Scent ${idx}`} />
-                    </div>
-                ))}
+            <div className="scent-carousel-base">
+                <div className="scent-track">
+                    {[
+                        "media/mistia/1.png",
+                        "media/midnight/1.png",
+                        "media/dusk/1.png",
+                        "media/dominus/1.png",
+                        "media/aqua/1.png",
+                        "media/mistia/1.png",
+                        "media/midnight/1.png",
+                        "media/dusk/1.png",
+                        "media/dominus/1.png",
+                        "media/aqua/1.png"
+                    ].map((img, idx) => (
+                        <div key={idx} className="scent-slide-wrapper">
+                            <img src={img} className="scent-slide-img" alt={`Scent ${idx}`} />
+                        </div>
+                    ))}
+                </div>
             </div>
         </section>
     );

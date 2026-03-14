@@ -42,7 +42,7 @@ html {
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+    font-family: 'Cinzel', serif;
     background-color: var(--apple-bg); 
     color: var(--text-main);
     overflow-x: hidden;
@@ -257,23 +257,109 @@ h1, h2, h3, .logo-text, .founder-name {
     transition: all 0.5s cubic-bezier(0.2, 1, 0.2, 1);
     position: relative; 
     overflow: hidden; 
-    min-height: 480px;
+    min-height: 520px;
     cursor: pointer;
 }
 
 .product-card:hover { 
     box-shadow: 0 20px 40px rgba(0,0,0,0.08); 
-    transform: translateY(-10px); 
     border-color: rgba(0,0,0,0.12);
+}
+
+.wishlist-overlay {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    font-size: 24px;
+    background: #fff;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    color: #1d1d1f;
+    transition: all 0.3s;
+}
+
+.wishlist-overlay:hover { color: var(--error); transform: scale(1.1); }
+
+.prod-text { padding: 10px 0; }
+
+.prod-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.prod-name { 
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    font-size: 1.4rem; 
+    font-weight: 700; 
+    margin: 0; 
+    line-height: 1.2; 
+    text-transform: none; 
+}
+.prod-meta { color: #1d1d1f; font-size: 1rem; font-weight: 700; opacity: 0.9; margin-top: 4px; }
+
+.prod-rating-box { text-align: right; }
+.prod-rating-box .stars { color: #1d1d1f; font-size: 0.8rem; display: flex; gap: 2px; justify-content: flex-end; }
+.reviews-label { font-size: 0.75rem; font-weight: 700; color: #1d1d1f; display: block; margin-top: 4px; }
+
+.prod-accords-row {
+    color: #1d1d1f;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.prod-sizes-row {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+.size-label { font-weight: 700; margin-right: 5px; }
+
+.card-divider { border: 0; border-top: 1px solid #d2d2d7; margin: 20px 0; }
+
+.prod-description-mini {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #6e6e73;
+    margin-bottom: 25px;
+}
+
+.add-to-bag-btn {
+    width: 100%;
+    padding: 18px;
+    background: #000;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.add-to-bag-btn:hover { transform: scale(1.01); background: #111; }
+
+.complimentary-gift-text {
+    font-size: 0.75rem;
+    color: #e74c3c;
+    text-align: center;
+    margin-top: 10px;
+    font-weight: 500;
 }
 
 .img-container { 
     width: 100%; 
-    aspect-ratio: 1/1.1;
+    aspect-ratio: 1/1.2;
     position: relative; 
     margin-bottom: 20px; 
     overflow: hidden; 
-    border-radius: 18px; 
     background: #fff; 
 }
 
@@ -410,19 +496,27 @@ h1, h2, h3, .logo-text, .founder-name {
 }
 .scroll-container::-webkit-scrollbar { display: none; }
 
+.scent-carousel-base {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    overflow: hidden;
+    padding: 40px 0;
+}
+
+.scent-track {
+    display: flex;
+    gap: 30px;
+    width: max-content;
+    animation: slowSlide 40s linear infinite;
+}
+
+@keyframes slowSlide {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
 .scent-slide-wrapper {
-    flex: 0 0 300px;
-    transition: transform 0.3s ease;
-}
-
-@media (max-width: 768px) {
-    .scent-slide-wrapper {
-        flex: 0 0 240px;
-    }
-}
-
-.scent-slide-wrapper:hover {
-    transform: translateY(-10px);
+    flex: 0 0 350px;
 }
 
 .scent-slide-img { 
@@ -580,14 +674,23 @@ footer {
     .logo-text { font-size: 1.2rem; }
     
     .product-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
+        grid-template-columns: 1fr;
+        gap: 40px;
     }
     
-    .product-card { padding: 12px; min-height: 400px; border-radius: 18px; }
-    .img-container { border-radius: 12px; }
-    .prod-name { font-size: 1rem; }
-    .prod-price { font-size: 0.95rem; margin-bottom: 15px; }
+    .product-card { 
+        padding: 0; 
+        min-height: auto; 
+        border-radius: 0; 
+        background: transparent;
+        border: none;
+    }
+    
+    .product-card:hover { transform: none; box-shadow: none; }
+    
+    .img-container { border-radius: 0; }
+    
+    .prod-text { padding: 10px 15px; }
     
     .btn-check { padding: 0 10px; font-size: 0.8rem; }
     .btn-cart { width: 40px; height: 40px; font-size: 18px; }

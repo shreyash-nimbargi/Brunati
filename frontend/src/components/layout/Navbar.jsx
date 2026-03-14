@@ -29,12 +29,12 @@ const Navbar = () => {
             </header>
 
             <nav className={`dropdown-menu ${isMenuOpen ? 'active' : ''}`}>
-                <Link to="/shop" className="menu-item" onClick={() => setIsMenuOpen(false)}>Shop All Collections</Link>
-                <Link to="/new" className="menu-item" onClick={() => setIsMenuOpen(false)}>New Arrivals</Link>
+                <Link to="/shop" className="menu-item" onClick={() => setIsMenuOpen(false)}>Shop all collections</Link>
+                <Link to="/new" className="menu-item" onClick={() => setIsMenuOpen(false)}>New arrivals</Link>
                 <Link to="/bestsellers" className="menu-item" onClick={() => setIsMenuOpen(false)}>Bestsellers</Link>
-                <Link to="/discovery" className="menu-item" onClick={() => setIsMenuOpen(false)}>Discovery Sets</Link>
-                <Link to="/story" className="menu-item" onClick={() => setIsMenuOpen(false)}>Our Story</Link>
-                <Link to="/stores" className="menu-item" onClick={() => setIsMenuOpen(false)}>Store Locator</Link>
+                <Link to="/discovery" className="menu-item" onClick={() => setIsMenuOpen(false)}>Discovery sets</Link>
+                <Link to="/story" className="menu-item" onClick={() => setIsMenuOpen(false)}>Our story</Link>
+                <Link to="/stores" className="menu-item" onClick={() => setIsMenuOpen(false)}>Store locator</Link>
             </nav>
         </div>
     );

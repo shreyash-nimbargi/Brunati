@@ -23,9 +23,9 @@ const Home = () => {
             <ScentArt />
 
 
-            {/* Client Experiences Section */}
+            {/* Reviews Section */}
             <section className="reviews-section">
-                <div className="section-header"><h2 className="section-title">Client Experiences</h2></div>
+                <div className="section-header"><h2 className="section-title">Reviews</h2></div>
                 <div className="scroll-container">
                     {reviews.map((r, idx) => (
                         <div key={idx} className="review-card">

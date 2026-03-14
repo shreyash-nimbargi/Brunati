@@ -125,7 +125,7 @@ const GenderSlider = () => {
                     </div>
 
                     <div className="add-to-cart-bar">
-                        <span>Add To Cart</span>
+                        <span>Add to cart</span>
                         <span>{currentProduct.price}</span>
                     </div>
                 </div>
