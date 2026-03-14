@@ -1,3 +1,5 @@
+@import './styles/desktop-slider.css';
+
 /* ========================================
    CORE DESIGN SYSTEM & VARIABLES
    (Restored from Legacy)
@@ -1042,3 +1044,4 @@ footer {
     }
     .card-details h3 { font-size: 1.5rem; }
 }
+

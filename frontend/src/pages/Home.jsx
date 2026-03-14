@@ -19,7 +19,7 @@ const Home = () => {
         <main>
             <Hero />
             <Collections />
-            
+
             <ScentArt />
 
 
