@@ -222,17 +222,15 @@ h1, h2, h3, .logo-text, .founder-name {
 /* TABS */
 .tabs { 
     display: flex; 
-    justify-content: flex-start; 
+    justify-content: center; 
     gap: 12px; 
     margin-bottom: 20px;
     overflow-x: auto; 
-    padding: 0 24px 10px;
+    padding: 0 0 10px;
     scrollbar-width: none; 
 }
 
-@media (min-width: 768px) {
-    .tabs { justify-content: center; padding: 0 0 10px; }
-}
+
 
 .tabs::-webkit-scrollbar { display: none; }
 
@@ -247,7 +245,6 @@ h1, h2, h3, .logo-text, .founder-name {
     cursor: pointer; 
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
     white-space: nowrap;
-    text-transform: lowercase;
 }
 .tab-btn.active { 
     background: #000; 
@@ -931,7 +928,6 @@ footer {
     letter-spacing: 1.5px;
     cursor: pointer;
     transition: all 0.4s;
-    text-transform: lowercase;
 }
 
 .btn-primary-dark { background: #111; color: #fff; margin-right: 15px; }

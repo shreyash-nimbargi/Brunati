@@ -36,19 +36,19 @@ const Collections = () => {
                         className={`tab-btn ${activeTab === 'him' ? 'active' : ''}`} 
                         onClick={() => setActiveTab('him')}
                     >
-                        For him
+                        For Him
                     </button>
                     <button 
                         className={`tab-btn ${activeTab === 'her' ? 'active' : ''}`} 
                         onClick={() => setActiveTab('her')}
                     >
-                        For her
+                        For Her
                     </button>
                     <button 
                         className={`tab-btn ${activeTab === 'gift' ? 'active' : ''}`} 
                         onClick={() => setActiveTab('gift')}
                     >
-                        Gift sets
+                        Gift Sets
                     </button>
                 </div>
             </div>

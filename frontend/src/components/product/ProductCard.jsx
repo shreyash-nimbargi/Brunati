@@ -51,7 +51,7 @@ const ProductCard = ({ id, name, meta, price, img1, img2, accords, description }
                     e.stopPropagation();
                     console.log('Added to bag:', name);
                 }}>
-                    Add to bag - Price: {price}
+                    Add To Bag - {price}
                 </button>
                 <p className="complimentary-gift-text">
                     Complimentary Gift on orders above ₹149...
