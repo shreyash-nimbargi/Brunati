@@ -98,8 +98,8 @@ h1, h2, h3, .logo-text, .founder-name {
     max-width: 1800px;
     margin: 15px auto;
     height: var(--header-height);
-    background-color: rgba(255, 255, 255, 0.5); /* Made more transparent */
-    backdrop-filter: blur(16px); /* Increased blur slightly for a frostier look */
+    background-color: rgba(255, 255, 255, 0.15); /* More transparent */
+    backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     display: flex;
     align-items: center;
@@ -115,7 +115,7 @@ h1, h2, h3, .logo-text, .founder-name {
 }
 
 .apple-header.scrolled {
-    background-color: rgba(255, 255, 255, 0.85); /* Slightly more transparent when scrolled too */
+    background-color: rgba(255, 255, 255, 0.6); /* Slightly more transparent when scrolled too */
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -154,7 +154,7 @@ h1, h2, h3, .logo-text, .founder-name {
     color: inherit;
     display: flex;
     align-items: center;
-    font-size: 20px;
+    font-size: 24px; /* Slightly larger for desktop */
     padding: 10px;
     border-radius: 50%;
     transition: all 0.3s ease;
