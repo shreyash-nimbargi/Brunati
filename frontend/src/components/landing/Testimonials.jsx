@@ -17,7 +17,7 @@ const Testimonials = () => {
                     <div key={idx} className="review-card" style={{ flex: '0 0 300px', padding: '30px', background: '#fff', borderRadius: '16px', border: '1px solid var(--apple-border)' }}>
                         <div className="stars" style={{ color: 'var(--star-yellow)', marginBottom: '12px' }}>★★★★★</div>
                         <p className="review-text" style={{ fontStyle: 'italic', marginBottom: '15px' }}>"{review.text}"</p>
-                        <div className="review-author" style={{ fontWeight: 700, fontSize: '0.8rem', letterSpacing: '1.5px', borderTop: '1px solid var(--apple-border)', paddingTop: '12px' }}>
+                        <div className="review-author" style={{ borderTop: '1px solid var(--apple-border)', paddingTop: '12px', marginTop: 'auto' }}>
                             {review.author}
                         </div>
                     </div>

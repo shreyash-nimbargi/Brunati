@@ -846,19 +846,21 @@ h1, h2, h3, .section-title, .founder-name {
 
 .review-text {
     font-style: italic;
-    font-family: 'Cinzel', serif;
+    font-family: Georgia, 'Times New Roman', serif;
     color: var(--text-main);
-    line-height: 1.6;
+    line-height: 1.7;
     margin-bottom: 20px;
-    font-size: 1.1rem;
+    font-size: 1rem;
+    font-weight: 400;
 }
 
 .review-author {
-    font-family: 'Cinzel', serif;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-size: 0.85rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 400;
+    letter-spacing: 1px;
+    font-style: normal;
+    font-size: 0.9rem;
+    color: var(--text-main);
 }
 
 @media (max-width: 480px) {
