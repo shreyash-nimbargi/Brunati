@@ -5,7 +5,7 @@ import { productsData } from '../../data/products';
 const Collections = () => {
     const [activeTab, setActiveTab] = useState('him');
     const [sliderIndex, setSliderIndex] = useState(0);
-    const [selectedSize, setSelectedSize] = useState('100ml');
+    const [selectedSize, setSelectedSize] = useState('50ML');
 
     const collectionsRows = {
         him: ['dominus', 'aqua', 'dusk'],
@@ -128,7 +128,7 @@ const Collections = () => {
                         </div>
 
                         <div className="slider-size-row">
-                            {['20ML', '30ML', '50ML', '100ML'].map(size => (
+                            {['50ML', '100ML'].map(size => (
                                 <button 
                                     key={size} 
                                     className={`slider-size-btn ${selectedSize.toLowerCase() === size.toLowerCase() ? 'active' : ''}`}
