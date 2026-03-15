@@ -244,14 +244,14 @@ h1, h2, h3, .logo-text, .founder-name {
 
 .sponsor-banner {
     width: 100%;
-    height: 85px; /* Same size as the previous gap you wanted filled */
+    height: 40px; /* Reduced from 85px */
     background: #000;
     color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
     text-transform: uppercase;
-    font-size: 0.85rem;
+    font-size: 0.75rem; /* Slightly smaller font */
     letter-spacing: 2px;
     border-top: 1px solid rgba(255,255,255,0.1);
     border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -259,8 +259,8 @@ h1, h2, h3, .logo-text, .founder-name {
 
 @media (max-width: 768px) {
     .sponsor-banner {
-        height: 60px;
-        font-size: 0.7rem;
+        height: 30px; /* Reduced from 60px */
+        font-size: 0.6rem;
     }
 }
 
