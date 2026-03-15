@@ -208,7 +208,7 @@ h1, h2, h3, .logo-text, .founder-name {
 /* HERO */
 .hero-poster {
     width: 100%;
-    margin-top: 68px; /* Slightly overlap to hide pixel gaps */
+    margin-top: 85px; /* Increased to prevent navbar overlap */
     display: flex;
     justify-content: center;
     background: transparent;
