@@ -44,7 +44,7 @@ const GenderSlider = () => {
     ];
 
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [selectedSize, setSelectedSize] = useState('100ml');
+    const [selectedSize, setSelectedSize] = useState('50ml');
 
     const nextSlide = () => {
         setCurrentIndex((prev) => (prev + 1) % products.length);
@@ -113,7 +113,7 @@ const GenderSlider = () => {
                     </div>
 
                     <div className="size-btns">
-                        {['20ml', '30ml', '50ml', '100ml'].map((size) => (
+                        {['50ml', '100ml'].map((size) => (
                             <button 
                                 key={size}
                                 className={`size-btn-minimal ${selectedSize === size ? 'active' : ''}`}
