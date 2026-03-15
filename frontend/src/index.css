@@ -244,23 +244,52 @@ h1, h2, h3, .logo-text, .founder-name {
 
 .sponsor-banner {
     width: 100%;
-    height: 40px; /* Reduced from 85px */
+    height: 40px;
     background: #000;
     color: #fff;
     display: flex;
     align-items: center;
-    justify-content: center;
-    text-transform: uppercase;
-    font-size: 0.75rem; /* Slightly smaller font */
-    letter-spacing: 2px;
+    overflow: hidden; /* Hide overflow for the sliding text */
     border-top: 1px solid rgba(255,255,255,0.1);
     border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
+.ticker-wrapper {
+    display: flex;
+    white-space: nowrap;
+}
+
+.ticker-group {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding-right: 30px;
+    animation: tickerScroll 30s linear infinite;
+}
+
+.ticker-group span {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+.ticker-dot {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 1.2rem !important;
+}
+
+@keyframes tickerScroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-100%); }
+}
+
 @media (max-width: 768px) {
     .sponsor-banner {
-        height: 30px; /* Reduced from 60px */
+        height: 35px;
+    }
+    .ticker-group span {
         font-size: 0.6rem;
+        letter-spacing: 1px;
     }
 }
 

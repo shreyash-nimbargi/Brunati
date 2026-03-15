@@ -55,11 +55,28 @@ const Home = () => {
     return (
         <main>
             <Hero />
-            
+
             {/* Sponsor/Ad Banner Space */}
             <section className="sponsor-banner-container">
                 <div className="sponsor-banner">
-                    <p>Ad / Sponsor Banner Area</p>
+                    <div className="ticker-wrapper">
+                        {[1, 2, 3, 4].map((i) => (
+                            <div key={i} className="ticker-group">
+                                <span>ARTISAN CRAFTED SCENTS</span>
+                                <span className="ticker-dot">•</span>
+                                <span>LONG LASTING SILLAGE</span>
+                                <span className="ticker-dot">•</span>
+                                <span>ELIXIR OF PURE LUXURY</span>
+                                <span className="ticker-dot">•</span>
+                                <span>SIGNATURE OLFACTORY NOTES</span>
+                                <span className="ticker-dot">•</span>
+                                <span>HAND-POURED IN SMALL BATCHES</span>
+                                <span className="ticker-dot">•</span>
+                                <span>ELEGANCE IN EVERY MIST</span>
+                                <span className="ticker-dot">•</span>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </section>
 
