@@ -83,7 +83,7 @@
 }
 
 .slider-rating .stars {
-    color: #000;
+    color: #D4AF37; /* golden */
     font-size: 1.1rem;
     display: flex;
     gap: 2px;

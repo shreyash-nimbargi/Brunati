@@ -36,7 +36,7 @@
     
     .apple-header {
         width: 95%; /* Reduced to match desktop's rounded aspect ratio nicely */
-        margin: 15px auto; /* Match desktop margin */
+        margin: 25px auto; /* Shift down in mobile view */
         padding: 0 20px;
         border-radius: 50px !important; /* Force rounding on mobile */
     }
@@ -213,14 +213,14 @@ h1, h2, h3, .logo-text, .founder-name {
     justify-content: center;
     background: transparent;
     overflow: hidden;
-    height: calc(100vh - 68px);
+    height: 70vh;
     min-height: 500px;
 }
 
 @media (max-width: 768px) {
     .hero-poster {
-        margin-top: 59px; /* Slightly overlap by 1px */
-        height: calc(70vh - 59px);
+        margin-top: 74px; /* Adjusted due to 25px top margin + 50px header - 1px */
+        height: calc(70vh - 74px);
         min-height: 400px;
     }
 }
@@ -407,7 +407,7 @@ h1, h2, h3, .logo-text, .founder-name {
 .prod-meta { color: #1d1d1f; font-size: 1rem; font-weight: 700; opacity: 0.9; margin-top: 4px; }
 
 .prod-rating-box { text-align: right; }
-.prod-rating-box .stars { color: #1d1d1f; font-size: 0.8rem; display: flex; gap: 2px; justify-content: flex-end; }
+.prod-rating-box .stars { color: #D4AF37; font-size: 0.8rem; display: flex; gap: 2px; justify-content: flex-end; }
 .reviews-label { font-size: 0.75rem; font-weight: 700; color: #1d1d1f; display: block; margin-top: 4px; }
 
 .prod-accords-row {
@@ -662,26 +662,12 @@ h1, h2, h3, .logo-text, .founder-name {
     gap: 20px;
     overflow-x: auto;
     padding: 0 24px 40px;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(0,0,0,0.1) transparent;
+    scrollbar-width: none; /* Firefox */
     -webkit-overflow-scrolling: touch;
 }
 
 .scroll-container::-webkit-scrollbar {
-    height: 4px;
-}
-
-.scroll-container::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.scroll-container::-webkit-scrollbar-thumb {
-    background: rgba(0,0,0,0.1);
-    border-radius: 10px;
-}
-
-.scroll-container::-webkit-scrollbar-thumb:hover {
-    background: rgba(0,0,0,0.2);
+    display: none; /* Chrome, Safari, Edge */
 }
 
 .scent-carousel-base {
@@ -706,6 +692,11 @@ h1, h2, h3, .logo-text, .founder-name {
 .scent-carousel-base {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+}
+
+.scent-carousel-base::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
 }
 
 .scent-slide-wrapper {
