@@ -1,6 +1,44 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 
 const ScentArt = () => {
+    const scrollRef = useRef(null);
+
+    useEffect(() => {
+        let animationFrameId;
+        const container = scrollRef.current;
+        if (!container) return;
+
+        let isDown = false;
+        const handleDown = () => isDown = true;
+        const handleUp = () => isDown = false;
+
+        container.addEventListener('mousedown', handleDown);
+        container.addEventListener('mouseup', handleUp);
+        container.addEventListener('mouseleave', handleUp);
+        container.addEventListener('touchstart', handleDown, { passive: true });
+        container.addEventListener('touchend', handleUp);
+
+        const scroll = () => {
+            if (!isDown) {
+                container.scrollLeft += 1;
+                if (container.scrollLeft >= container.scrollWidth - container.clientWidth - 1) {
+                    container.scrollLeft = 0;
+                }
+            }
+            animationFrameId = requestAnimationFrame(scroll);
+        };
+        animationFrameId = requestAnimationFrame(scroll);
+
+        return () => {
+            cancelAnimationFrame(animationFrameId);
+            container.removeEventListener('mousedown', handleDown);
+            container.removeEventListener('mouseup', handleUp);
+            container.removeEventListener('mouseleave', handleUp);
+            container.removeEventListener('touchstart', handleDown);
+            container.removeEventListener('touchend', handleUp);
+        };
+    }, []);
+
     return (
         <section className="middle-poster content-wrap">
             <div className="section-header">
@@ -10,7 +48,7 @@ const ScentArt = () => {
                 </p>
             </div>
             
-            <div className="scent-carousel-base">
+            <div className="scent-carousel-base" ref={scrollRef}>
                 <div className="scent-track">
                     {[
                         "media/mistia/1.png",

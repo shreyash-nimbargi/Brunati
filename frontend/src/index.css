@@ -35,9 +35,10 @@
     }
     
     .apple-header {
-        width: 98%;
-        margin: 10px auto;
-        padding: 0 15px;
+        width: 95%; /* Reduced to match desktop's rounded aspect ratio nicely */
+        margin: 15px auto; /* Match desktop margin */
+        padding: 0 20px;
+        border-radius: 50px !important; /* Force rounding on mobile */
     }
 
     .nav-group {
@@ -93,18 +94,18 @@ h1, h2, h3, .logo-text, .founder-name {
 }
 
 .apple-header {
-    width: 95%;
-    max-width: 1400px;
+    width: 98%;
+    max-width: 1800px;
     margin: 15px auto;
     height: var(--header-height);
-    background-color: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background-color: rgba(255, 255, 255, 0.15); /* More transparent */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 30px; /* Refined padding for the rounded bar */
-    border: 1px solid rgba(0, 0, 0, 0.08); /* Full border for rounded look */
+    border: none; /* Removed black border between them */
     border-radius: 50px; /* Fully rounded */
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     position: relative;
@@ -114,11 +115,11 @@ h1, h2, h3, .logo-text, .founder-name {
 }
 
 .apple-header.scrolled {
-    background-color: rgba(255, 255, 255, 0.95);
+    background-color: rgba(255, 255, 255, 0.6); /* Slightly more transparent when scrolled too */
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: none;
 }
 
 .apple-header .icon-btn, .apple-header .logo-text {
@@ -153,7 +154,7 @@ h1, h2, h3, .logo-text, .founder-name {
     color: inherit;
     display: flex;
     align-items: center;
-    font-size: 20px;
+    font-size: 24px; /* Slightly larger for desktop */
     padding: 10px;
     border-radius: 50%;
     transition: all 0.3s ease;
@@ -207,18 +208,19 @@ h1, h2, h3, .logo-text, .founder-name {
 /* HERO */
 .hero-poster {
     width: 100%;
-    margin-top: 0; 
+    margin-top: 68px; /* Slightly overlap to hide pixel gaps */
     display: flex;
     justify-content: center;
-    background: #000;
+    background: transparent;
     overflow: hidden;
-    height: 100vh;
+    height: calc(100vh - 68px);
     min-height: 500px;
 }
 
 @media (max-width: 768px) {
     .hero-poster {
-        height: 70vh;
+        margin-top: 59px; /* Slightly overlap by 1px */
+        height: calc(70vh - 59px);
         min-height: 400px;
     }
 }
@@ -228,6 +230,38 @@ h1, h2, h3, .logo-text, .founder-name {
     height: 100%;
     object-fit: cover;
     display: block;
+}
+
+/* SPONSOR BANNER */
+.sponsor-banner-container {
+    width: 100%;
+    background-color: var(--apple-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+.sponsor-banner {
+    width: 100%;
+    height: 85px; /* Same size as the previous gap you wanted filled */
+    background: #000;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+@media (max-width: 768px) {
+    .sponsor-banner {
+        height: 60px;
+        font-size: 0.7rem;
+    }
 }
 
 /* LAYOUT HELPERS */
@@ -260,6 +294,23 @@ h1, h2, h3, .logo-text, .founder-name {
     overflow-x: auto; 
     padding: 0 0 10px;
     scrollbar-width: none; 
+}
+
+@media (max-width: 480px) {
+    .tabs {
+        gap: 6px;
+        overflow-x: hidden; /* disable scroll */
+        flex-wrap: nowrap;
+        width: 100%;
+        padding: 0 5px 10px 5px;
+    }
+    .tab-btn {
+        flex: 1; /* make buttons take equal width */
+        padding: 10px 5px !important;
+        font-size: 0.75rem !important;
+        letter-spacing: 0.5px !important;
+        text-align: center;
+    }
 }
 
 
@@ -644,12 +695,17 @@ h1, h2, h3, .logo-text, .founder-name {
     display: flex;
     gap: 30px;
     width: max-content;
-    animation: slowSlide 40s linear infinite;
+    /* Animation removed here to be controlled via JS for auto+manual scroll */
 }
 
 @keyframes slowSlide {
     0% { transform: translateX(0); }
     100% { transform: translateX(-50%); }
+}
+
+.scent-carousel-base {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .scent-slide-wrapper {

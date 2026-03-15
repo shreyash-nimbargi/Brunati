@@ -1,10 +1,47 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import Hero from '../components/landing/Hero';
 import Collections from '../components/landing/Collections';
 import ScentArt from '../components/landing/ScentArt';
 
 
 const Home = () => {
+    const reviewsRef = useRef(null);
+
+    useEffect(() => {
+        let animationFrameId;
+        const container = reviewsRef.current;
+        if (!container) return;
+
+        let isDown = false;
+        const handleDown = () => isDown = true;
+        const handleUp = () => isDown = false;
+
+        container.addEventListener('mousedown', handleDown);
+        container.addEventListener('mouseup', handleUp);
+        container.addEventListener('mouseleave', handleUp);
+        container.addEventListener('touchstart', handleDown, { passive: true });
+        container.addEventListener('touchend', handleUp);
+
+        const scroll = () => {
+            if (!isDown) {
+                container.scrollLeft += 1;
+                if (container.scrollLeft >= container.scrollWidth - container.clientWidth - 1) {
+                    container.scrollLeft = 0;
+                }
+            }
+            animationFrameId = requestAnimationFrame(scroll);
+        };
+        animationFrameId = requestAnimationFrame(scroll);
+
+        return () => {
+            cancelAnimationFrame(animationFrameId);
+            container.removeEventListener('mousedown', handleDown);
+            container.removeEventListener('mouseup', handleUp);
+            container.removeEventListener('mouseleave', handleUp);
+            container.removeEventListener('touchstart', handleDown);
+            container.removeEventListener('touchend', handleUp);
+        };
+    }, []);
 
     // Content for Client Experiences (Reviews)
     const reviews = [
@@ -18,6 +55,14 @@ const Home = () => {
     return (
         <main>
             <Hero />
+            
+            {/* Sponsor/Ad Banner Space */}
+            <section className="sponsor-banner-container">
+                <div className="sponsor-banner">
+                    <p>Ad / Sponsor Banner Area</p>
+                </div>
+            </section>
+
             <Collections />
 
             <ScentArt />
@@ -26,7 +71,7 @@ const Home = () => {
             {/* Reviews Section */}
             <section className="reviews-section">
                 <div className="section-header"><h2 className="section-title">Reviews</h2></div>
-                <div className="scroll-container">
+                <div className="scroll-container" ref={reviewsRef}>
                     {reviews.map((r, idx) => (
                         <div key={idx} className="review-card">
                             <div>
