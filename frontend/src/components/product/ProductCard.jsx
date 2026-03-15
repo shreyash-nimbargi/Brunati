@@ -6,11 +6,10 @@ const ProductCard = ({ id, name, meta, price, img1, img2, accords, description }
 
     return (
         <div className="product-card" onClick={() => navigate(`/product/${id}`)}>
-            <div className="wishlist-overlay">
-                <ion-icon name="heart-outline"></ion-icon>
-            </div>
-            
             <div className="img-container">
+                <div className="wishlist-overlay">
+                    <ion-icon name="heart-outline"></ion-icon>
+                </div>
                 <img src={img1} className="prod-img-primary" alt={name} />
                 <img src={img2} className="prod-img-secondary" alt={`${name} Hover`} />
             </div>
@@ -38,7 +37,10 @@ const ProductCard = ({ id, name, meta, price, img1, img2, accords, description }
                 </div>
 
                 <div className="prod-sizes-row">
-                    <span className="size-label">Size:</span> 30ml 50ml 100ml 20ml
+                    <div className="size-options">
+                        <span className="size-pill">50ml</span>
+                        <span className="size-pill">100ml</span>
+                    </div>
                 </div>
 
                 <hr className="card-divider" />

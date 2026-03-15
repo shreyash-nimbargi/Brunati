@@ -55,31 +55,6 @@ const Home = () => {
     return (
         <main>
             <Hero />
-
-            {/* Sponsor/Ad Banner Space */}
-            <section className="sponsor-banner-container">
-                <div className="sponsor-banner">
-                    <div className="ticker-wrapper">
-                        {[1, 2, 3, 4].map((i) => (
-                            <div key={i} className="ticker-group">
-                                <span>ARTISAN CRAFTED SCENTS</span>
-                                <span className="ticker-dot">•</span>
-                                <span>LONG LASTING SILLAGE</span>
-                                <span className="ticker-dot">•</span>
-                                <span>ELIXIR OF PURE LUXURY</span>
-                                <span className="ticker-dot">•</span>
-                                <span>SIGNATURE OLFACTORY NOTES</span>
-                                <span className="ticker-dot">•</span>
-                                <span>HAND-POURED IN SMALL BATCHES</span>
-                                <span className="ticker-dot">•</span>
-                                <span>ELEGANCE IN EVERY MIST</span>
-                                <span className="ticker-dot">•</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
             <Collections />
 
             <ScentArt />
@@ -101,6 +76,34 @@ const Home = () => {
                 </div>
             </section>
 
+            {/* Luxury Brand Banner */}
+            <section className="brand-banner">
+                <div className="brand-banner-inner">
+                    <div className="brand-banner-ornament">✦</div>
+                    <p className="brand-banner-tagline">The language of desire</p>
+                    <h2 className="brand-banner-heading">Wear what cannot<br />be spoken</h2>
+                    <p className="brand-banner-sub">
+                        Each Brunati fragrance is a living signature — an invisible trail of memory,<br className="d-none-mobile" />
+                        desire, and identity that lingers long after you have left the room.
+                    </p>
+                    <div className="brand-banner-divider">
+                        <span className="brand-banner-line"></span>
+                        <span className="brand-banner-diamond">◆</span>
+                        <span className="brand-banner-line"></span>
+                    </div>
+                    <div className="brand-banner-notes">
+                        <span>Oud</span>
+                        <span className="dot">·</span>
+                        <span>Amber</span>
+                        <span className="dot">·</span>
+                        <span>Sandalwood</span>
+                        <span className="dot">·</span>
+                        <span>Saffron</span>
+                        <span className="dot">·</span>
+                        <span>Vetiver</span>
+                    </div>
+                </div>
+            </section>
 
         </main>
     );

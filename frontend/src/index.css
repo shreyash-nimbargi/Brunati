@@ -32,13 +32,14 @@
         --floating-gap: 8px;
         --radius: 14px;
         --header-height: 50px;
+        --section-padding: 30px;
     }
     
     .apple-header {
-        width: 95%; /* Reduced to match desktop's rounded aspect ratio nicely */
-        margin: 25px auto; /* Shift down in mobile view */
+        width: 100%; 
+        margin: 0 auto; 
         padding: 0 20px;
-        border-radius: 50px !important; /* Force rounding on mobile */
+        border-radius: 0 !important; 
     }
 
     .nav-group {
@@ -47,7 +48,19 @@
 
     .icon-btn {
         padding: 8px;
-        font-size: 18px;
+        font-size: 13px; /* Reduced by 30% from 18px */
+    }
+
+    .section-header {
+        margin-bottom: 5px;
+    }
+
+    .section-title {
+        margin-bottom: 5px;
+    }
+
+    .tabs {
+        margin-bottom: 5px !important;
     }
 
     .wishlist-mobile-btn {
@@ -60,18 +73,19 @@
 
     .product-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
+        gap: 10px;
     }
 
     .product-card {
-        padding: 10px;
+        padding: 8px 10px 10px 10px;
         min-height: auto;
         border-radius: 14px;
         gap: 0;
     }
 
-    .prod-sizes-row, .prod-accords-row, .card-divider, .complimentary-gift-text {
-        display: none;
+    .prod-sizes-row {
+        display: block;
+        margin-bottom: 8px;
     }
 
     .prod-description-mini {
@@ -81,8 +95,10 @@
         -webkit-box-orient: vertical;
         overflow: hidden;
         margin-bottom: 8px;
-        line-height: 1.3;
+        line-height: 1.4;
         font-size: 0.75rem;
+        color: #6e6e73;
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
     }
 
     .prod-name {
@@ -101,19 +117,33 @@
     }
 
     .img-container {
-        margin-bottom: 8px;
+        margin-bottom: 5px;
     }
 
     .img-container img {
         padding: 10px;
     }
 
+    .hero-poster {
+        margin-top: var(--header-height); 
+        height: calc(70vh - var(--header-height));
+        min-height: 400px;
+    }
+
+    .content-wrap {
+        padding: 20px 16px; 
+    }
+
     .wishlist-overlay {
-        top: 8px;
-        right: 8px;
-        width: 30px;
-        height: 30px;
-        font-size: 18px;
+        top: 10px;
+        right: 10px;
+        width: 35px;
+        height: 35px;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        font-size: 20px;
+        z-index: 10;
+        position: absolute;
     }
 }
 
@@ -126,7 +156,7 @@ html {
 }
 
 body {
-    font-family: 'Cinzel', serif;
+    font-family: 'Roboto', sans-serif;
     background-color: var(--apple-bg); 
     color: var(--text-main);
     overflow-x: hidden;
@@ -134,9 +164,11 @@ body {
 }
 
 /* Typography Enhancements */
-h1, h2, h3, .founder-name {
-    font-family: 'Cinzel', serif;
-    letter-spacing: -0.01em;
+h1, h2, h3, .section-title, .founder-name {
+    font-family: 'Trajan Pro', serif;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
 }
 
 /* NAVIGATION */
@@ -152,49 +184,45 @@ h1, h2, h3, .founder-name {
 }
 
 .apple-header {
-    width: 98%;
-    max-width: 1800px;
-    margin: 15px auto;
+    width: 100%;
+    margin: 0;
     height: var(--header-height);
-    background-color: rgba(255, 255, 255, 0.15); /* More transparent */
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background-color: #000000;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 30px; /* Refined padding for the rounded bar */
-    border: none; /* Removed black border between them */
-    border-radius: 50px; /* Fully rounded */
+    padding: 0 30px; 
+    border: none; 
+    border-radius: 0; 
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     position: relative;
     overflow: hidden;
-    color: var(--text-main);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .apple-header.scrolled {
-    background-color: rgba(255, 255, 255, 0.6); /* Slightly more transparent when scrolled too */
+    background-color: #000000;
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     border: none;
 }
 
-.apple-header .icon-btn, .apple-header .logo-text {
-    color: var(--text-main);
-}
-
+.apple-header .icon-btn, .apple-header .logo-text,
 .apple-header.scrolled .icon-btn, .apple-header.scrolled .logo-text {
-    color: #000;
+    color: #ffffff;
 }
 
 .logo-text {
     font-family: 'Trajan Pro', serif;
-    font-weight: 700;
-    letter-spacing: 2px;
-    font-size: 1.4rem;
+    font-weight: 900;
+    letter-spacing: 3px;
+    font-size: 1.5rem;
     text-decoration: none;
-    color: var(--text-main);
+    color: #ffffff;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
@@ -213,7 +241,7 @@ h1, h2, h3, .founder-name {
     color: inherit;
     display: flex;
     align-items: center;
-    font-size: 24px; /* Slightly larger for desktop */
+    font-size: 17px; /* Reduced by 30% from 24px */
     padding: 10px;
     border-radius: 50%;
     transition: all 0.3s ease;
@@ -229,16 +257,16 @@ h1, h2, h3, .founder-name {
 .dropdown-menu {
     width: 100%;
     max-width: 1200px;
-    background-color: var(--glass-bg);
+    background-color: #000000;
     backdrop-filter: blur(var(--blur-strength));
     -webkit-backdrop-filter: blur(var(--blur-strength));
-    margin-top: 8px;
-    border-radius: var(--radius);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    margin-top: 0;
+    border-radius: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     display: none;
     flex-direction: column;
     padding: 10px 0;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     overflow: hidden;
 }
 
@@ -250,14 +278,14 @@ h1, h2, h3, .founder-name {
 .menu-item {
     padding: 14px 25px;
     text-decoration: none;
-    color: var(--text-main);
+    color: #ffffff;
     font-size: 1rem;
     font-weight: 400;
     transition: background 0.2s;
-    border-bottom: 1px solid rgba(0,0,0,0.03);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
-.menu-item:hover { background: rgba(0,0,0,0.02); }
+.menu-item:hover { background: rgba(255,255,255,0.05); }
 
 @keyframes slideDown {
     from { opacity: 0; transform: translateY(-15px); }
@@ -267,7 +295,7 @@ h1, h2, h3, .founder-name {
 /* HERO */
 .hero-poster {
     width: 100%;
-    margin-top: 85px; /* Increased to prevent navbar overlap */
+    margin-top: var(--header-height); 
     display: flex;
     justify-content: center;
     background: transparent;
@@ -276,81 +304,17 @@ h1, h2, h3, .founder-name {
     min-height: 500px;
 }
 
-@media (max-width: 768px) {
-    .hero-poster {
-        margin-top: 74px; /* Adjusted due to 25px top margin + 50px header - 1px */
-        height: calc(70vh - 74px);
-        min-height: 400px;
-    }
-}
+
 
 .hero-poster video {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+    pointer-events: none; /* Disables play/pause interaction */
 }
 
-/* SPONSOR BANNER */
-.sponsor-banner-container {
-    width: 100%;
-    background-color: var(--apple-bg);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-}
 
-.sponsor-banner {
-    width: 100%;
-    height: 40px;
-    background: #000;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    overflow: hidden; /* Hide overflow for the sliding text */
-    border-top: 1px solid rgba(255,255,255,0.1);
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-
-.ticker-wrapper {
-    display: flex;
-    white-space: nowrap;
-}
-
-.ticker-group {
-    display: flex;
-    align-items: center;
-    gap: 30px;
-    padding-right: 30px;
-    animation: tickerScroll 30s linear infinite;
-}
-
-.ticker-group span {
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 2px;
-}
-
-.ticker-dot {
-    color: rgba(255, 255, 255, 0.4);
-    font-size: 1.2rem !important;
-}
-
-@keyframes tickerScroll {
-    from { transform: translateX(0); }
-    to { transform: translateX(-100%); }
-}
-
-@media (max-width: 768px) {
-    .sponsor-banner {
-        height: 35px;
-    }
-    .ticker-group span {
-        font-size: 0.6rem;
-        letter-spacing: 1px;
-    }
-}
 
 /* LAYOUT HELPERS */
 .content-wrap { 
@@ -359,11 +323,7 @@ h1, h2, h3, .founder-name {
     padding: var(--section-padding) 24px;
 }
 
-@media (max-width: 768px) {
-    .content-wrap {
-        padding: 40px 16px;
-    }
-}
+
 
 .section-header { text-align: center; margin-bottom: 60px; }
 .section-title { 
@@ -462,20 +422,21 @@ h1, h2, h3, .founder-name {
 
 .wishlist-overlay {
     position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 10;
+    top: 15px;
+    right: 15px;
+    z-index: 20;
     font-size: 24px;
     background: #fff;
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     color: #1d1d1f;
     transition: all 0.3s;
+    cursor: pointer;
 }
 
 .wishlist-overlay:hover { color: var(--error); transform: scale(1.1); }
@@ -497,11 +458,27 @@ h1, h2, h3, .founder-name {
     line-height: 1.2; 
     text-transform: none; 
 }
-.prod-meta { color: #1d1d1f; font-size: 1rem; font-weight: 700; opacity: 0.9; margin-top: 4px; }
+.prod-meta { 
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    color: #1d1d1f; 
+    font-size: 0.9rem; 
+    font-weight: 500; 
+    opacity: 0.8; 
+    margin-top: 2px; 
+    text-transform: none; 
+}
 
 .prod-rating-box { text-align: right; }
 .prod-rating-box .stars { color: #D4AF37; font-size: 0.8rem; display: flex; gap: 2px; justify-content: flex-end; }
-.reviews-label { font-size: 0.75rem; font-weight: 700; color: #1d1d1f; display: block; margin-top: 4px; }
+.reviews-label { 
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    font-size: 0.75rem; 
+    font-weight: 600; 
+    color: #1d1d1f; 
+    display: block; 
+    margin-top: 4px; 
+    text-transform: none;
+}
 
 .prod-accords-row {
     color: #1d1d1f;
@@ -520,26 +497,50 @@ h1, h2, h3, .founder-name {
 .card-divider { border: 0; border-top: 1px solid #d2d2d7; margin: 20px 0; }
 
 .prod-description-mini {
-    font-size: 0.8rem;
-    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 0.85rem;
+    line-height: 1.5;
     color: #6e6e73;
     margin-bottom: 15px;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+}
+
+.size-options {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.size-pill {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border: 1px solid #d2d2d7;
+    border-radius: 4px;
+    color: #1d1d1f;
 }
 
 .add-to-bag-btn {
     width: 100%;
-    padding: 20px;
+    padding: 16px;
     background: #111;
     color: #fff;
     border: 1px solid #111;
     border-radius: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
     font-size: 0.9rem;
     font-weight: 600;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     position: relative;
     z-index: 1;
+    text-transform: none;
 }
 .add-to-bag-btn:hover { 
     background: #fff; 
@@ -741,12 +742,12 @@ h1, h2, h3, .founder-name {
 
 /* REVIEWS & SCENT ART */
 .reviews-section, .middle-poster {
-    padding: 80px 0;
+    padding: 24px 0 60px 0;
 }
 
 .middle-poster {
     background: var(--apple-off-white);
-    margin: 40px 0;
+    margin: 12px 0;
     text-align: center;
 }
 
@@ -774,7 +775,12 @@ h1, h2, h3, .founder-name {
     display: flex;
     gap: 30px;
     width: max-content;
-    /* Animation removed here to be controlled via JS for auto+manual scroll */
+}
+
+@media (max-width: 768px) {
+    .scent-track {
+        gap: 15px;
+    }
 }
 
 @keyframes slowSlide {
@@ -793,7 +799,13 @@ h1, h2, h3, .founder-name {
 }
 
 .scent-slide-wrapper {
-    flex: 0 0 350px;
+    flex: 0 0 220px;
+}
+
+@media (max-width: 768px) {
+    .scent-slide-wrapper {
+        flex: 0 0 160px;
+    }
 }
 
 .scent-slide-img { 
@@ -834,11 +846,19 @@ h1, h2, h3, .founder-name {
 
 .review-text {
     font-style: italic;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    font-family: 'Cinzel', serif;
     color: var(--text-main);
-    line-height: 1.5;
+    line-height: 1.6;
     margin-bottom: 20px;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
+}
+
+.review-author {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 0.85rem;
 }
 
 @media (max-width: 480px) {
@@ -847,6 +867,152 @@ h1, h2, h3, .founder-name {
         padding: 20px;
     }
 }
+
+/* ========================================
+   BRAND STATEMENT BANNER
+   ======================================== */
+.brand-banner {
+    width: 100%;
+    background: 
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(180, 140, 70, 0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 80% 100%, rgba(120, 90, 40, 0.08) 0%, transparent 60%),
+        linear-gradient(160deg, #0a0a0a 0%, #111111 40%, #0d0d0d 70%, #080808 100%);
+    padding: 60px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.brand-banner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.5), transparent);
+}
+
+.brand-banner::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.5), transparent);
+}
+
+.brand-banner-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.brand-banner-ornament {
+    font-size: 1rem;
+    color: #D4AF37;
+    opacity: 0.8;
+    margin-bottom: 12px;
+    display: block;
+    letter-spacing: 8px;
+}
+
+.brand-banner-tagline {
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: #D4AF37;
+    opacity: 0.85;
+    margin-bottom: 14px;
+}
+
+.brand-banner-heading {
+    font-family: 'Trajan Pro', serif !important;
+    font-size: clamp(1.3rem, 3vw, 2.3rem);
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.2;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+}
+
+.brand-banner-sub {
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.8rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.55);
+    font-weight: 300;
+    letter-spacing: 0.3px;
+    margin-bottom: 24px;
+}
+
+.brand-banner-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.brand-banner-line {
+    display: block;
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.6));
+}
+
+.brand-banner-line:last-child {
+    background: linear-gradient(90deg, rgba(212, 175, 55, 0.6), transparent);
+}
+
+.brand-banner-diamond {
+    color: #D4AF37;
+    font-size: 0.5rem;
+    opacity: 0.7;
+}
+
+.brand-banner-notes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.brand-banner-notes .dot {
+    color: #D4AF37;
+    opacity: 0.6;
+    font-size: 1.2rem;
+    line-height: 0;
+}
+
+@media (max-width: 768px) {
+    .brand-banner {
+        padding: 42px 24px;
+    }
+
+    .brand-banner-line {
+        width: 50px;
+    }
+
+    .brand-banner-notes {
+        gap: 8px;
+        font-size: 0.65rem;
+        letter-spacing: 2px;
+    }
+
+    .d-none-mobile {
+        display: none;
+    }
+}
+
+
 
 
 
@@ -1044,6 +1210,11 @@ footer {
 
     .icon-btn {
         padding: 6px;
+    }
+
+    .hero-poster {
+        margin-top: 50px; /* Header margin is 0 on small mobile, so just match height */
+        height: calc(70vh - 50px);
     }
 }
 

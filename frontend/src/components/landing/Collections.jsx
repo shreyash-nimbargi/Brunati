@@ -69,7 +69,7 @@ const Collections = () => {
                         className={`tab-btn ${activeTab === 'gift' ? 'active' : ''}`} 
                         onClick={() => setActiveTab('gift')}
                     >
-                        Gift Sets
+                        Unisex
                     </button>
                 </div>
             </div>
@@ -97,9 +97,9 @@ const Collections = () => {
 
                     <div className="slider-info-col">
                         <div className="slider-title-row">
-                            <h2 className="slider-title">{currentProduct.name.toUpperCase()}</h2>
+                            <h2 className="slider-title">{currentProduct.name}</h2>
                             <span className="slider-divider">\</span>
-                            <span className="slider-category">{currentProduct.gender.toUpperCase()}</span>
+                            <span className="slider-category">{currentProduct.gender}</span>
                             <div className="red-dot" style={{width: '10px', height: '10px', background: '#D22B2B', borderRadius: '50%', marginLeft: 'auto', marginRight: '20px'}}></div>
                         </div>
 
@@ -109,20 +109,20 @@ const Collections = () => {
                         </div>
 
                         <p className="slider-description">
-                            {currentProduct.description.toUpperCase()}
+                            {currentProduct.description}
                         </p>
 
                         <div className="slider-notes-grid">
                             <div className="slider-note-item">
-                                <h4>THE INTRODUCTION:</h4>
+                                <h4>Introduction:</h4>
                                 <p>{currentProduct.topNotes && currentProduct.topNotes.replace(/,\s*/g, '/')}</p>
                             </div>
                             <div className="slider-note-item">
-                                <h4>THE DISCOVERY:</h4>
+                                <h4>Discovery:</h4>
                                 <p>{(currentProduct.middleNotes || "Floral Symphony").replace(/,\s*/g, '/')}</p>
                             </div>
                             <div className="slider-note-item">
-                                <h4>THE IMPRESSION:</h4>
+                                <h4>Impression:</h4>
                                 <p>{currentProduct.baseNotes.split(',').slice(0,2).join('/')}</p>
                             </div>
                         </div>
@@ -140,7 +140,7 @@ const Collections = () => {
                         </div>
 
                         <div className="slider-add-bar">
-                            <span>ADD TO CART</span>
+                            <span>Add to cart</span>
                             <span>{currentProduct.price}</span>
                         </div>
                     </div>
