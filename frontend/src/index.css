@@ -292,27 +292,9 @@ h1, h2, h3, .section-title, .founder-name {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* HERO */
-.hero-poster {
-    width: 100%;
-    margin-top: var(--header-height); 
-    display: flex;
-    justify-content: center;
-    background: transparent;
-    overflow: hidden;
-    height: 70vh;
-    min-height: 500px;
-}
-
-
-
-.hero-poster video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    pointer-events: none; /* Disables play/pause interaction */
-}
+/* HERO 
+   Hero styles moved to Hero.css
+*/
 
 
 
@@ -1366,15 +1348,64 @@ footer {
     background-color: var(--apple-bg);
 }
 
-.influencers-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
+.influencers-slider-wrapper {
+    position: relative;
     max-width: 1400px;
     margin: 0 auto;
+    display: flex;
+    align-items: center;
+}
+
+.influencers-slider {
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* Firefox */
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+}
+
+.influencers-slider::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+.slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0,0,0,0.1);
+    color: #111;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.slider-arrow:hover {
+    background: #111;
+    color: #fff;
+}
+
+.left-arrow {
+    left: -20px;
+}
+
+.right-arrow {
+    right: -20px;
 }
 
 .influencer-card {
+    flex: 0 0 calc(25% - 11.25px); /* Show exactly 4 items with gap calculation */
+    min-width: calc(25% - 11.25px);
     display: flex;
     flex-direction: column;
     border: 1px solid rgba(0,0,0,0.1);
@@ -1387,7 +1418,7 @@ footer {
 .influencer-image-placeholder {
     width: 100%;
     aspect-ratio: 1/1;
-    background-color: #f0f0f0; /* Blank placeholder */
+    background-color: #f0f0f0;
 }
 
 .influencer-info {
@@ -1422,15 +1453,18 @@ footer {
 }
 
 @media (max-width: 1024px) {
-    .influencers-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
+    .influencer-card {
+        flex: 0 0 calc(50% - 7.5px);
+        min-width: calc(50% - 7.5px);
     }
 }
 
 @media (max-width: 600px) {
-    .influencers-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
+    .influencer-card {
+        flex: 0 0 88%;
+        min-width: 88%;
+    }
+    .slider-arrow {
+        display: none; /* Usually hide arrows on mobile, manual swipe is better */
     }
 }

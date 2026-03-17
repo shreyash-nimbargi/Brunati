@@ -6,6 +6,14 @@ import OlfactoryTrends from '../components/landing/OlfactoryTrends';
 
 const Home = () => {
     const reviewsRef = useRef(null);
+    const influencersRef = useRef(null);
+
+    const scrollInfluencers = (direction) => {
+        if (influencersRef.current) {
+            const scrollAmount = 300; // manual scroll distance
+            influencersRef.current.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
+        }
+    };
 
     useEffect(() => {
         let animationFrameId;
@@ -72,6 +80,16 @@ const Home = () => {
             name: "SHANAYA KAPOOR",
             role: "INDIAN ACTRESS",
             wearing: "WEARING: NINJA NATION // 001"
+        },
+        {
+            name: "VICKY KAUSHAL",
+            role: "INDIAN ACTOR",
+            wearing: "WEARING: OUD WOOD"
+        },
+        {
+            name: "ALIA BHATT",
+            role: "INDIAN ACTRESS",
+            wearing: "WEARING: NIGHT BLOOM"
         }
     ];
 
@@ -101,17 +119,27 @@ const Home = () => {
 
             {/* Influencers Section */}
             <section className="influencers-section">
-                <div className="influencers-grid">
-                    {influencersList.map((influencer, idx) => (
-                        <div key={idx} className="influencer-card">
-                            <div className="influencer-image-placeholder"></div>
-                            <div className="influencer-info">
-                                <p className="influencer-name">{influencer.name}</p>
-                                <p className="influencer-role">{influencer.role}</p>
-                                <p className="influencer-wearing">{influencer.wearing}</p>
+                <div className="influencers-slider-wrapper">
+                    <button className="slider-arrow left-arrow" onClick={() => scrollInfluencers('left')}>
+                        &#8249;
+                    </button>
+
+                    <div className="influencers-slider" ref={influencersRef}>
+                        {influencersList.map((influencer, idx) => (
+                            <div key={idx} className="influencer-card">
+                                <div className="influencer-image-placeholder"></div>
+                                <div className="influencer-info">
+                                    <p className="influencer-name">{influencer.name}</p>
+                                    <p className="influencer-role">{influencer.role}</p>
+                                    <p className="influencer-wearing">{influencer.wearing}</p>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
+
+                    <button className="slider-arrow right-arrow" onClick={() => scrollInfluencers('right')}>
+                        &#8250;
+                    </button>
                 </div>
             </section>
 
