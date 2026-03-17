@@ -15,6 +15,8 @@ const ProductDetail = () => {
     const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
     const [selectedGift, setSelectedGift] = useState(null);
 
+    const getImgSrc = (src) => src.startsWith('http') || src.startsWith('/') ? src : `/${src}`;
+
     const toggleAccordion = (idx) => {
         setActiveAccordion(activeAccordion === idx ? null : idx);
     };
@@ -56,7 +58,7 @@ const ProductDetail = () => {
                                     }}
                                 >
                                     <div style={{ width: '16px', height: '16px', border: '1px solid #000', borderRadius: '4px', background: selectedGift === p.name ? '#000' : 'transparent' }}></div>
-                                    <img src={p.images[0]} style={{ width: '40px', height: '40px', objectFit: 'cover' }} alt={p.name} />
+                                    <img src={getImgSrc(p.images[0])} style={{ width: '40px', height: '40px', objectFit: 'cover' }} alt={p.name} />
                                     <span>{p.name}</span>
                                 </div>
                             ))}
@@ -90,7 +92,7 @@ const ProductDetail = () => {
             <main className="product-page-grid">
                 <div className="gallery-container">
                     <div className="main-image-box">
-                        <img src={mainImg} alt={product.name} />
+                        <img src={getImgSrc(mainImg)} alt={product.name} />
                     </div>
                     <div className="carousel-track" style={{ display: 'flex', gap: '10px' }}>
                         {product.images.map((img, idx) => (
@@ -100,7 +102,7 @@ const ProductDetail = () => {
                                 onClick={() => setMainImg(img)}
                                 style={{ width: '80px', height: '80px', borderRadius: '12px', border: `2px solid ${mainImg === img ? '#000' : '#eee'}`, cursor: 'pointer', overflow: 'hidden' }}
                             >
-                                <img src={img} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                <img src={getImgSrc(img)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                             </div>
                         ))}
                     </div>
