@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import Hero from '../components/landing/Hero';
 import Collections from '../components/landing/Collections';
 import ScentArt from '../components/landing/ScentArt';
+import Influencers from '../components/landing/Influencers';
 
 
 const Home = () => {
@@ -76,34 +77,7 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* Luxury Brand Banner */}
-            <section className="brand-banner">
-                <div className="brand-banner-inner">
-                    <div className="brand-banner-ornament">✦</div>
-                    <p className="brand-banner-tagline">The language of desire</p>
-                    <h2 className="brand-banner-heading">Wear what cannot<br />be spoken</h2>
-                    <p className="brand-banner-sub">
-                        Each Brunati fragrance is a living signature — an invisible trail of memory,<br className="d-none-mobile" />
-                        desire, and identity that lingers long after you have left the room.
-                    </p>
-                    <div className="brand-banner-divider">
-                        <span className="brand-banner-line"></span>
-                        <span className="brand-banner-diamond">◆</span>
-                        <span className="brand-banner-line"></span>
-                    </div>
-                    <div className="brand-banner-notes">
-                        <span>Oud</span>
-                        <span className="dot">·</span>
-                        <span>Amber</span>
-                        <span className="dot">·</span>
-                        <span>Sandalwood</span>
-                        <span className="dot">·</span>
-                        <span>Saffron</span>
-                        <span className="dot">·</span>
-                        <span>Vetiver</span>
-                    </div>
-                </div>
-            </section>
+            <Influencers />
 
         </main>
     );
