@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import Hero from '../components/landing/Hero';
 import Collections from '../components/landing/Collections';
 import ScentArt from '../components/landing/ScentArt';
-
+import OlfactoryTrends from '../components/landing/OlfactoryTrends';
 
 const Home = () => {
     const reviewsRef = useRef(null);
@@ -52,13 +52,36 @@ const Home = () => {
         { name: "David K.", text: "The Art of Scent indeed. Brunati has redefined what a luxury fragrance should feel like." }
     ];
 
+    const influencersList = [
+        {
+            name: "KATRINA KAIF",
+            role: "INDIAN ACTRESS",
+            wearing: "WEARING: ILLUMINATI"
+        },
+        {
+            name: "RAFTAAR",
+            role: "MUSICIAN, HIP HOP",
+            wearing: "WEARING: ILLUMINATI"
+        },
+        {
+            name: "PANTHER",
+            role: "MUSICIAN, HIP HOP",
+            wearing: "WEARING: UM VISION"
+        },
+        {
+            name: "SHANAYA KAPOOR",
+            role: "INDIAN ACTRESS",
+            wearing: "WEARING: NINJA NATION // 001"
+        }
+    ];
+
     return (
         <main>
             <Hero />
             <Collections />
 
             <ScentArt />
-
+            <OlfactoryTrends />
 
             {/* Reviews Section */}
             <section className="reviews-section">
@@ -76,32 +99,19 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* Luxury Brand Banner */}
-            <section className="brand-banner">
-                <div className="brand-banner-inner">
-                    <div className="brand-banner-ornament">✦</div>
-                    <p className="brand-banner-tagline">The language of desire</p>
-                    <h2 className="brand-banner-heading">Wear what cannot<br />be spoken</h2>
-                    <p className="brand-banner-sub">
-                        Each Brunati fragrance is a living signature — an invisible trail of memory,<br className="d-none-mobile" />
-                        desire, and identity that lingers long after you have left the room.
-                    </p>
-                    <div className="brand-banner-divider">
-                        <span className="brand-banner-line"></span>
-                        <span className="brand-banner-diamond">◆</span>
-                        <span className="brand-banner-line"></span>
-                    </div>
-                    <div className="brand-banner-notes">
-                        <span>Oud</span>
-                        <span className="dot">·</span>
-                        <span>Amber</span>
-                        <span className="dot">·</span>
-                        <span>Sandalwood</span>
-                        <span className="dot">·</span>
-                        <span>Saffron</span>
-                        <span className="dot">·</span>
-                        <span>Vetiver</span>
-                    </div>
+            {/* Influencers Section */}
+            <section className="influencers-section">
+                <div className="influencers-grid">
+                    {influencersList.map((influencer, idx) => (
+                        <div key={idx} className="influencer-card">
+                            <div className="influencer-image-placeholder"></div>
+                            <div className="influencer-info">
+                                <p className="influencer-name">{influencer.name}</p>
+                                <p className="influencer-role">{influencer.role}</p>
+                                <p className="influencer-wearing">{influencer.wearing}</p>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </section>
 
