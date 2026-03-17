@@ -17,7 +17,7 @@
     --error: #ff3b30;
 
     /* Header Specifics */
-    --header-height: 54px;
+    --header-height: 80px;
     --glass-bg: rgba(255, 255, 255, 0.85); 
     --blur-strength: 20px;
     --floating-gap: 12px;
@@ -31,7 +31,7 @@
     :root {
         --floating-gap: 8px;
         --radius: 14px;
-        --header-height: 50px;
+        --header-height: 70px;
         --section-padding: 30px;
     }
     
@@ -47,8 +47,8 @@
     }
 
     .icon-btn {
-        padding: 8px;
-        font-size: 13px; /* Reduced by 30% from 18px */
+        padding: 10px;
+        font-size: 20px; 
     }
 
     .section-header {
@@ -220,7 +220,7 @@ h1, h2, h3, .section-title, .founder-name {
     font-family: 'Trajan Pro', serif;
     font-weight: 900;
     letter-spacing: 3px;
-    font-size: 1.5rem;
+    font-size: 2.2rem;
     text-decoration: none;
     color: #ffffff;
     position: absolute;
@@ -241,8 +241,8 @@ h1, h2, h3, .section-title, .founder-name {
     color: inherit;
     display: flex;
     align-items: center;
-    font-size: 17px; /* Reduced by 30% from 24px */
-    padding: 10px;
+    font-size: 24px; 
+    padding: 12px;
     border-radius: 50%;
     transition: all 0.3s ease;
 }
@@ -276,10 +276,10 @@ h1, h2, h3, .section-title, .founder-name {
 }
 
 .menu-item {
-    padding: 14px 25px;
+    padding: 18px 30px;
     text-decoration: none;
     color: #ffffff;
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 400;
     transition: background 0.2s;
     border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -1142,7 +1142,7 @@ footer {
     .story-grid { grid-template-columns: 1fr; gap: 40px; }
     .story-grid > div:first-child { order: 2; }
     
-    .logo-text { font-size: 1.2rem; }
+    .logo-text { font-size: 1.8rem; }
     
     .product-grid {
         grid-template-columns: 1fr;
@@ -1197,7 +1197,7 @@ footer {
         left: auto;
         flex: 1;
         text-align: center;
-        font-size: 1.1rem;
+        font-size: 1.6rem;
         letter-spacing: 1px;
     }
 
@@ -1211,12 +1211,12 @@ footer {
     }
 
     .icon-btn {
-        padding: 6px;
+        padding: 8px;
     }
 
     .hero-poster {
-        margin-top: 50px; /* Header margin is 0 on small mobile, so just match height */
-        height: calc(70vh - 50px);
+        margin-top: var(--header-height); 
+        height: calc(70vh - var(--header-height));
     }
 }
 
