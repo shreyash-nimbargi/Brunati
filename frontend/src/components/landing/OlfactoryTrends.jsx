@@ -41,6 +41,7 @@ const TrendVideo = ({ src }) => {
 
 const OlfactoryTrends = () => {
     const navigate = useNavigate();
+    const scrollRef = useRef(null);
     
     // We filter out the gift set and map the actual products for the trends section
     const trendProducts = Object.keys(productsData).filter(key => key !== 'gift1');
@@ -53,32 +54,45 @@ const OlfactoryTrends = () => {
         navigate(`/product/${id}`);
     };
 
+    const scroll = (direction) => {
+        if (scrollRef.current) {
+            const scrollAmount = 300;
+            scrollRef.current.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
+        }
+    };
+
     return (
         <section className="olfactory-trends-section">
             <h2 className="section-title text-center">Olfactory Trends</h2>
-            <div className="trends-scroll-container">
-                {trends.map((item, idx) => {
-                    const productInfo = productsData[item];
-                    return (
-                        <div key={idx} className="trend-card">
-                            <TrendVideo src={productInfo.videoReel || ""} />
-                            <div className="trend-bottom-area">
-                                <div 
-                                    className="trend-small-image placeholder-light"
-                                    onClick={() => handleProductClick(item)}
-                                    title={`View ${productInfo.name}`}
-                                >
-                                    <img 
-                                        src={`/${productInfo.images[0]}`} 
-                                        alt={productInfo.name} 
-                                        style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '4px' }}
-                                    />
+            <div className="olfactory-trends-wrapper">
+                <div className="trends-scroll-container" ref={scrollRef}>
+                    {trends.map((item, idx) => {
+                        const productInfo = productsData[item];
+                        return (
+                            <div key={idx} className="trend-card">
+                                <TrendVideo src={productInfo.videoReel || ""} />
+                                <div className="trend-bottom-area">
+                                    <div 
+                                        className="trend-small-image placeholder-light"
+                                        onClick={() => handleProductClick(item)}
+                                        title={`View ${productInfo.name}`}
+                                    >
+                                        <img 
+                                            src={`/${productInfo.images[0]}`} 
+                                            alt={productInfo.name} 
+                                            style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '4px' }}
+                                        />
+                                    </div>
+                                    <button className="trend-buy-btn" onClick={() => handleProductClick(item)}>Buy Now</button>
                                 </div>
-                                <button className="trend-buy-btn" onClick={() => handleProductClick(item)}>Buy Now</button>
                             </div>
-                        </div>
-                    );
-                })}
+                        );
+                    })}
+                </div>
+            </div>
+            <div className="trends-arrow-container">
+                <button className="trends-slider-arrow left-arrow" onClick={() => scroll('left')}>&#8249;</button>
+                <button className="trends-slider-arrow right-arrow" onClick={() => scroll('right')}>&#8250;</button>
             </div>
         </section>
     );

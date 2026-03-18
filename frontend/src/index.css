@@ -837,256 +837,116 @@ h1, h2, h3, .section-title, .founder-name {
 }
 
 .review-author {
-    font-family: Georgia, 'Times New Roman', serif;
-    font-weight: 400;
-    letter-spacing: 1px;
     font-style: normal;
-    font-size: 0.9rem;
+    font-weight: 600;
     color: var(--text-main);
-}
-
-@media (max-width: 480px) {
-    .review-card {
-        width: 280px;
-        padding: 20px;
-    }
+    margin-top: 15px;
+    text-align: right;
 }
 
 /* ========================================
-   BRAND STATEMENT BANNER
+   INFLUENCERS SECTION
    ======================================== */
-.brand-banner {
-    width: 100%;
-    background: 
-        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(180, 140, 70, 0.12) 0%, transparent 70%),
-        radial-gradient(ellipse 60% 40% at 80% 100%, rgba(120, 90, 40, 0.08) 0%, transparent 60%),
-        linear-gradient(160deg, #0a0a0a 0%, #111111 40%, #0d0d0d 70%, #080808 100%);
-    padding: 60px 24px;
-    text-align: center;
+
+.influencers-section {
+    padding: var(--section-padding) 0;
+    background-color: var(--apple-off-white);
+}
+
+.influencers-slider-wrapper {
     position: relative;
-    overflow: hidden;
-}
-
-.brand-banner::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.5), transparent);
-}
-
-.brand-banner::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.5), transparent);
-}
-
-.brand-banner-inner {
-    max-width: 800px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
-}
-
-.brand-banner-ornament {
-    font-size: 1rem;
-    color: #D4AF37;
-    opacity: 0.8;
-    margin-bottom: 12px;
-    display: block;
-    letter-spacing: 8px;
-}
-
-.brand-banner-tagline {
-    font-family: 'Roboto', sans-serif;
-    font-size: 0.65rem;
-    font-weight: 400;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    color: #D4AF37;
-    opacity: 0.85;
-    margin-bottom: 14px;
-}
-
-.brand-banner-heading {
-    font-family: 'Trajan Pro', serif !important;
-    font-size: clamp(1.3rem, 3vw, 2.3rem);
-    font-weight: 700;
-    color: #ffffff;
-    line-height: 1.2;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-bottom: 16px;
-}
-
-.brand-banner-sub {
-    font-family: 'Roboto', sans-serif;
-    font-size: 0.8rem;
-    line-height: 1.8;
-    color: rgba(255, 255, 255, 0.55);
-    font-weight: 300;
-    letter-spacing: 0.3px;
-    margin-bottom: 24px;
-}
-
-.brand-banner-divider {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    margin-bottom: 20px;
-}
-
-.brand-banner-line {
-    display: block;
-    width: 80px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.6));
-}
-
-.brand-banner-line:last-child {
-    background: linear-gradient(90deg, rgba(212, 175, 55, 0.6), transparent);
-}
-
-.brand-banner-diamond {
-    color: #D4AF37;
-    font-size: 0.5rem;
-    opacity: 0.7;
-}
-
-.brand-banner-notes {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    flex-wrap: wrap;
-    font-family: 'Roboto', sans-serif;
-    font-size: 0.78rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.45);
-}
-
-.brand-banner-notes .dot {
-    color: #D4AF37;
-    opacity: 0.6;
-    font-size: 1.2rem;
-    line-height: 0;
-}
-
-@media (max-width: 768px) {
-    .brand-banner {
-        padding: 42px 24px;
-    }
-
-    .brand-banner-line {
-        width: 50px;
-    }
-
-    .brand-banner-notes {
-        gap: 8px;
-        font-size: 0.65rem;
-        letter-spacing: 2px;
-    }
-
-    .d-none-mobile {
-        display: none;
-    }
-}
-
-
-
-
-
-/* PRODUCT PAGE */
-.product-page-grid {
-    display: grid;
-    grid-template-columns: 1.2fr 0.8fr;
-    gap: 60px;
-    max-width: 1400px;
-    margin: 150px auto 60px;
-    padding: 0 24px;
-}
-
-.gallery-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.main-image-box {
-    background: #f9f9f9;
-    border-radius: 30px;
-    aspect-ratio: 1/1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
-}
-
-.main-image-box img {
     max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
 }
 
-.product-info-sidebar {
-    position: sticky;
-    top: 150px;
-    height: fit-content;
+.influencers-slider {
+    display: flex;
+    overflow-x: auto;
+    padding: 20px 0;
+    gap: 20px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    padding-left: 24px;
+    padding-right: 24px;
 }
 
-/* MODALS */
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.4);
-    backdrop-filter: blur(10px);
-    z-index: 10000;
+.influencers-slider::-webkit-scrollbar {
     display: none;
+}
+
+.influencer-card {
+    min-width: 280px;
+    width: 280px;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--apple-border);
+    flex-shrink: 0;
+    scroll-snap-align: start;
+}
+
+.influencer-image-placeholder {
+    width: 100%;
+    height: 320px;
+    background-color: #e0e0e0;
+}
+
+.influencer-info {
+    padding: 15px;
+    text-align: left;
+}
+
+.influencer-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin: 0 0 4px 0;
+}
+
+.influencer-role, .influencer-wearing {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid var(--apple-border);
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
-}
-
-.modal-overlay.active { display: flex; }
-
-.modal-content {
-    background: #fff;
-    width: 100%;
-    max-width: 500px;
-    border-radius: 30px;
-    padding: 40px;
-    position: relative;
-    animation: modalUp 0.5s cubic-bezier(0.2, 1, 0.2, 1);
-}
-
-@keyframes modalUp {
-    from { transform: translateY(50px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
-
-.auth-btn {
-    width: 100%;
-    padding: 20px;
-    background: #111;
-    color: #fff;
-    border: 1px solid #111;
-    border-radius: 0;
-    font-size: 0.95rem;
-    font-weight: 500;
-    letter-spacing: 2px;
     cursor: pointer;
-    transition: all 0.4s ease;
-}
-.auth-btn:hover { 
-    background: transparent; 
-    color: #111;
+    z-index: 10;
+    font-size: 24px;
+    color: var(--text-main);
+    transition: background-color 0.2s, transform 0.2s;
 }
 
-/* FOOTER */
+.slider-arrow:hover {
+    background-color: #fff;
+    transform: translateY(-50%) scale(1.05);
+}
+
+.slider-arrow.left-arrow {
+    left: 15px;
+}
+
+.slider-arrow.right-arrow {
+    right: 15px;
+}
+
+
+/* ========================================
+   FOOTER
+   ======================================== */
 footer {
     padding: 80px 24px;
     background: #fff;
@@ -1344,7 +1204,7 @@ footer {
 
 /* INFLUENCERS SECTION */
 .influencers-section {
-    padding: 60px 24px;
+    padding: 60px 0;
     background-color: var(--apple-bg);
 }
 
@@ -1360,10 +1220,12 @@ footer {
     display: flex;
     overflow-x: auto;
     gap: 15px;
+    padding: 0 24px;
     scroll-behavior: smooth;
     scrollbar-width: none; /* Firefox */
     -webkit-overflow-scrolling: touch;
     width: 100%;
+    scroll-snap-type: x mandatory;
 }
 
 .influencers-slider::-webkit-scrollbar {
@@ -1413,6 +1275,7 @@ footer {
     background: #fff;
     padding-bottom: 20px;
     overflow: hidden;
+    scroll-snap-align: start;
 }
 
 .influencer-image-placeholder {
