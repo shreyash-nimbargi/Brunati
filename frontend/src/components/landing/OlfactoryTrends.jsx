@@ -41,6 +41,7 @@ const TrendVideo = ({ src }) => {
 
 const OlfactoryTrends = () => {
     const navigate = useNavigate();
+    const scrollContainerRef = useRef(null);
     
     // We filter out the gift set and map the actual products for the trends section
     const trendProducts = Object.keys(productsData).filter(key => key !== 'gift1');
@@ -53,32 +54,51 @@ const OlfactoryTrends = () => {
         navigate(`/product/${id}`);
     };
 
+    const scroll = (direction) => {
+        if (!scrollContainerRef.current) return;
+        const container = scrollContainerRef.current;
+        const scrollAmount = 300;
+        if (direction === 'left') {
+            container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        } else {
+            container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        }
+    };
+
     return (
         <section className="olfactory-trends-section">
             <h2 className="section-title text-center">Olfactory Trends</h2>
-            <div className="trends-scroll-container">
-                {trends.map((item, idx) => {
-                    const productInfo = productsData[item];
-                    return (
-                        <div key={idx} className="trend-card">
-                            <TrendVideo src={productInfo.videoReel || ""} />
-                            <div className="trend-bottom-area">
-                                <div 
-                                    className="trend-small-image placeholder-light"
-                                    onClick={() => handleProductClick(item)}
-                                    title={`View ${productInfo.name}`}
-                                >
-                                    <img 
-                                        src={`/${productInfo.images[0]}`} 
-                                        alt={productInfo.name} 
-                                        style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '4px' }}
-                                    />
+            <div className="trends-container">
+                <div className="trends-scroll-container" ref={scrollContainerRef}>
+                    {trends.map((item, idx) => {
+                        const productInfo = productsData[item];
+                        return (
+                            <div key={idx} className="trend-card">
+                                <TrendVideo src={productInfo.videoReel || ""} />
+                                <div className="trend-bottom-area">
+                                    <div 
+                                        className="trend-small-image placeholder-light"
+                                        onClick={() => handleProductClick(item)}
+                                        title={`View ${productInfo.name}`}
+                                    >
+                                        <img 
+                                            src={`/${productInfo.images[0]}`} 
+                                            alt={productInfo.name} 
+                                            style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '4px' }}
+                                        />
+                                    </div>
+                                    <button className="trend-buy-btn" onClick={() => handleProductClick(item)}>Buy Now</button>
                                 </div>
-                                <button className="trend-buy-btn" onClick={() => handleProductClick(item)}>Buy Now</button>
                             </div>
-                        </div>
-                    );
-                })}
+                        );
+                    })}
+                </div>
+                <button className="trend-arrow trend-arrow-left" onClick={() => scroll('left')} aria-label="Scroll left">
+                    &#8249;
+                </button>
+                <button className="trend-arrow trend-arrow-right" onClick={() => scroll('right')} aria-label="Scroll right">
+                    &#8250;
+                </button>
             </div>
         </section>
     );

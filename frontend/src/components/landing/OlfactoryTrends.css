@@ -11,6 +11,12 @@
     font-weight: 700;
 }
 
+.trends-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
 .trends-scroll-container {
     display: flex;
     overflow-x: auto;
@@ -18,6 +24,7 @@
     padding-bottom: 20px;
     scrollbar-width: none; /* Firefox */
     -webkit-overflow-scrolling: touch;
+    flex: 1;
 }
 
 .trends-scroll-container::-webkit-scrollbar {
@@ -120,4 +127,49 @@
     font-size: 24px;
     color: #000;
     margin-left: 4px; /* visually center play triangle */
+}
+
+/* Arrow buttons styling */
+.trend-arrow {
+    display: none;
+    position: absolute;
+    bottom: 20px;
+    width: 48.4px;
+    height: 48.4px;
+    background-color: #fff;
+    color: #000;
+    border: none;
+    border-radius: 50%;
+    font-size: 29.04px;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.trend-arrow:hover {
+    background-color: #ddd;
+    transform: scale(1.05);
+}
+
+.trend-arrow-left {
+    left: auto;
+    right: 50px;
+}
+
+.trend-arrow-right {
+    right: 0;
+}
+
+/* Desktop view only */
+@media (min-width: 1024px) {
+    .trend-arrow {
+        display: flex;
+    }
+    
+    .trends-container {
+        padding-bottom: 60px;
+    }
 }
