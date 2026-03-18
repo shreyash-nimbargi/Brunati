@@ -159,3 +159,48 @@
     color: #000;
     margin-left: 4px; /* visually center play triangle */
 }
+
+/* Arrow buttons styling */
+.trend-arrow {
+    display: none;
+    position: absolute;
+    bottom: 20px;
+    width: 53.24px;
+    height: 53.24px;
+    background-color: #fff;
+    color: #000;
+    border: none;
+    border-radius: 50%;
+    font-size: 31.944px;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.trend-arrow:hover {
+    background-color: #ddd;
+    transform: scale(1.05);
+}
+
+.trend-arrow-left {
+    left: auto;
+    right: 50px;
+}
+
+.trend-arrow-right {
+    right: 0;
+}
+
+/* Desktop view only */
+@media (min-width: 1024px) {
+    .trend-arrow {
+        display: flex;
+    }
+    
+    .trends-container {
+        padding-bottom: 60px;
+    }
+}
