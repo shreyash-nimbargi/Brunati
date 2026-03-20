@@ -16,8 +16,8 @@ exports.updateFreeSampleSettings = async (req, res) => {
             Object.assign(settings, data);
         }
         await settings.save();
-        res.json(settings);
+        res.json({ status: true, message: "Settings updated successfully", data: settings });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(400).json({ status: false, message: error.message, data: null });
     }
 };

@@ -4,9 +4,9 @@ exports.createReview = async (req, res) => {
     try {
         const review = new Review(req.body);
         await review.save();
-        res.status(201).json(review);
+        res.status(201).json({ status: true, message: "Review created successfully", data: review });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(400).json({ status: false, message: error.message, data: null });
     }
 };
 
@@ -14,11 +14,11 @@ exports.updateReview = async (req, res) => {
     try {
         const review = await Review.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
         if (!review) {
-            return res.status(404).json({ message: "Review not found" });
+            return res.status(404).json({ status: false, message: "Review not found", data: null });
         }
-        res.json(review);
+        res.json({ status: true, message: "Review updated successfully", data: review });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(400).json({ status: false, message: error.message, data: null });
     }
 };
 
@@ -26,19 +26,19 @@ exports.deleteReview = async (req, res) => {
     try {
         const review = await Review.findByIdAndDelete(req.params.id);
         if (!review) {
-            return res.status(404).json({ message: "Review not found" });
+            return res.status(404).json({ status: false, message: "Review not found", data: null });
         }
-        res.json({ message: "Review deleted successfully" });
+        res.json({ status: true, message: "Review deleted successfully", data: null });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ status: false, message: error.message, data: null });
     }
 };
 
 exports.getAllReviews = async (req, res) => {
     try {
         const reviews = await Review.find().populate("productId").sort({ createdAt: -1 });
-        res.json(reviews);
+        res.json({ status: true, message: "Reviews fetched successfully", data: reviews });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ status: false, message: error.message, data: null });
     }
 };

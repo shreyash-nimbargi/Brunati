@@ -6,21 +6,32 @@ exports.getReviewsByProduct = async (req, res) => {
         productId: req.params.productId
     });
 
-    res.json(reviews);
+    res.json({ status: true, message: "Reviews fetched successfully", data: reviews });
 
 };
 
 exports.createReview = async (req, res) => {
     try {
-        const { productId, reviewerName, rating, reviewText } = req.body;
+        const { productId, rating, reviewText } = req.body;
+
+        const alreadyReviewed = await Review.findOne({
+            productId,
+            userId: req.user._id
+        });
+
+        if (alreadyReviewed) {
+            return res.status(400).json({ status: false, message: "You have already reviewed this product", data: null });
+        }
+
         const review = await Review.create({
             productId,
-            reviewerName,
+            userId: req.user._id,
+            reviewerName: req.user.name,
             rating,
             reviewText
         });
-        res.status(201).json(review);
+        res.status(201).json({ status: true, message: "Review created successfully", data: review });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ status: false, message: error.message, data: null });
     }
 };

@@ -21,7 +21,9 @@ exports.createOrder = async (req, res) => {
 
             if (!sizeData || sizeData.stock < item.quantity) {
                 return res.status(400).json({
-                    message: "Stock not available"
+                    status: false,
+                    message: "Stock not available",
+                    data: null
                 });
             }
 
@@ -45,31 +47,41 @@ exports.createOrder = async (req, res) => {
         let freeSample = null;
 
         if (sampleId) {
+            const sample = await Sample.findById(sampleId).populate("productId");
 
-            const sample = await Sample.findById(sampleId)
-                .populate("productId");
-
-            freeSample = {
-                sampleId: sample._id,
-                productName: sample.productId.name,
-                size: sample.size
-            };
-
+            if (sample && sample.active && sample.stock > 0) {
+                freeSample = {
+                    sampleId: sample._id,
+                    productName: sample.productId.name,
+                    size: sample.size
+                };
+                
+                // Decrement sample stock
+                sample.stock -= 1;
+                await sample.save();
+            }
         }
 
         const order = await Order.create({
+            userId: req.user._id,
             customer,
             items: orderItems,
             freeSample,
             totalAmount: total
         });
 
-        res.status(201).json(order);
+        res.status(201).json({
+            status: true,
+            message: "Order created successfully",
+            data: order
+        });
 
     } catch (error) {
 
         res.status(500).json({
-            message: error.message
+            status: false,
+            message: error.message,
+            data: null
         });
 
     }
@@ -82,6 +94,10 @@ exports.getOrderById = async (req, res) => {
         orderId: req.params.orderId
     });
 
-    res.json(order);
+    if (!order) {
+        return res.status(404).json({ status: false, message: "Order not found", data: null });
+    }
+
+    res.json({ status: true, message: "Order fetched successfully", data: order });
 
 };

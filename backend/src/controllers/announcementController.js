@@ -6,6 +6,6 @@ exports.getAnnouncements = async (req, res) => {
         .find({ active: true })
         .sort({ priority: 1 });
 
-    res.json(announcements);
+    res.json({ status: true, message: "Announcements fetched successfully", data: announcements });
 
 };

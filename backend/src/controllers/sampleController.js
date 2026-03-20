@@ -6,7 +6,7 @@ exports.getAvailableSamples = async (req, res) => {
     const settings = await Settings.findOne();
 
     if (!settings.freeSampleEnabled) {
-        return res.json({ samples: [] });
+        return res.json({ status: true, message: "Free samples are disabled", data: { samples: [] } });
     }
 
     const samples = await Sample.find({
@@ -15,8 +15,12 @@ exports.getAvailableSamples = async (req, res) => {
     }).populate("productId");
 
     res.json({
-        maxSamples: settings.maxSamples,
-        samples
+        status: true,
+        message: "Available samples fetched successfully",
+        data: {
+            maxSamples: settings.maxSamples,
+            samples
+        }
     });
 
 };

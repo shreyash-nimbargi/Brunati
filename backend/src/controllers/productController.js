@@ -26,14 +26,18 @@ exports.getProducts = async (req, res) => {
     }
 
     const products = await Product.find(filter);
-    res.json(products);
+    res.json({ status: true, message: "Products fetched successfully", data: products });
 };
 
 exports.getProductBySlug = async (req, res) => {
 
     const product = await Product.findOne({ slug: req.params.slug });
 
-    res.json(product);
+    if (!product) {
+        return res.status(404).json({ status: false, message: "Product not found", data: null });
+    }
+
+    res.json({ status: true, message: "Product fetched successfully", data: product });
 
 };
 

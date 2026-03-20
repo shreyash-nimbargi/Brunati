@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db");
 
 // Connect to database
-connectDB();
+// connectDB(); // Called in server.js instead
 
 const app = express();
 
@@ -22,13 +22,13 @@ app.use(
 );
 
 // Routes
-app.use("/api/users", require("./routes/userRoutes"));
-app.use("/api/products", require("./routes/productRoutes"));
-app.use("/api/orders", require("./routes/orderRoutes"));
-app.use("/api/reviews", require("./routes/reviewRoutes"));
-app.use("/api/samples", require("./routes/sampleRoutes"));
-app.use("/api/announcements", require("./routes/announcementRoutes"));
-app.use("/api/admin", require("./routes/adminRoutes"));
+app.use("/api/v1/users", require("./routes/userRoutes"));
+app.use("/api/v1/products", require("./routes/productRoutes"));
+app.use("/api/v1/orders", require("./routes/orderRoutes"));
+app.use("/api/v1/reviews", require("./routes/reviewRoutes"));
+app.use("/api/v1/samples", require("./routes/sampleRoutes"));
+app.use("/api/v1/announcements", require("./routes/announcementRoutes"));
+app.use("/api/v1/admin", require("./routes/adminRoutes"));
 
 app.get('/', (req, res) => {
   res.send("API is running...");
@@ -45,7 +45,9 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
   res.status(statusCode).json({
+    status: false,
     message: err.message,
+    data: null,
     stack: process.env.NODE_ENV === "production" ? null : err.stack,
   });
 });

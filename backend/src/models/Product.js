@@ -35,7 +35,6 @@ const productSchema = new mongoose.Schema({
 
     category: {
         type: String,
-        enum: ["men", "women", "unisex", "gifts"],
         required: true
     },
 
@@ -79,7 +78,6 @@ productSchema.pre("save", function (next) {
     next();
 });
 
-productSchema.index({ slug: 1 });
 productSchema.index({ category: 1 });
 productSchema.index({ name: "text" });
 

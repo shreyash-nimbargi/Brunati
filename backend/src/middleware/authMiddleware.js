@@ -14,7 +14,7 @@ const authMiddleware = async (req, res, next) => {
     }
 
     if (!token) {
-        return res.status(401).json({ message: "Not authorized, no token" });
+        return res.status(401).json({ status: false, message: "Not authorized - Login required", data: null });
     }
 
     try {
@@ -23,7 +23,7 @@ const authMiddleware = async (req, res, next) => {
         next();
     } catch (error) {
         console.error(error);
-        res.status(401).json({ message: "Not authorized, token failed" });
+        res.status(401).json({ status: false, message: "Session expired or invalid token", data: null });
     }
 };
 
