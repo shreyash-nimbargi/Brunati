@@ -10,6 +10,7 @@ const adminSampleController = require("../controllers/admin/adminSampleControlle
 const adminOrderController = require("../controllers/admin/adminOrderController");
 const adminAnnouncementController = require("../controllers/admin/adminAnnouncementController");
 const adminSettingsController = require("../controllers/admin/adminSettingsController");
+const adminCategoryController = require("../controllers/admin/adminCategoryController");
 
 router.use(adminMiddleware);
 
@@ -20,6 +21,12 @@ router.put("/products/:id", upload.fields([{ name: 'images', maxCount: 10 }, { n
 router.delete("/products/:id", adminProductController.deleteProduct);
 router.get("/products", adminProductController.getAllProducts);
 
+/* CATEGORY MANAGEMENT */
+
+router.post("/categories", upload.single("image"), adminCategoryController.createCategory);
+router.put("/categories/:id", upload.single("image"), adminCategoryController.updateCategory);
+router.delete("/categories/:id", adminCategoryController.deleteCategory);
+router.get("/categories", adminCategoryController.getAllCategories);
 
 /* REVIEW MANAGEMENT */
 

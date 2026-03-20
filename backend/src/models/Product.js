@@ -64,10 +64,10 @@ const productSchema = new mongoose.Schema({
 
 
 
-productSchema.pre("save", function (next) {
+productSchema.pre("save", function () {
 
     if (!this.isModified("name")) {
-        return next();
+        return;
     }
 
     this.slug = slugify(this.name, {
@@ -75,7 +75,6 @@ productSchema.pre("save", function (next) {
         strict: true
     });
 
-    next();
 });
 
 productSchema.index({ category: 1 });

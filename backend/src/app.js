@@ -28,6 +28,7 @@ app.use("/api/v1/orders", require("./routes/orderRoutes"));
 app.use("/api/v1/reviews", require("./routes/reviewRoutes"));
 app.use("/api/v1/samples", require("./routes/sampleRoutes"));
 app.use("/api/v1/announcements", require("./routes/announcementRoutes"));
+app.use("/api/v1/categories", require("./routes/categoryRoutes"));
 app.use("/api/v1/admin", require("./routes/adminRoutes"));
 
 app.get('/', (req, res) => {

@@ -104,3 +104,17 @@ exports.getUserOrders = async (req, res) => {
     res.json({ status: true, message: "Orders fetched successfully", data: orders });
 
 };
+
+exports.updateAddress = async (req, res) => {
+    try {
+        const { street, city, pincode } = req.body;
+        const user = await User.findById(req.user.id);
+        
+        user.address = { street, city, pincode };
+        await user.save();
+
+        res.json({ status: true, message: "Address updated successfully", data: user.address });
+    } catch (error) {
+        res.status(500).json({ status: false, message: error.message, data: null });
+    }
+};

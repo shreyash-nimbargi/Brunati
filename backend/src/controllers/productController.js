@@ -25,8 +25,24 @@ exports.getProducts = async (req, res) => {
         ];
     }
 
-    const products = await Product.find(filter);
-    res.json({ status: true, message: "Products fetched successfully", data: products });
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+
+    const total = await Product.countDocuments(filter);
+    const products = await Product.find(filter).skip(skip).limit(limit);
+
+    res.json({ 
+        status: true, 
+        message: "Products fetched successfully", 
+        data: products,
+        pagination: {
+            total,
+            page,
+            limit,
+            totalPages: Math.ceil(total / limit)
+        }
+    });
 };
 
 exports.getProductBySlug = async (req, res) => {

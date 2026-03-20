@@ -103,8 +103,19 @@ exports.deleteProduct = async (req, res) => {
 
 exports.getAllProducts = async (req, res) => {
     try {
-        const products = await Product.find().sort({ createdAt: -1 });
-        res.json({ status: true, message: "Products fetched successfully", data: products });
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 20;
+        const skip = (page - 1) * limit;
+
+        const total = await Product.countDocuments();
+        const products = await Product.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
+
+        res.json({ 
+            status: true, 
+            message: "Products fetched successfully", 
+            data: products,
+            pagination: { total, page, limit, totalPages: Math.ceil(total / limit) }
+        });
     } catch (error) {
         res.status(500).json({ status: false, message: error.message, data: null });
     }
