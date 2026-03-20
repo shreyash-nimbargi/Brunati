@@ -42,30 +42,39 @@ exports.updateProduct = async (req, res) => {
     try {
         const productData = parseBody(req.body);
 
-        // Handle uploaded images
-        if (req.files) {
-            if (req.files.images) {
-                productData.images = req.files.images.map(file => file.path);
-            }
-            if (req.files.storyImages) {
-                if (!productData.story) productData.story = {};
-                productData.story.storyImages = req.files.storyImages.map(file => file.path);
-            }
-        }
-
         const product = await Product.findById(req.params.id);
         if (!product) {
             return res.status(404).json({ status: false, message: "Product not found", data: null });
         }
 
-        // Delete old images from Cloudinary if new ones are uploaded
+        // Handle uploaded images
         if (req.files) {
-            if (req.files.images && product.images && product.images.length > 0) {
-                await deleteMultipleFromCloudinary(product.images);
+            if (req.files.images) {
+                // Delete old product images from Cloudinary before replacing
+                if (product.images && product.images.length > 0) {
+                    await deleteMultipleFromCloudinary(product.images);
+                }
+                productData.images = req.files.images.map(file => file.path);
             }
-            if (req.files.storyImages && product.story && product.story.storyImages && product.story.storyImages.length > 0) {
-                await deleteMultipleFromCloudinary(product.story.storyImages);
+            if (req.files.storyImages) {
+                // Delete old story images from Cloudinary before replacing
+                if (product.story && product.story.storyImages && product.story.storyImages.length > 0) {
+                    await deleteMultipleFromCloudinary(product.story.storyImages);
+                }
+                // Merge: only update storyImages, keep existing sections intact
+                productData.story = {
+                    sections: productData.story?.sections ?? product.story?.sections ?? [],
+                    storyImages: req.files.storyImages.map(file => file.path)
+                };
             }
+        }
+
+        // If story.sections were sent in body but no new storyImages, preserve existing storyImages
+        if (productData.story && !req.files?.storyImages) {
+            productData.story = {
+                storyImages: product.story?.storyImages ?? [],
+                sections: productData.story.sections ?? product.story?.sections ?? []
+            };
         }
 
         Object.assign(product, productData);

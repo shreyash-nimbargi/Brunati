@@ -1,12 +1,24 @@
 const Order = require("../models/Order");
 const Product = require("../models/Product");
 const Sample = require("../models/Sample");
+const sendEmail = require("../utils/emailService");
 
 exports.createOrder = async (req, res) => {
 
     try {
 
-        const { customer, items, sampleId } = req.body;
+        const { items, sampleId, street, city, pincode } = req.body;
+
+        // Auto-populate customer info from logged-in user
+        const customer = {
+            name:    req.user.name,
+            email:   req.user.email,
+            phone:   req.user.phone,
+            // Use address from request body, or fall back to saved default address
+            street:  street  || req.user.address?.street  || "",
+            city:    city    || req.user.address?.city     || "",
+            pincode: pincode || req.user.address?.pincode  || ""
+        };
 
         let orderItems = [];
         let total = 0;
@@ -69,6 +81,15 @@ exports.createOrder = async (req, res) => {
             freeSample,
             totalAmount: total
         });
+
+        // ✅ Email: Order Placed
+        if (req.user.email) {
+            await sendEmail({
+                email: req.user.email,
+                subject: `Order Confirmed! Your Brunati Order #${order.orderId}`,
+                message: `Hello ${req.user.name},\n\nThank you for your order! We have received your order #${order.orderId} for ₹${order.totalAmount}.\n\nWe will notify you when your order ships.\n\nThank you for choosing Brunati.`
+            });
+        }
 
         res.status(201).json({
             status: true,

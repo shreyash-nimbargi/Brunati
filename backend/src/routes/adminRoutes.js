@@ -55,8 +55,8 @@ router.get("/announcements", adminAnnouncementController.getAllAnnouncements);
 /* ORDERS */
 
 router.get("/orders", adminOrderController.getAllOrders);
-router.get("/orders/:id", adminOrderController.getOrderDetails);
-router.patch("/orders/:id/status", adminOrderController.updateOrderStatus);
+router.get("/orders/:orderId", adminOrderController.getOrderDetails);
+router.patch("/orders/:orderId/status", adminOrderController.updateOrderStatus);
 
 
 /* SETTINGS */

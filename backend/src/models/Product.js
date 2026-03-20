@@ -27,10 +27,14 @@ const productSchema = new mongoose.Schema({
         required: true
     },
 
+    description: {
+        type: String,
+        default: ""
+    },
+
     slug: {
         type: String,
-        unique: true,
-        required: true
+        unique: true
     },
 
     category: {

@@ -4,13 +4,8 @@ const settingsSchema = new mongoose.Schema({
 
     freeSampleEnabled: {
         type: Boolean,
-        default: false
+        default: true
     },
-
-    allowedSamples: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Sample"
-    }],
 
     maxSamples: {
         type: Number,

@@ -49,7 +49,7 @@ const orderSchema = new mongoose.Schema({
         name: String,
         email: String,
         phone: String,
-        address: String,
+        street: String,
         city: String,
         pincode: String
     },
@@ -69,21 +69,21 @@ const orderSchema = new mongoose.Schema({
     orderStatus: {
         type: String,
         enum: [
-            "pending",
+            "placed",
             "confirmed",
             "processing",
             "shipped",
             "delivered",
             "cancelled"
         ],
-        default: "pending"
+        default: "placed"
     }
 
 }, { timestamps: true });
 
-orderSchema.pre("save", async function (next) {
+orderSchema.pre("save", async function () {
 
-    if (!this.isNew) return next();
+    if (!this.isNew) return;
 
     const count = await mongoose.model("Order").countDocuments();
 
@@ -91,7 +91,6 @@ orderSchema.pre("save", async function (next) {
 
     this.orderId = `BRN-${year}-${(count + 1).toString().padStart(4, "0")}`;
 
-    next();
 });
 
 orderSchema.index({ orderStatus: 1 });

@@ -44,10 +44,19 @@ app.use((req, res, next) => {
 
 // Global Error Handler
 app.use((err, req, res, next) => {
+  let message = err.message;
+  if (err.name === 'MulterError' || err.message === 'Unexpected field') {
+      if (err.field) {
+          message = `Unexpected field: '${err.field}'. You uploaded a file using a key name we don't accept. Only 'images' and 'storyImages' are allowed.`;
+      } else {
+          message = `MulterError: You likely have an empty row in your Postman form-data set to 'File'. Delete any unused rows!`;
+      }
+  }
+
   const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
   res.status(statusCode).json({
     status: false,
-    message: err.message,
+    message: message,
     data: null,
     stack: process.env.NODE_ENV === "production" ? null : err.stack,
   });
