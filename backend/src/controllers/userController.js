@@ -118,3 +118,31 @@ exports.updateAddress = async (req, res) => {
         res.status(500).json({ status: false, message: error.message, data: null });
     }
 };
+
+exports.changePassword = async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({ status: false, message: "Both currentPassword and newPassword are required", data: null });
+        }
+
+        if (newPassword.length < 6) {
+            return res.status(400).json({ status: false, message: "New password must be at least 6 characters", data: null });
+        }
+
+        const user = await User.findById(req.user.id);
+
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ status: false, message: "Current password is incorrect", data: null });
+        }
+
+        user.password = newPassword;
+        await user.save(); // Pre-save hook auto-hashes the new password
+
+        res.json({ status: true, message: "Password changed successfully", data: null });
+    } catch (error) {
+        res.status(500).json({ status: false, message: error.message, data: null });
+    }
+};

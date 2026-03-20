@@ -11,8 +11,12 @@ const adminOrderController = require("../controllers/admin/adminOrderController"
 const adminAnnouncementController = require("../controllers/admin/adminAnnouncementController");
 const adminSettingsController = require("../controllers/admin/adminSettingsController");
 const adminCategoryController = require("../controllers/admin/adminCategoryController");
+const adminDashboardController = require("../controllers/admin/adminDashboardController");
 
 router.use(adminMiddleware);
+
+/* DASHBOARD */
+router.get("/dashboard", adminDashboardController.getDashboard);
 
 /* PRODUCT MANAGEMENT */
 

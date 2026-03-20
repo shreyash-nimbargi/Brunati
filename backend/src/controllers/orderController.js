@@ -110,15 +110,79 @@ exports.createOrder = async (req, res) => {
 };
 
 exports.getOrderById = async (req, res) => {
+    try {
+        const order = await Order.findOne({
+            orderId: req.params.orderId,
+            userId: req.user._id // Security: Ensure customer can only view their own order
+        });
 
-    const order = await Order.findOne({
-        orderId: req.params.orderId
-    });
+        if (!order) {
+            return res.status(404).json({ status: false, message: "Order not found", data: null });
+        }
 
-    if (!order) {
-        return res.status(404).json({ status: false, message: "Order not found", data: null });
+        res.json({ status: true, message: "Order fetched successfully", data: order });
+    } catch (error) {
+        res.status(500).json({ status: false, message: error.message, data: null });
     }
+};
 
-    res.json({ status: true, message: "Order fetched successfully", data: order });
+exports.cancelOrder = async (req, res) => {
+    try {
+        const order = await Order.findOne({
+            orderId: req.params.orderId,
+            userId: req.user._id
+        });
 
+        if (!order) {
+            return res.status(404).json({ status: false, message: "Order not found", data: null });
+        }
+
+        // Only allow cancellation if order hasn't been processed/shipped yet
+        if (!["placed", "confirmed"].includes(order.orderStatus)) {
+            return res.status(400).json({ 
+                status: false, 
+                message: `Cannot cancel order in '${order.orderStatus}' status. Please contact support.`, 
+                data: null 
+            });
+        }
+
+        // 1. Return items to stock
+        for (let item of order.items) {
+            const product = await Product.findById(item.productId);
+            if (product) {
+                const sizeData = product.sizes.find(s => s.size === item.size);
+                if (sizeData) {
+                    sizeData.stock += item.quantity;
+                    await product.save();
+                }
+            }
+        }
+
+        // 2. Return free sample to stock (if any)
+        if (order.freeSample && order.freeSample.sampleId) {
+            const sample = await Sample.findById(order.freeSample.sampleId);
+            if (sample) {
+                sample.stock += 1;
+                await sample.save();
+            }
+        }
+
+        // 3. Update order status
+        order.orderStatus = "cancelled";
+        await order.save();
+
+        // 4. Send Email
+        if (order.customer.email) {
+            await sendEmail({
+                email: order.customer.email,
+                subject: `Order Cancelled: #${order.orderId}`,
+                message: `Hello ${order.customer.name},\n\nYour order #${order.orderId} has been successfully cancelled as per your request.\n\nIf this was a mistake, please reach out to us.\n\nBest regards,\nBrunati Team`
+            });
+        }
+
+        res.json({ status: true, message: "Order cancelled successfully", data: order });
+
+    } catch (error) {
+        res.status(500).json({ status: false, message: error.message, data: null });
+    }
 };
