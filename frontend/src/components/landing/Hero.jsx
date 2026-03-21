@@ -62,24 +62,16 @@ const Hero = () => {
             if (snappedIndex === 0) {
                 // Snapped to first clone (Clone DUSK), teleport to real DUSK
                 const realDuskIndex = originalSlides.length; // Index 5
-                sliderRef.current.style.scrollSnapType = 'none'; // Temporarily disable snapping to avoid bounce
                 sliderRef.current.scrollLeft = realDuskIndex * slideWidth;
                 setCurrentIndex(realDuskIndex);
-                setTimeout(() => {
-                    if (sliderRef.current) sliderRef.current.style.scrollSnapType = 'x mandatory';
-                }, 50);
             } 
             else if (snappedIndex === slides.length - 1) {
                 // Snapped to last clone (Clone MISTIA), teleport to real MISTIA
                 const realMistiaIndex = 1; // Index 1
-                sliderRef.current.style.scrollSnapType = 'none';
                 sliderRef.current.scrollLeft = realMistiaIndex * slideWidth;
                 setCurrentIndex(realMistiaIndex);
-                setTimeout(() => {
-                    if (sliderRef.current) sliderRef.current.style.scrollSnapType = 'x mandatory';
-                }, 50);
             }
-        }, 150); // Adjust debounce timer to ensure snapping is concluded
+        }, 50); // Kept minimal debounce to ensure browser has processed snap event natively
     };
 
     // Auto-advance
