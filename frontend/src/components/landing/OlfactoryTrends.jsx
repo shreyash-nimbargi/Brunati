@@ -76,45 +76,36 @@ const OlfactoryTrends = () => {
         const handleDown = (e) => {
             isDown = true;
             container.style.cursor = 'grabbing';
-            startX = (e.pageX || e.touches[0].pageX) - container.offsetLeft;
+            container.style.scrollBehavior = 'auto'; // Disable CSS smooth scroll during interaction
+            startX = (e.pageX || e.touches[0]?.pageX || 0) - container.offsetLeft;
             scrollLeft = container.scrollLeft;
         };
 
-        const handleLeave = () => {
+        const handleLeaveOrUp = () => {
             isDown = false;
             container.style.cursor = 'grab';
-        };
-
-        const handleUp = () => {
-            isDown = false;
-            container.style.cursor = 'grab';
+            container.style.scrollBehavior = '';
         };
 
         const handleMove = (e) => {
             if (!isDown) return;
             e.preventDefault();
-            const x = (e.pageX || e.touches[0].pageX) - container.offsetLeft;
+            const x = (e.pageX || e.touches[0]?.pageX || 0) - container.offsetLeft;
             const walk = (x - startX) * 2;
             container.scrollLeft = scrollLeft - walk;
         };
 
         container.style.cursor = 'grab';
         container.addEventListener('mousedown', handleDown);
-        container.addEventListener('mouseleave', handleLeave);
-        container.addEventListener('mouseup', handleUp);
+        container.addEventListener('mouseleave', handleLeaveOrUp);
+        container.addEventListener('mouseup', handleLeaveOrUp);
         container.addEventListener('mousemove', handleMove);
-        container.addEventListener('touchstart', handleDown, { passive: true });
-        container.addEventListener('touchend', handleUp);
-        container.addEventListener('touchmove', handleMove, { passive: false });
 
         return () => {
             container.removeEventListener('mousedown', handleDown);
-            container.removeEventListener('mouseleave', handleLeave);
-            container.removeEventListener('mouseup', handleUp);
+            container.removeEventListener('mouseleave', handleLeaveOrUp);
+            container.removeEventListener('mouseup', handleLeaveOrUp);
             container.removeEventListener('mousemove', handleMove);
-            container.removeEventListener('touchstart', handleDown);
-            container.removeEventListener('touchend', handleUp);
-            container.removeEventListener('touchmove', handleMove);
         };
     }, []);
 

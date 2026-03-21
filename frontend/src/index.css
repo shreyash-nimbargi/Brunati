@@ -52,7 +52,7 @@
     }
     
     .nav-group.right .icon-btn, .wishlist-mobile-btn {
-        font-size: 15px; /* Reduced specific icons only for mobile */
+        font-size: 19.5px; /* Increased back by 30% for mobile */
     }
 
     .section-header {

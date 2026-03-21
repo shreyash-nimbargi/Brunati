@@ -16,55 +16,75 @@ const Home = () => {
     };
 
     useEffect(() => {
-        const setupDragToScroll = (container) => {
+        const setupDragToScroll = (container, enableAutoScroll = false, speed = 0.5) => {
             if (!container) return null;
             
             let isDown = false;
             let startX;
             let scrollLeft;
+            let animationFrameId;
+            let subpixelScroll = 0;
             
             const handleDown = (e) => {
                 isDown = true;
                 container.style.cursor = 'grabbing';
-                startX = (e.pageX || e.touches[0].pageX) - container.offsetLeft;
+                container.style.scrollBehavior = 'auto'; // Prevent CSS smooth scroll from glitching JS drag
+                startX = (e.pageX || e.touches[0]?.pageX || 0) - container.offsetLeft;
                 scrollLeft = container.scrollLeft;
             };
             
             const handleLeaveOrUp = () => {
                 isDown = false;
                 container.style.cursor = 'grab';
+                container.style.scrollBehavior = ''; // Restore CSS smooth behavior
             };
             
             const handleMove = (e) => {
                 if (!isDown) return;
                 e.preventDefault();
-                const x = (e.pageX || e.touches[0].pageX) - container.offsetLeft;
+                const x = (e.pageX || e.touches[0]?.pageX || 0) - container.offsetLeft;
                 const walk = (x - startX) * 2;
                 container.scrollLeft = scrollLeft - walk;
             };
+            
+            const autoScroll = () => {
+                if (!isDown && enableAutoScroll) {
+                    subpixelScroll += speed;
+                    if (subpixelScroll >= 1) {
+                        const step = Math.floor(subpixelScroll);
+                        container.scrollLeft += step;
+                        subpixelScroll -= step;
+                    }
+                    if (container.scrollLeft >= container.scrollWidth - container.clientWidth - 1) {
+                        container.scrollLeft = 0;
+                    }
+                }
+                if (enableAutoScroll) {
+                    animationFrameId = requestAnimationFrame(autoScroll);
+                }
+            };
+            
+            if (enableAutoScroll) {
+                animationFrameId = requestAnimationFrame(autoScroll);
+            }
             
             container.style.cursor = 'grab';
             container.addEventListener('mousedown', handleDown);
             container.addEventListener('mouseleave', handleLeaveOrUp);
             container.addEventListener('mouseup', handleLeaveOrUp);
             container.addEventListener('mousemove', handleMove);
-            container.addEventListener('touchstart', handleDown, { passive: true });
-            container.addEventListener('touchend', handleLeaveOrUp);
-            container.addEventListener('touchmove', handleMove, { passive: false });
             
             return () => {
                 container.removeEventListener('mousedown', handleDown);
                 container.removeEventListener('mouseleave', handleLeaveOrUp);
                 container.removeEventListener('mouseup', handleLeaveOrUp);
                 container.removeEventListener('mousemove', handleMove);
-                container.removeEventListener('touchstart', handleDown);
-                container.removeEventListener('touchend', handleLeaveOrUp);
-                container.removeEventListener('touchmove', handleMove);
+                if (animationFrameId) cancelAnimationFrame(animationFrameId);
             };
         };
 
-        const cleanupReviews = setupDragToScroll(reviewsRef.current);
-        const cleanupInfluencers = setupDragToScroll(influencersRef.current);
+        const cleanupReviews = setupDragToScroll(reviewsRef.current, true, 0.5); // Auto-scroll ON for reviews, slow speed
+        const cleanupInfluencers = setupDragToScroll(influencersRef.current, false, 0.5); // Auto-scroll strictly OFF for influencers, but keeps manual smooth dragging
 
         return () => {
             if (cleanupReviews) cleanupReviews();
