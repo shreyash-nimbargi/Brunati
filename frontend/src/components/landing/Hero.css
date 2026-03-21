@@ -80,22 +80,26 @@
     transform: translateY(-2px);
 }
 
-.hero-scrollbar-track {
+.hero-slider-dots {
     position: absolute;
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
-    width: 200px;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    overflow: hidden;
+    display: flex;
+    gap: 12px;
     z-index: 10;
 }
 
-.hero-scrollbar-thumb {
-    height: 100%;
+.hero-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.hero-dot.active {
     background: #fff;
-    border-radius: 10px;
-    transition: transform 0.1s ease-out;
+    transform: scale(1.2);
 }

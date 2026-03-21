@@ -50,6 +50,10 @@
         padding: 12px;
         font-size: 18px; /* Increased */
     }
+    
+    .nav-group.right .icon-btn, .wishlist-mobile-btn {
+        font-size: 15px; /* Reduced specific icons only for mobile */
+    }
 
     .section-header {
         margin-bottom: 5px;
@@ -737,7 +741,7 @@ h1, h2, h3, .section-title, .founder-name {
     display: flex;
     gap: 20px;
     overflow-x: auto;
-    padding: 0 24px 40px;
+    padding: 0 0 40px 0;
     scrollbar-width: none; /* Firefox */
     -webkit-overflow-scrolling: touch;
 }
@@ -856,7 +860,7 @@ h1, h2, h3, .section-title, .founder-name {
    INFLUENCERS SECTION
    ======================================== */
 .influencers-section {
-    padding: 60px 24px;
+    padding: 60px 0;
     background: #ffffff;
 }
 
@@ -1308,14 +1312,14 @@ footer {
 
 /* INFLUENCERS SECTION */
 .influencers-section {
-    padding: 60px 24px;
+    padding: 60px 0;
     background-color: var(--apple-bg);
 }
 
 .influencers-slider-wrapper {
     position: relative;
-    max-width: 1400px;
-    margin: 0 auto;
+    width: 100%;
+    margin: 0;
     display: flex;
     align-items: center;
 }
@@ -1360,11 +1364,11 @@ footer {
 }
 
 .left-arrow {
-    left: -20px;
+    left: 20px;
 }
 
 .right-arrow {
-    right: -20px;
+    right: 20px;
 }
 
 .influencer-card {

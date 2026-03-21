@@ -1,5 +1,5 @@
 .olfactory-trends-section {
-    padding: 60px 24px;
+    padding: 60px 0;
     background-color: var(--apple-bg);
     overflow: hidden;
 }
@@ -9,6 +9,7 @@
     margin-bottom: 40px;
     font-size: clamp(2rem, 4vw, 2.5rem);
     font-weight: 700;
+    padding: 0 24px;
 }
 
 .trends-container {

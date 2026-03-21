@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { productsData } from '../../data/products';
 import './OlfactoryTrends.css';
@@ -46,8 +46,8 @@ const OlfactoryTrends = () => {
     // We filter out the gift set and map the actual products for the trends section
     const trendProducts = Object.keys(productsData).filter(key => key !== 'gift1');
 
-    // To ensure we have enough items to scroll (like the previous 10 cards), we can duplicate them to create a longer list:
-    const trends = [...trendProducts, ...trendProducts];
+    // No infinite scroll for this section as per requirements
+    const trends = trendProducts;
 
     const handleProductClick = (id) => {
         // Navigate to product detail page
@@ -64,6 +64,59 @@ const OlfactoryTrends = () => {
             container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
         }
     };
+
+    useEffect(() => {
+        const container = scrollContainerRef.current;
+        if (!container) return;
+
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        const handleDown = (e) => {
+            isDown = true;
+            container.style.cursor = 'grabbing';
+            startX = (e.pageX || e.touches[0].pageX) - container.offsetLeft;
+            scrollLeft = container.scrollLeft;
+        };
+
+        const handleLeave = () => {
+            isDown = false;
+            container.style.cursor = 'grab';
+        };
+
+        const handleUp = () => {
+            isDown = false;
+            container.style.cursor = 'grab';
+        };
+
+        const handleMove = (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = (e.pageX || e.touches[0].pageX) - container.offsetLeft;
+            const walk = (x - startX) * 2;
+            container.scrollLeft = scrollLeft - walk;
+        };
+
+        container.style.cursor = 'grab';
+        container.addEventListener('mousedown', handleDown);
+        container.addEventListener('mouseleave', handleLeave);
+        container.addEventListener('mouseup', handleUp);
+        container.addEventListener('mousemove', handleMove);
+        container.addEventListener('touchstart', handleDown, { passive: true });
+        container.addEventListener('touchend', handleUp);
+        container.addEventListener('touchmove', handleMove, { passive: false });
+
+        return () => {
+            container.removeEventListener('mousedown', handleDown);
+            container.removeEventListener('mouseleave', handleLeave);
+            container.removeEventListener('mouseup', handleUp);
+            container.removeEventListener('mousemove', handleMove);
+            container.removeEventListener('touchstart', handleDown);
+            container.removeEventListener('touchend', handleUp);
+            container.removeEventListener('touchmove', handleMove);
+        };
+    }, []);
 
     return (
         <section className="olfactory-trends-section">

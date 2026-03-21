@@ -16,38 +16,59 @@ const Home = () => {
     };
 
     useEffect(() => {
-        let animationFrameId;
-        const container = reviewsRef.current;
-        if (!container) return;
-
-        let isDown = false;
-        const handleDown = () => isDown = true;
-        const handleUp = () => isDown = false;
-
-        container.addEventListener('mousedown', handleDown);
-        container.addEventListener('mouseup', handleUp);
-        container.addEventListener('mouseleave', handleUp);
-        container.addEventListener('touchstart', handleDown, { passive: true });
-        container.addEventListener('touchend', handleUp);
-
-        const scroll = () => {
-            if (!isDown) {
-                container.scrollLeft += 1;
-                if (container.scrollLeft >= container.scrollWidth - container.clientWidth - 1) {
-                    container.scrollLeft = 0;
-                }
-            }
-            animationFrameId = requestAnimationFrame(scroll);
+        const setupDragToScroll = (container) => {
+            if (!container) return null;
+            
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+            
+            const handleDown = (e) => {
+                isDown = true;
+                container.style.cursor = 'grabbing';
+                startX = (e.pageX || e.touches[0].pageX) - container.offsetLeft;
+                scrollLeft = container.scrollLeft;
+            };
+            
+            const handleLeaveOrUp = () => {
+                isDown = false;
+                container.style.cursor = 'grab';
+            };
+            
+            const handleMove = (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = (e.pageX || e.touches[0].pageX) - container.offsetLeft;
+                const walk = (x - startX) * 2;
+                container.scrollLeft = scrollLeft - walk;
+            };
+            
+            container.style.cursor = 'grab';
+            container.addEventListener('mousedown', handleDown);
+            container.addEventListener('mouseleave', handleLeaveOrUp);
+            container.addEventListener('mouseup', handleLeaveOrUp);
+            container.addEventListener('mousemove', handleMove);
+            container.addEventListener('touchstart', handleDown, { passive: true });
+            container.addEventListener('touchend', handleLeaveOrUp);
+            container.addEventListener('touchmove', handleMove, { passive: false });
+            
+            return () => {
+                container.removeEventListener('mousedown', handleDown);
+                container.removeEventListener('mouseleave', handleLeaveOrUp);
+                container.removeEventListener('mouseup', handleLeaveOrUp);
+                container.removeEventListener('mousemove', handleMove);
+                container.removeEventListener('touchstart', handleDown);
+                container.removeEventListener('touchend', handleLeaveOrUp);
+                container.removeEventListener('touchmove', handleMove);
+            };
         };
-        animationFrameId = requestAnimationFrame(scroll);
+
+        const cleanupReviews = setupDragToScroll(reviewsRef.current);
+        const cleanupInfluencers = setupDragToScroll(influencersRef.current);
 
         return () => {
-            cancelAnimationFrame(animationFrameId);
-            container.removeEventListener('mousedown', handleDown);
-            container.removeEventListener('mouseup', handleUp);
-            container.removeEventListener('mouseleave', handleUp);
-            container.removeEventListener('touchstart', handleDown);
-            container.removeEventListener('touchend', handleUp);
+            if (cleanupReviews) cleanupReviews();
+            if (cleanupInfluencers) cleanupInfluencers();
         };
     }, []);
 
