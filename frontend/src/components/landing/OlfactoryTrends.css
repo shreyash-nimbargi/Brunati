@@ -16,6 +16,7 @@
     position: relative;
     display: flex;
     align-items: center;
+    padding-left: 0;
 }
 
 .trends-scroll-container {
@@ -26,10 +27,20 @@
     scrollbar-width: none; /* Firefox */
     -webkit-overflow-scrolling: touch;
     flex: 1;
+    justify-content: center;
 }
 
 .trends-scroll-container::-webkit-scrollbar {
     display: none; /* Chrome/Safari */
+}
+
+/* Mobile - Remove center alignment and show all cards */
+@media (max-width: 768px) {
+    .trends-scroll-container {
+        justify-content: flex-start;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
 }
 
 .trend-card {

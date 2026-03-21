@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isSignupOpen, setIsSignupOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
 
     useEffect(() => {

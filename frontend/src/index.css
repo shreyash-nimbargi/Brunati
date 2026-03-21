@@ -17,7 +17,7 @@
     --error: #ff3b30;
 
     /* Header Specifics */
-    --header-height: 80px;
+    --header-height: 64px;
     --glass-bg: rgba(255, 255, 255, 0.85); 
     --blur-strength: 20px;
     --floating-gap: 12px;
@@ -31,7 +31,7 @@
     :root {
         --floating-gap: 8px;
         --radius: 14px;
-        --header-height: 70px;
+        --header-height: 60px;
         --section-padding: 30px;
     }
     
@@ -197,7 +197,7 @@ h1, h2, h3, .section-title, .founder-name {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 30px; 
+    padding: 0 24px; 
     border: none; 
     border-radius: 0; 
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -223,8 +223,8 @@ h1, h2, h3, .section-title, .founder-name {
 .logo-text {
     font-family: 'Trajan Pro', serif;
     font-weight: 900;
-    letter-spacing: 3px;
-    font-size: 2.2rem;
+    letter-spacing: 2px;
+    font-size: 1.6rem;
     text-decoration: none;
     color: #ffffff;
     position: absolute;
@@ -235,7 +235,7 @@ h1, h2, h3, .section-title, .founder-name {
 .nav-group {
     display: flex;
     align-items: center;
-    gap: 25px; /* Increased from 15px */
+    gap: 20px;
 }
 
 .icon-btn {
@@ -245,8 +245,8 @@ h1, h2, h3, .section-title, .founder-name {
     color: inherit;
     display: flex;
     align-items: center;
-    font-size: 24px; /* Increased */
-    padding: 15px;
+    font-size: 20px;
+    padding: 10px;
     border-radius: 50%;
     transition: all 0.3s ease;
 }
@@ -753,14 +753,19 @@ h1, h2, h3, .section-title, .founder-name {
 .scent-carousel-base {
     width: 100vw;
     margin-left: calc(-50vw + 50%);
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
     padding: 40px 0;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
 }
 
 .scent-track {
     display: flex;
     gap: 30px;
     width: max-content;
+    justify-content: center;
 }
 
 @media (max-width: 768px) {
@@ -772,12 +777,6 @@ h1, h2, h3, .section-title, .founder-name {
 @keyframes slowSlide {
     0% { transform: translateX(0); }
     100% { transform: translateX(-50%); }
-}
-
-.scent-carousel-base {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox */
 }
 
 .scent-carousel-base::-webkit-scrollbar {
@@ -860,13 +859,14 @@ h1, h2, h3, .section-title, .founder-name {
    INFLUENCERS SECTION
    ======================================== */
 .influencers-section {
-    padding: 60px 0;
+    padding: 30px 0 60px 0;
     background: #ffffff;
 }
 
 .influencers-container {
     max-width: 1400px;
     margin: 0 auto;
+    padding-left: 0;
 }
 
 .influencers-grid {
@@ -1138,7 +1138,8 @@ footer {
         border-top: none;
         display: flex;
         justify-content: space-between;
-        padding: 0 10px;
+        padding: 0 12px;
+        height: 65px;
     }
 
     .logo-text {
@@ -1147,13 +1148,13 @@ footer {
         left: auto;
         flex: 1;
         text-align: center;
-        font-size: 1.5rem; /* Reverted to look elegant and balanced */
+        font-size: 1.2rem;
         letter-spacing: 1px;
     }
 
     .nav-group {
         flex: 1;
-        gap: 5px;
+        gap: 8px;
     }
 
     .nav-group.right {
@@ -1162,6 +1163,7 @@ footer {
 
     .icon-btn {
         padding: 6px;
+        font-size: 16px;
     }
 
     .hero-poster {
@@ -1312,7 +1314,7 @@ footer {
 
 /* INFLUENCERS SECTION */
 .influencers-section {
-    padding: 60px 0;
+    padding: 30px 0 60px 0;
     background-color: var(--apple-bg);
 }
 
