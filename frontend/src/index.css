@@ -52,7 +52,7 @@
     }
     
     .nav-group.right .icon-btn, .wishlist-mobile-btn {
-        font-size: 19.5px; /* Increased back by 30% for mobile */
+        font-size: 18px; /* Matched to menu icon size */
     }
 
     .section-header {
@@ -1092,7 +1092,7 @@ footer {
     .story-grid { grid-template-columns: 1fr; gap: 40px; }
     .story-grid > div:first-child { order: 2; }
     
-    .logo-text { font-size: 1.6rem; }
+    .logo-text { font-size: 1.9rem; }
     
     .product-grid {
         grid-template-columns: 1fr;
@@ -1147,7 +1147,7 @@ footer {
         left: auto;
         flex: 1;
         text-align: center;
-        font-size: 1.4rem;
+        font-size: 1.9rem;
         letter-spacing: 1px;
     }
 
