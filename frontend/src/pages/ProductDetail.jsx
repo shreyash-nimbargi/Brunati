@@ -14,7 +14,9 @@ const ProductDetail = () => {
     const [isGiftModalOpen, setIsGiftModalOpen] = useState(false);
     const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
     const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
     const [selectedGift, setSelectedGift] = useState(null);
+    const [orderID, setOrderID] = useState('');
 
     const scrollRef = React.useRef(null);
     const [isHovered, setIsHovered] = useState(false);
@@ -58,6 +60,13 @@ const ProductDetail = () => {
         }
         setIsGiftModalOpen(false);
         setIsAddressModalOpen(true);
+    };
+
+    const handlePlaceOrder = () => {
+        const id = `BRN-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+        setOrderID(id);
+        setIsCheckoutModalOpen(false);
+        setIsSuccessModalOpen(true);
     };
 
     return (
@@ -135,7 +144,7 @@ const ProductDetail = () => {
 
                         <div className="modal-footer">
                             <button className="buy-now-cta" onClick={() => { setIsAddressModalOpen(false); setIsCheckoutModalOpen(true); }}>
-                                Proceed to checkout
+                                Continue
                             </button>
                         </div>
                     </div>
@@ -175,8 +184,26 @@ const ProductDetail = () => {
                             <span className="total-price">₹ {price}.00</span>
                         </div>
                         
-                        <button className="buy-now-cta full-width-btn" onClick={() => alert('Redirecting to secure payment...')}>
-                            Pay to Checkout
+                        <button className="buy-now-cta full-width-btn" onClick={handlePlaceOrder}>
+                            Place Order
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* Order Success Modal */}
+            {isSuccessModalOpen && (
+                <div className="modal-overlay active">
+                    <div className="modal-content success-modal">
+                        <div className="success-animation">
+                            <div className="checkmark-circle">
+                                <div className="checkmark draw"></div>
+                            </div>
+                        </div>
+                        <h2 className="modal-title">Your Order Is Placed!</h2>
+                        <p className="order-id-text">Order ID: #{orderID}</p>
+                        <button className="buy-now-cta full-width-btn" onClick={() => navigate('/')}>
+                            Continue Shopping
                         </button>
                     </div>
                 </div>
@@ -202,9 +229,9 @@ const ProductDetail = () => {
                 </div>
 
                 <div className="product-info-sidebar">
-                    <div className="sidebar-content" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                    <div className="sidebar-content">
                         <span className="badge" style={{ background: '#f5f5f7', padding: '6px 14px', borderRadius: '20px', width: 'fit-content', fontSize: '0.8rem', fontWeight: 600 }}>{product.badge}</span>
-                        <h1 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>{product.name}</h1>
+                        <h1 className="product-title-desktop">{product.name}</h1>
                         <div className="price" style={{ fontSize: '1.8rem', fontWeight: 700 }}>₹ {price}.00</div>
 
                         <div className="size-selector">
