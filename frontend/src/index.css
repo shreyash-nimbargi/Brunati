@@ -1746,7 +1746,7 @@ footer {
     border-bottom: 1px solid #f0f0f0;
 }
 
-.address-modal .modal-title {
+.modal-title {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
     font-size: 1.4rem;
     font-weight: 700;
@@ -2125,6 +2125,252 @@ footer {
         opacity: 1;
     }
 }
+
+/* ADDRESS MODAL & FORM */
+.address-modal, .address-form-modal {
+    max-width: 550px; /* Refined parent constraint */
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+}
+
+.address-scroll-container {
+    overflow-y: auto;
+    padding-right: 10px;
+    padding-bottom: 80px; /* Ensure last address is visible above sticky button */
+    margin-bottom: 0;
+}
+
+.address-card {
+    border: 1.5px solid #eee;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    background: #fff;
+    position: relative;
+    text-align: left;
+}
+
+.radio-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    width: 100%;
+}
+
+.radio-group input[type="radio"] {
+    margin-top: 4px;
+    transform: scale(1.2);
+    accent-color: #000;
+}
+
+.radio-group label {
+    flex: 1;
+    cursor: pointer;
+}
+
+.address-card.selected {
+    border-color: #000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.card-heading {
+    font-size: 0.8rem;
+    color: #86868b;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.recipient-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.recipient-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #1d1d1f;
+}
+
+.address-details p, .contact-info p {
+    font-size: 0.9rem;
+    color: #484848;
+    margin: 0 0 4px 0;
+    line-height: 1.4;
+}
+
+.edit-btn {
+    position: absolute !important;
+    bottom: 24px !important;
+    right: 24px !important;
+    background: #f5f5f7 !important; /* Muted Apple-style grey background */
+    border: none !important;
+    color: #1d1d1f !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    cursor: pointer !important;
+    padding: 8px 16px !important;
+    border-radius: 20px !important;
+    transition: all 0.2s ease !important;
+    box-shadow: none !important;
+}
+
+.edit-btn:hover {
+    background: #e1e1e6 !important;
+}
+
+.edit-btn ion-icon {
+    font-size: 1.1rem;
+}
+
+.sticky-footer {
+    background: #fff;
+    padding: 16px 20px !important; /* Slimmer vertical profile */
+    border-top: 1px solid #eee;
+    margin: 32px auto 0 !important; /* Center footer and add gap from list */
+    z-index: 100;
+    width: 100%;
+    max-width: 400px; /* Constrain width on desktop */
+    display: flex;
+    justify-content: center;
+}
+
+.sticky-footer .buy-now-cta {
+    width: 100% !important;
+    padding: 14px 20px !important; /* Slimmer scaling as seen in spec */
+    border-radius: 0 !important; /* Strictly square/rectangular */
+    font-weight: 600;
+    font-size: 1rem !important;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+}
+
+/* FORM STYYLES */
+.address-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    text-align: left;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group.full-width {
+    grid-column: span 2;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1d1d1f;
+}
+
+.form-group input {
+    padding: 16px;
+    border: 1.5px solid #eee;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: #000;
+    outline: none;
+}
+
+.form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 40px -40px -40px !important; /* Flush with bottom and sides of the modal */
+    padding: 0;
+}
+
+.save-btn {
+    width: 100%;
+    padding: 20px; /* Premium height scaling */
+    background: #000;
+    color: #fff;
+    border: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: 0 !important; /* Strictly square/rectangular */
+}
+
+.cancel-btn {
+    background: none;
+    border: none;
+    color: #86868b;
+    text-decoration: underline;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 20px 10px; /* Added spacing for cancel action */
+}
+
+@media (max-width: 768px) {
+    .address-modal {
+        max-width: 100% !important;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    .form-group.full-width {
+        grid-column: span 1;
+    }
+    
+    .address-form-modal {
+        max-width: 100%;
+        margin: 0;
+        border-radius: 30px 30px 0 0;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: auto;
+        animation: slideUpModal 0.5s cubic-bezier(0.2, 1, 0.2, 1);
+        padding: 30px 24px;
+    }
+
+    .sticky-footer {
+        position: sticky !important;
+        bottom: -30px !important;
+        margin: 0 -24px -30px !important;
+        padding: 15px 24px 30px !important;
+        width: auto !important;
+        max-width: none !important;
+    }
+
+    .sticky-footer .buy-now-cta {
+        padding: 18px 24px !important;
+        font-size: 1.1rem !important;
+    }
+}
+
+@keyframes slideUpModal {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
 
 
 

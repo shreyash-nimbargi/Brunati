@@ -17,6 +17,23 @@ const ProductDetail = () => {
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
     const [selectedGift, setSelectedGift] = useState(null);
     const [orderID, setOrderID] = useState('');
+    const [isAddressFormOpen, setIsAddressFormOpen] = useState(false);
+    const [selectedAddressIndex, setSelectedAddressIndex] = useState(0);
+    const [addresses, setAddresses] = useState([
+        {
+            name: "Shreyash Nimbargi",
+            phone: "+91 98765 43210",
+            email: "shreyash@example.com",
+            address1: "123 Luxury Avenue, Penthouse 5",
+            address2: "Bandra West, Mumbai, Maharashtra",
+            pin: "400050"
+        }
+    ]);
+    const [currentAddress, setCurrentAddress] = useState({
+        name: "", phone: "", email: "", address1: "", address2: "", pin: ""
+    });
+    const [isEditing, setIsEditing] = useState(false);
+    const [editIndex, setEditIndex] = useState(null);
 
     const scrollRef = React.useRef(null);
     const [isHovered, setIsHovered] = useState(false);
@@ -94,59 +111,123 @@ const ProductDetail = () => {
                                 </div>
                             ))}
                         </div>
-                        <button className="buy-now-cta full-width-btn" style={{ marginTop: '20px' }} onClick={handleProceed}>Proceed to Buy</button>
+                        <button className="buy-now-cta full-width-btn" style={{ marginTop: '20px' }} onClick={handleProceed}>Continue</button>
                     </div>
                 </div>
             )}
 
+            {/* Address Selection Modal */}
             {/* Address Selection Modal */}
             {isAddressModalOpen && (
                 <div className="modal-overlay active">
                     <div className="modal-content address-modal">
                         <div className="modal-header">
                             <h2 className="modal-title">Select Address</h2>
-                            <button className="add-new-btn">Add New</button>
+                            <button className="add-new-btn" onClick={() => {
+                                setCurrentAddress({ name: "", phone: "", email: "", address1: "", address2: "", pin: "" });
+                                setIsEditing(false);
+                                setIsAddressFormOpen(true);
+                            }}>Add New</button>
                         </div>
-
+                        
                         <div className="address-scroll-container">
-                            <div className="address-card">
-                                <h4 className="card-heading">Saved Address</h4>
-                                <div className="card-content">
-                                    <div className="radio-group">
-                                        <input type="radio" id="addr1" name="address" checked readOnly />
-                                        <label htmlFor="addr1">
-                                            <div className="recipient-row">
-                                                <span className="recipient-name">Shreyash Nimbargi</span>
-                                                <ion-icon name="star" className="star-icon" style={{ color: '#FFD700', fontSize: '1.2rem' }}></ion-icon>
-                                            </div>
-                                            <div className="address-details">
-                                                <p>123 Luxury Avenue, Penthouse 5</p>
-                                                <p>Bandra West, Mumbai, Maharashtra</p>
-                                                <p>PIN: 400050</p>
-                                            </div>
-                                            <div className="contact-info">
-                                                <p>+91 98765 43210</p>
-                                                <p>shreyash@example.com</p>
-                                            </div>
-                                            <div className="info-note">
-                                                <ion-icon name="information-circle-outline" style={{ color: '#f39c12' }}></ion-icon>
-                                                <span>For better reach, include an alternate number.</span>
-                                            </div>
-                                        </label>
+                            {addresses.map((addr, idx) => (
+                                <div key={idx} className={`address-card ${selectedAddressIndex === idx ? 'selected' : ''}`}>
+                                    <h4 className="card-heading">{idx === 0 ? 'Saved Address' : 'New Address'}</h4>
+                                    <div className="card-content">
+                                        <div className="radio-group" onClick={() => setSelectedAddressIndex(idx)}>
+                                            <input type="radio" id={`addr${idx}`} name="address" checked={selectedAddressIndex === idx} readOnly />
+                                            <label htmlFor={`addr${idx}`}>
+                                                <div className="recipient-row">
+                                                    <span className="recipient-name">{addr.name}</span>
+                                                    {idx === 0 && <ion-icon name="star" className="star-icon" style={{ color: '#FFD700', fontSize: '1.2rem' }}></ion-icon>}
+                                                </div>
+                                                <div className="address-details">
+                                                    <p>{addr.address1}</p>
+                                                    <p>{addr.address2}</p>
+                                                    <p>PIN: {addr.pin}</p>
+                                                </div>
+                                                <div className="contact-info">
+                                                    <p>{addr.phone}</p>
+                                                    <p>{addr.email}</p>
+                                                </div>
+                                            </label>
+                                        </div>
+                                        <button className="edit-btn" onClick={() => {
+                                            setCurrentAddress(addr);
+                                            setIsEditing(true);
+                                            setEditIndex(idx);
+                                            setIsAddressFormOpen(true);
+                                        }}>
+                                            <ion-icon name="pencil-outline"></ion-icon>
+                                            Edit
+                                        </button>
                                     </div>
-                                    <button className="edit-btn">
-                                        <ion-icon name="pencil-outline"></ion-icon>
-                                        Edit
-                                    </button>
                                 </div>
-                            </div>
+                            ))}
                         </div>
 
-                        <div className="modal-footer">
-                            <button className="buy-now-cta" onClick={() => { setIsAddressModalOpen(false); setIsCheckoutModalOpen(true); }}>
+                        <div className="modal-footer sticky-footer">
+                            <button className="buy-now-cta full-width-btn" onClick={() => { setIsAddressModalOpen(false); setIsCheckoutModalOpen(true); }}>
                                 Continue
                             </button>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Address Form Modal */}
+            {isAddressFormOpen && (
+                <div className="modal-overlay active form-overlay">
+                    <div className="modal-content address-form-modal">
+                        <div className="modal-header">
+                            <h2 className="modal-title">{isEditing ? 'Edit Address' : 'Add New Address'}</h2>
+                        </div>
+                        
+                        <form className="address-form" onSubmit={(e) => {
+                            e.preventDefault();
+                            if(isEditing) {
+                                const newAddrs = [...addresses];
+                                newAddrs[editIndex] = currentAddress;
+                                setAddresses(newAddrs);
+                            } else {
+                                setAddresses([...addresses, currentAddress]);
+                                setSelectedAddressIndex(addresses.length);
+                            }
+                            setIsAddressFormOpen(false);
+                        }}>
+                            <div className="form-grid">
+                                <div className="form-group full-width">
+                                    <label>Full Name</label>
+                                    <input type="text" value={currentAddress.name} onChange={(e) => setCurrentAddress({...currentAddress, name: e.target.value})} required placeholder="Enter full name" />
+                                </div>
+                                <div className="form-group">
+                                    <label>Phone Number</label>
+                                    <input type="tel" value={currentAddress.phone} onChange={(e) => setCurrentAddress({...currentAddress, phone: e.target.value})} required placeholder="+91" />
+                                </div>
+                                <div className="form-group">
+                                    <label>Email ID</label>
+                                    <input type="email" value={currentAddress.email} onChange={(e) => setCurrentAddress({...currentAddress, email: e.target.value})} required placeholder="example@gmail.com" />
+                                </div>
+                                <div className="form-group full-width">
+                                    <label>Building / Area / Street</label>
+                                    <input type="text" value={currentAddress.address1} onChange={(e) => setCurrentAddress({...currentAddress, address1: e.target.value})} required placeholder="Address line 1" />
+                                </div>
+                                <div className="form-group">
+                                    <label>City / State</label>
+                                    <input type="text" value={currentAddress.address2} onChange={(e) => setCurrentAddress({...currentAddress, address2: e.target.value})} required placeholder="City, State" />
+                                </div>
+                                <div className="form-group">
+                                    <label>Pincode</label>
+                                    <input type="text" value={currentAddress.pin} onChange={(e) => setCurrentAddress({...currentAddress, pin: e.target.value})} required placeholder="XXXXXX" />
+                                </div>
+                            </div>
+
+                            <div className="form-actions">
+                                <button type="submit" className="save-btn">Save Address</button>
+                                <button type="button" className="cancel-btn" onClick={() => setIsAddressFormOpen(false)}>Cancel</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             )}
