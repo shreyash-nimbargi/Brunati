@@ -18,7 +18,7 @@ const Navbar = () => {
         <div className="nav-wrapper">
             <header className={`apple-header ${scrolled ? 'scrolled' : ''}`} id="mainHeader">
                 <div className="nav-group left">
-                    <button className="icon-btn" onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Menu">
+                    <button className="icon-btn menu-toggle-btn" onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Menu">
                         <ion-icon name={isMenuOpen ? "close-outline" : "menu-outline"}></ion-icon>
                     </button>
                     {/* Only visible on mobile */}
