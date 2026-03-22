@@ -48,10 +48,10 @@
 
     .icon-btn {
         padding: 12px;
-        font-size: 18px; /* Increased */
+        font-size: 20px; /* Matched to wishlist icon size */
     }
     
-    .nav-group.right .icon-btn, .wishlist-mobile-btn {
+    .wishlist-mobile-btn {
         font-size: 20px; /* Sized perfectly to be clickable but smaller than the text */
     }
 
