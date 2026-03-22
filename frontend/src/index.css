@@ -17,7 +17,7 @@
     --error: #ff3b30;
 
     /* Header Specifics */
-    --header-height: 80px;
+    --header-height: 64px;
     --glass-bg: rgba(255, 255, 255, 0.85); 
     --blur-strength: 20px;
     --floating-gap: 12px;
@@ -31,7 +31,7 @@
     :root {
         --floating-gap: 8px;
         --radius: 14px;
-        --header-height: 70px;
+        --header-height: 60px;
         --section-padding: 30px;
     }
     
@@ -49,6 +49,14 @@
     .icon-btn {
         padding: 12px;
         font-size: 18px; /* Increased */
+    }
+    
+    .nav-group.right .icon-btn, .wishlist-mobile-btn {
+        font-size: 20px; /* Sized perfectly to be clickable but smaller than the text */
+    }
+
+    .menu-toggle-btn {
+        font-size: 22px !important; /* 10% increase from standard 20px mobile icon size */
     }
 
     .section-header {
@@ -193,7 +201,7 @@ h1, h2, h3, .section-title, .founder-name {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 30px; 
+    padding: 0 24px; 
     border: none; 
     border-radius: 0; 
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -219,8 +227,8 @@ h1, h2, h3, .section-title, .founder-name {
 .logo-text {
     font-family: 'Trajan Pro', serif;
     font-weight: 900;
-    letter-spacing: 3px;
-    font-size: 2.2rem;
+    letter-spacing: 2px;
+    font-size: 1.6rem;
     text-decoration: none;
     color: #ffffff;
     position: absolute;
@@ -231,7 +239,7 @@ h1, h2, h3, .section-title, .founder-name {
 .nav-group {
     display: flex;
     align-items: center;
-    gap: 25px; /* Increased from 15px */
+    gap: 20px;
 }
 
 .icon-btn {
@@ -241,8 +249,8 @@ h1, h2, h3, .section-title, .founder-name {
     color: inherit;
     display: flex;
     align-items: center;
-    font-size: 24px; /* Increased */
-    padding: 15px;
+    font-size: 20px;
+    padding: 10px;
     border-radius: 50%;
     transition: all 0.3s ease;
 }
@@ -737,7 +745,7 @@ h1, h2, h3, .section-title, .founder-name {
     display: flex;
     gap: 20px;
     overflow-x: auto;
-    padding: 0 24px 40px;
+    padding: 0 0 40px 0;
     scrollbar-width: none; /* Firefox */
     -webkit-overflow-scrolling: touch;
 }
@@ -749,14 +757,19 @@ h1, h2, h3, .section-title, .founder-name {
 .scent-carousel-base {
     width: 100vw;
     margin-left: calc(-50vw + 50%);
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
     padding: 40px 0;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
 }
 
 .scent-track {
     display: flex;
     gap: 30px;
     width: max-content;
+    justify-content: center;
 }
 
 @media (max-width: 768px) {
@@ -768,12 +781,6 @@ h1, h2, h3, .section-title, .founder-name {
 @keyframes slowSlide {
     0% { transform: translateX(0); }
     100% { transform: translateX(-50%); }
-}
-
-.scent-carousel-base {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox */
 }
 
 .scent-carousel-base::-webkit-scrollbar {
@@ -837,116 +844,221 @@ h1, h2, h3, .section-title, .founder-name {
 }
 
 .review-author {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 400;
+    letter-spacing: 1px;
     font-style: normal;
-    font-weight: 600;
+    font-size: 0.9rem;
     color: var(--text-main);
-    margin-top: 15px;
-    text-align: right;
+}
+
+@media (max-width: 480px) {
+    .review-card {
+        width: 280px;
+        padding: 20px;
+    }
 }
 
 /* ========================================
    INFLUENCERS SECTION
    ======================================== */
-
 .influencers-section {
-    padding: var(--section-padding) 0;
-    background-color: var(--apple-off-white);
+    padding: 30px 0 60px 0;
+    background: #ffffff;
 }
 
-.influencers-slider-wrapper {
-    position: relative;
-    max-width: 100%;
+.influencers-container {
+    max-width: 1400px;
     margin: 0 auto;
-    display: flex;
-    align-items: center;
+    padding-left: 0;
 }
 
-.influencers-slider {
-    display: flex;
-    overflow-x: auto;
-    padding: 20px 0;
-    gap: 20px;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x mandatory;
-    padding-left: 24px;
-    padding-right: 24px;
-}
-
-.influencers-slider::-webkit-scrollbar {
-    display: none;
+.influencers-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    position: relative;
 }
 
 .influencer-card {
-    min-width: 280px;
-    width: 280px;
-    background: #fff;
-    border-radius: 16px;
-    overflow: hidden;
-    border: 1px solid var(--apple-border);
-    flex-shrink: 0;
-    scroll-snap-align: start;
+    background: #ffffff;
+    border: none;
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.influencer-card:hover {
+    transform: translateY(-5px);
 }
 
 .influencer-image-placeholder {
     width: 100%;
-    height: 320px;
-    background-color: #e0e0e0;
+    aspect-ratio: 1 / 1.1;
+    background: #e5e5e5;
+    position: relative;
+    overflow: hidden;
 }
 
-.influencer-info {
-    padding: 15px;
-    text-align: left;
+.influencer-details {
+    padding: 15px 5px;
+    text-align: center;
+    background: #f9f9f9;
 }
 
-.influencer-name {
+.inf-name {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
     font-weight: 700;
-    font-size: 1.1rem;
-    margin: 0 0 4px 0;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 5px;
+    color: #1d1d1f;
+    text-transform: uppercase;
 }
 
-.influencer-role, .influencer-wearing {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    margin: 0;
+.inf-profession {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    font-size: 0.7rem;
+    color: #1d1d1f;
+    letter-spacing: 0.05em;
+    margin-bottom: 5px;
+    text-transform: uppercase;
 }
 
-.slider-arrow {
+.inf-wearing {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: #1d1d1f;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    opacity: 0.9;
+}
+
+.carousel-arrow {
     position: absolute;
+    right: -25px;
     top: 50%;
     transform: translateY(-50%);
-    background-color: rgba(255, 255, 255, 0.8);
-    border: 1px solid var(--apple-border);
-    border-radius: 50%;
-    width: 44px;
-    height: 44px;
+    width: 50px;
+    height: 50px;
+    background: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 1.5rem;
     cursor: pointer;
     z-index: 10;
-    font-size: 24px;
-    color: var(--text-main);
-    transition: background-color 0.2s, transform 0.2s;
 }
 
-.slider-arrow:hover {
-    background-color: #fff;
-    transform: translateY(-50%) scale(1.05);
+@media (max-width: 1024px) {
+    .influencers-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    .carousel-arrow {
+        display: none;
+    }
 }
 
-.slider-arrow.left-arrow {
-    left: 15px;
+@media (max-width: 600px) {
+    .influencers-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
 }
 
-.slider-arrow.right-arrow {
-    right: 15px;
+
+
+
+
+/* PRODUCT PAGE */
+.product-page-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 60px;
+    max-width: 1400px;
+    margin: 150px auto 60px;
+    padding: 0 24px;
 }
 
+.gallery-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
 
-/* ========================================
-   FOOTER
-   ======================================== */
+.main-image-box {
+    background: #f9f9f9;
+    border-radius: 30px;
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.main-image-box img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.product-info-sidebar {
+    position: sticky;
+    top: 150px;
+    height: fit-content;
+}
+
+/* MODALS */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-overlay.active { display: flex; }
+
+.modal-content {
+    background: #fff;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 30px;
+    padding: 40px;
+    position: relative;
+    animation: modalUp 0.5s cubic-bezier(0.2, 1, 0.2, 1);
+}
+
+@keyframes modalUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.auth-btn {
+    width: 100%;
+    padding: 20px;
+    background: #111;
+    color: #fff;
+    border: 1px solid #111;
+    border-radius: 0;
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+}
+.auth-btn:hover { 
+    background: transparent; 
+    color: #111;
+}
+
+/* FOOTER */
 footer {
     padding: 80px 24px;
     background: #fff;
@@ -1030,7 +1142,8 @@ footer {
         border-top: none;
         display: flex;
         justify-content: space-between;
-        padding: 0 10px;
+        padding: 0 12px;
+        height: 65px;
     }
 
     .logo-text {
@@ -1039,13 +1152,13 @@ footer {
         left: auto;
         flex: 1;
         text-align: center;
-        font-size: 1.4rem;
+        font-size: 1.2rem;
         letter-spacing: 1px;
     }
 
     .nav-group {
         flex: 1;
-        gap: 5px;
+        gap: 8px;
     }
 
     .nav-group.right {
@@ -1054,6 +1167,7 @@ footer {
 
     .icon-btn {
         padding: 6px;
+        font-size: 16px;
     }
 
     .hero-poster {
@@ -1204,14 +1318,14 @@ footer {
 
 /* INFLUENCERS SECTION */
 .influencers-section {
-    padding: 60px 0;
+    padding: 30px 0 60px 0;
     background-color: var(--apple-bg);
 }
 
 .influencers-slider-wrapper {
     position: relative;
-    max-width: 1400px;
-    margin: 0 auto;
+    width: 100%;
+    margin: 0;
     display: flex;
     align-items: center;
 }
@@ -1220,12 +1334,10 @@ footer {
     display: flex;
     overflow-x: auto;
     gap: 15px;
-    padding: 0 24px;
     scroll-behavior: smooth;
     scrollbar-width: none; /* Firefox */
     -webkit-overflow-scrolling: touch;
     width: 100%;
-    scroll-snap-type: x mandatory;
 }
 
 .influencers-slider::-webkit-scrollbar {
@@ -1258,11 +1370,11 @@ footer {
 }
 
 .left-arrow {
-    left: -20px;
+    left: 20px;
 }
 
 .right-arrow {
-    right: -20px;
+    right: 20px;
 }
 
 .influencer-card {
@@ -1275,7 +1387,6 @@ footer {
     background: #fff;
     padding-bottom: 20px;
     overflow: hidden;
-    scroll-snap-align: start;
 }
 
 .influencer-image-placeholder {
@@ -1322,6 +1433,7 @@ footer {
     }
 }
 
+
 @media (max-width: 600px) {
     .influencer-card {
         flex: 0 0 88%;
@@ -1331,3 +1443,374 @@ footer {
         display: none; /* Usually hide arrows on mobile, manual swipe is better */
     }
 }
+
+/* NEW 'BUY NOW' CTA STYLES */
+.buy-now-cta {
+    width: 100%;
+    padding: 22px;
+    background: #000; /* Solid black background */
+    color: #fff; /* Pure white text */
+    border: none;
+    border-radius: 0; /* Strict square/rectangular shape */
+    font-size: 1.15rem; /* Standard text size as seen in image_2.png */
+    font-weight: 700; /* Standard weight as seen in image_2.png */
+    letter-spacing: 0.05em; /* Premium spacing */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; /* Standard font from image_2 */
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.buy-now-cta:hover {
+    background: #1a1a1a;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+}
+
+.buy-now-cta:hover .free-badge {
+    background: #FFD700; /* Darker yellow on hover for better visibility */
+}
+
+.buy-now-cta:active {
+    transform: translateY(0);
+}
+
+.free-badge {
+    background: #FFEF00; /* Solid bright yellow background */
+    color: #000; /* Pure black text */
+    padding: 6px 14px; /* Maintain height as seen in image_8 */
+    border-radius: 8px; /* Precise rounded corners (as seen in image_8) */
+    font-weight: 900; /* Bold badge text */
+    font-size: 0.85rem; /* Badge font size */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1; /* Vertically centered */
+    text-transform: uppercase;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    vertical-align: middle;
+    margin-left: 4px;
+}
+
+/* ADDRESS SELECTION MODAL STYLES */
+.address-modal {
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+}
+
+.address-modal .modal-header {
+    padding: 24px 24px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.address-modal .modal-title {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-transform: none !important;
+    font-variant: normal !important;
+    margin: 0;
+}
+
+.address-modal .add-new-btn {
+    color: #27ae60;
+    background: none;
+    border: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.address-scroll-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 24px;
+    background: #f9f9f9;
+}
+
+.address-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.address-card .card-heading {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #86868b;
+    margin-bottom: 16px;
+    text-transform: none !important;
+    font-variant: normal !important;
+}
+
+.address-card .card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.address-card .radio-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.address-card .radio-group input[type="radio"] {
+    margin-top: 4px; /* Centering radio with recipient name line only */
+    cursor: pointer;
+}
+
+.address-card .radio-group label {
+    flex: 1;
+    cursor: pointer;
+}
+
+.address-card .recipient-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.address-card .recipient-name {
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+
+.address-card .address-details p,
+.address-card .contact-info p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #1d1d1f;
+    line-height: 1.6; /* Increased for better readability */
+}
+
+.address-card .contact-info {
+    margin-top: 12px;
+}
+
+.address-card .info-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 16px;
+    padding: 10px 14px;
+    background: #f9f9f9; /* Muted neutral grey */
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: #d35400; /* Soft burnt orange */
+}
+
+.address-card .info-note ion-icon {
+    color: #d35400; /* Soft burnt orange for the icon */
+    font-size: 1rem;
+}
+
+.address-card .edit-btn {
+    background: #f5f5f7; /* Light grey background */
+    border: none; /* No border */
+    color: #1d1d1f;
+    padding: 12px 24px;
+    border-radius: 0; /* Strict square corners */
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    width: fit-content;
+    margin-top: 20px;
+    margin-bottom: 20px; /* 20px vertical padding before card border */
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.address-card .edit-btn:hover {
+    background: #e1e1e3;
+}
+
+.address-modal .modal-footer {
+    padding: 24px;
+    background: #fff;
+    border-top: 1px solid #f0f0f0;
+}
+
+/* Mobile specific styling */
+@media (max-width: 600px) {
+    .modal-overlay {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .address-modal {
+        max-width: 100% !important;
+        width: 100% !important;
+        max-height: 85vh;
+        position: relative;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        animation: slideUp 0.4s cubic-bezier(0.2, 1, 0.2, 1);
+    }
+}
+
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+/* GIFT SELECTION MODAL STYLES */
+.gift-modal .modal-title {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-transform: none !important;
+    font-variant: normal !important;
+    letter-spacing: -0.01em;
+}
+
+.gift-modal .modal-subtitle {
+    color: #6e6e73;
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+}
+
+.sample-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sample-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 20px;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    cursor: pointer;
+    background: #fff;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sample-item.selected {
+    border: 1.5px solid #000;
+    background: #f9f9f9;
+}
+
+.radio-icon {
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid #d2d2d7;
+    border-radius: 50%; /* Circular radio */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.sample-item.selected .radio-icon {
+    border-color: #000;
+}
+
+.radio-inner {
+    width: 10px;
+    height: 10px;
+    background: #000;
+    border-radius: 50%;
+    transform: scale(0);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.sample-item.selected .radio-inner {
+    transform: scale(1);
+}
+
+.sample-img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.sample-name {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #1d1d1f;
+}
+
+.full-width-btn {
+    width: 100% !important;
+    border-radius: 0 !important;
+}
+
+/* ORDER SUMMARY MODAL STYLES */
+.checkout-modal .modal-title {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+    text-transform: none !important;
+    font-variant: normal !important;
+}
+
+.summary-list {
+    padding: 20px 0;
+    border-top: 1px solid #f0f0f0;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0; /* Increased spacing between rows */
+}
+
+.summary-row .label {
+    color: #6e6e73;
+    font-size: 0.95rem;
+}
+
+.summary-row .value {
+    color: #111;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 0;
+    margin-top: 8px;
+    border-top: 1px solid #eeeeee; /* Thin light-grey divider */
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.total-price {
+    font-size: 1.45rem; /* Increased size for visual hierarchy */
+    color: #000;
+}
+
+
+
+
