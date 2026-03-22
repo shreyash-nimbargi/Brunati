@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isSignupOpen, setIsSignupOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
 
     useEffect(() => {
@@ -37,9 +36,9 @@ const Navbar = () => {
                     <button className="icon-btn" aria-label="Cart">
                         <ion-icon name="bag-handle-outline"></ion-icon>
                     </button>
-                    <button className="icon-btn" aria-label="Account">
+                    <Link to="/signin" className="icon-btn" aria-label="Account">
                         <ion-icon name="person-outline"></ion-icon>
-                    </button>
+                    </Link>
                 </div>
             </header>
 

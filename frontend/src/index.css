@@ -1,5 +1,9 @@
 @import './styles/desktop-slider.css';
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* ========================================
    CORE DESIGN SYSTEM & VARIABLES
    (Restored from Legacy)
