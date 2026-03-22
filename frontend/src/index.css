@@ -1009,11 +1009,125 @@ h1, h2, h3, .section-title, .founder-name {
     object-fit: contain; /* Ensure no cropping */
 }
 
+/* THUMBNAILS */
+.thumb {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    border: 2px solid #eee;
+    cursor: pointer;
+    overflow: hidden;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.thumb.active {
+    border-color: #000 !important;
+}
+
+.thumb:hover {
+    border-color: #ddd;
+}
+
 .product-info-sidebar {
     position: sticky;
     top: 100px; /* Sticky Sidebar alignment */
     height: fit-content;
     align-self: start; /* Alignment with gallery top */
+}
+
+/* PRODUCT ACCORDIONS */
+.accordion-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px; /* Space between Buy Now and Accordion */
+}
+
+.acc-item {
+    background: #f9f9f9;
+    border: 1px solid #e5e5e5;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+.acc-header {
+    width: 100%;
+    padding: 16px 20px;
+    border: none;
+    background: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 600;
+    color: #1d1d1f;
+    font-size: 0.95rem;
+}
+
+.acc-chevron {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease-in-out;
+    color: #86868b;
+}
+
+.acc-item.active .acc-chevron {
+    transform: rotate(180deg);
+}
+
+.acc-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition: grid-template-rows 0.45s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.45s ease;
+}
+
+.acc-item.active .acc-content {
+    grid-template-rows: 1fr;
+    opacity: 1;
+}
+
+.acc-inner {
+    overflow: hidden;
+    padding: 0 20px 0; /* Padding adjustment for smooth start */
+    transition: padding 0.45s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.acc-item.active .acc-inner {
+    padding: 0 20px 20px;
+}
+
+.accords-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.accord-tag {
+    background: #ffffff;
+    border: 1px solid #eeeeee;
+    padding: 6px 14px;
+    border-radius: 50px; /* Pill shape */
+    font-size: 11px; /* Subtle adjustment */
+    font-weight: 500; /* Sophisticated medium weight */
+    text-transform: uppercase;
+    letter-spacing: 0.05em; /* Custom kerning for premium feel */
+    color: #1d1d1f;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.pyramid-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #484848;
+}
+
+.note-row {
+    margin-bottom: 2px;
 }
 
 .sidebar-content {
@@ -1179,6 +1293,60 @@ footer {
     
     .btn-check { padding: 0 10px; font-size: 0.8rem; }
     .btn-cart { width: 40px; height: 40px; font-size: 18px; }
+
+    /* Mobile Product Gallery Fix */
+    .product-page-grid {
+        margin-top: 80px;
+        padding: 0;
+        gap: 0;
+    }
+
+    .gallery-container {
+        margin-top: 0;
+        width: 100%;
+        gap: 0;
+    }
+
+    .main-image-box {
+        height: 70vh;
+        border-radius: 0;
+        padding: 24px;
+        background: #f9f9f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .main-image-box img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+
+    .thumb {
+        height: 85px; /* Adjusted height for mobile gallery balance */
+    }
+
+    .carousel-track {
+        margin-top: 24px !important; /* Increased spacing to push thumbnails down */
+        padding: 0 20px;
+    }
+
+    .product-info-sidebar {
+        padding: 32px 24px 40px; /* Increased padding for smooth reflow */
+        background: #fff;
+    }
+
+    .buy-now-cta {
+        padding: 14px 20px !important; /* Slimmer vertically on mobile */
+        font-size: 1rem !important; /* Slightly smaller text for balance */
+        margin-top: 32px; /* Consistency with preceding component gap */
+    }
+
+    .free-badge {
+        padding: 4px 10px !important; /* Slightly smaller badge to fit slimmer button */
+        font-size: 0.75rem !important;
+    }
 }
 
 /* Mobile Devices */
