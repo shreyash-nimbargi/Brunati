@@ -151,8 +151,10 @@ const ProductDetail = () => {
                             </div>
                         </div>
 
-                        <button className="auth-btn" style={{ padding: '20px', fontSize: '1.1rem' }} onClick={() => setIsGiftModalOpen(true)}>
-                            Buy Now With <span style={{ color: '#ff4d6d' }}>Free</span> Gift
+                        <button className="buy-now-btn" onClick={() => setIsGiftModalOpen(true)}>
+                            <span>Buy Now With</span>
+                            <span className="free-badge">FREE</span>
+                            <span>Gift</span>
                         </button>
 
                         <div className="accordion-group" style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: '#eee', borderRadius: '12px', overflow: 'hidden' }}>

@@ -1058,6 +1058,44 @@ h1, h2, h3, .section-title, .founder-name {
     color: #111;
 }
 
+.buy-now-btn {
+    width: 100%;
+    padding: 20px 40px;
+    background-color: #000000;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 50px; /* Pill shape */
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    text-transform: none;
+    font-family: inherit;
+}
+
+.buy-now-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.free-badge {
+    background-color: #FFD700;
+    color: #000000;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+
 /* FOOTER */
 footer {
     padding: 80px 24px;
