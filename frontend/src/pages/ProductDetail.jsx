@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { productsData } from '../data/products';
+import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
 
 const ProductDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { addToCart } = useCart();
+    const { isWishlisted, toggleWishlist } = useWishlist();
     const product = productsData[id] || productsData['dominus'];
 
     const [mainImg, setMainImg] = useState(product.images[0]);
@@ -230,7 +234,32 @@ const ProductDetail = () => {
                 <div className="product-info-sidebar">
                     <div className="sidebar-content">
                         <span className="badge" style={{ background: '#f5f5f7', padding: '6px 14px', borderRadius: '20px', width: 'fit-content', fontSize: '0.8rem', fontWeight: 600 }}>{product.badge}</span>
-                        <h1 className="product-title-desktop">{product.name}</h1>
+                        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
+                            <h1 className="product-title-desktop">{product.name}</h1>
+                            {/* Wishlist heart */}
+                            <button
+                                onClick={() => toggleWishlist({
+                                    id: id || 'dominus',
+                                    name: product.name,
+                                    badge: product.badge,
+                                    price: price,
+                                    image: getImgSrc(product.images[0]),
+                                    size: selectedSize,
+                                })}
+                                title={isWishlisted(id || 'dominus') ? 'Remove from wishlist' : 'Add to wishlist'}
+                                style={{
+                                    background: 'none', border: 'none', cursor: 'pointer', flexShrink: 0,
+                                    color: isWishlisted(id || 'dominus') ? '#e74c3c' : '#9e9ea3',
+                                    fontSize: 24, padding: '4px 0', marginTop: 4,
+                                    transition: 'color 0.2s, transform 0.2s',
+                                    display: 'flex', alignItems: 'center',
+                                }}
+                                onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.15)'; }}
+                                onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; }}
+                            >
+                                <ion-icon name={isWishlisted(id || 'dominus') ? 'heart' : 'heart-outline'}></ion-icon>
+                            </button>
+                        </div>
                         <div className="price" style={{
                             fontSize: '1.8rem',
                             fontWeight: 360,
@@ -247,9 +276,28 @@ const ProductDetail = () => {
                             </div>
                         </div>
 
-                        <button className="buy-now-cta" onClick={() => setIsGiftModalOpen(true)}>
-                            Buy Now With <span className="free-badge">FREE</span> Gift
-                        </button>
+                        <div style={{ display: 'flex', gap: '2px', flexDirection: 'column' }}>
+                            <button 
+                                className="buy-now-cta" 
+                                style={{ background: '#fff', color: '#111', border: '1px solid #111' }}
+                                onClick={() => {
+                                    addToCart({
+                                        id: id || 'dominus',
+                                        name: product.name,
+                                        size: selectedSize,
+                                        price: parseFloat(String(price).replace(/[^0-9.]/g, '')),
+                                        quantity: 1,
+                                        image: getImgSrc(mainImg),
+                                    });
+                                    navigate('/cart');
+                                }}
+                            >
+                                Add to Cart
+                            </button>
+                            <button className="buy-now-cta" onClick={() => setIsGiftModalOpen(true)}>
+                                Buy Now With <span className="free-badge">FREE</span> Gift
+                            </button>
+                        </div>
 
                         <div className="accordion-group">
                             <div className={`acc-item ${activeAccordion === 0 ? 'active' : ''}`}>

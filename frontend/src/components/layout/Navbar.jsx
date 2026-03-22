@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const { cartCount } = useCart();
+    const { wishlistCount } = useWishlist();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -20,22 +24,64 @@ const Navbar = () => {
                     <button className="icon-btn menu-toggle-btn" onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Menu">
                         <ion-icon name={isMenuOpen ? "close-outline" : "menu-outline"}></ion-icon>
                     </button>
-                    {/* Only visible on mobile */}
-                    <button className="icon-btn wishlist-mobile-btn" aria-label="Wishlist">
-                        <ion-icon name="heart-outline"></ion-icon>
-                    </button>
+                    {/* Mobile wishlist → /wishlist */}
+                    <Link to="/wishlist" className="icon-btn wishlist-mobile-btn" aria-label="Wishlist">
+                        <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <ion-icon name="heart-outline"></ion-icon>
+                            {wishlistCount > 0 && (
+                                <span style={{
+                                    position: 'absolute', top: -6, right: -8,
+                                    background: '#D4AF37', color: '#000',
+                                    borderRadius: '50%', width: 15, height: 15,
+                                    fontSize: 8, fontWeight: 800,
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    lineHeight: 1, pointerEvents: 'none',
+                                }}>
+                                    {wishlistCount}
+                                </span>
+                            )}
+                        </span>
+                    </Link>
                 </div>
 
                 <Link to="/" className="logo-text">Brunati</Link>
 
                 <div className="nav-group right">
-                    {/* Only visible on desktop */}
-                    <button className="icon-btn wishlist-desktop-btn" aria-label="Wishlist">
-                        <ion-icon name="heart-outline"></ion-icon>
-                    </button>
-                    <button className="icon-btn" aria-label="Cart">
-                        <ion-icon name="bag-handle-outline"></ion-icon>
-                    </button>
+                    {/* Desktop wishlist → /wishlist */}
+                    <Link to="/wishlist" className="icon-btn wishlist-desktop-btn" aria-label="Wishlist">
+                        <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <ion-icon name="heart-outline"></ion-icon>
+                            {wishlistCount > 0 && (
+                                <span style={{
+                                    position: 'absolute', top: -6, right: -8,
+                                    background: '#D4AF37', color: '#000',
+                                    borderRadius: '50%', width: 15, height: 15,
+                                    fontSize: 8, fontWeight: 800,
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    lineHeight: 1, pointerEvents: 'none',
+                                }}>
+                                    {wishlistCount}
+                                </span>
+                            )}
+                        </span>
+                    </Link>
+                    <Link to="/cart" className="icon-btn" aria-label="Cart">
+                        <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <ion-icon name="bag-handle-outline"></ion-icon>
+                            {cartCount > 0 && (
+                                <span style={{
+                                    position: 'absolute', top: -6, right: -8,
+                                    background: '#D4AF37', color: '#000',
+                                    borderRadius: '50%', width: 15, height: 15,
+                                    fontSize: 8, fontWeight: 800,
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    lineHeight: 1, pointerEvents: 'none',
+                                }}>
+                                    {cartCount}
+                                </span>
+                            )}
+                        </span>
+                    </Link>
                     <Link to="/signin" className="icon-btn" aria-label="Account">
                         <ion-icon name="person-outline"></ion-icon>
                     </Link>

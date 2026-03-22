@@ -1,6 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useCart } from '../../context/CartContext';
 
 const ProductFeed = () => {
+    const navigate = useNavigate();
+    const { addToCart } = useCart();
     const products = [
         {
             id: 1,
@@ -66,7 +70,20 @@ const ProductFeed = () => {
                         <p className="card-price">{product.price}</p>
                         <p className="card-desc">{product.description}</p>
                         <div className="card-actions">
-                            <button className="btn-detail btn-primary-dark">Add to Cart</button>
+                            <button 
+                                className="btn-detail btn-primary-dark"
+                                onClick={() => {
+                                    addToCart({
+                                        id: String(product.id),
+                                        name: product.name,
+                                        size: '100ml',
+                                        price: parseFloat(product.price.replace(/[^0-9.]/g, '')),
+                                        quantity: 1,
+                                        image: product.image,
+                                    });
+                                    navigate('/cart');
+                                }}
+                            >Add to Cart</button>
                             <button className="btn-detail" style={{ border: '1px solid #1d1d1f' }}>View Details</button>
                         </div>
                     </div>
