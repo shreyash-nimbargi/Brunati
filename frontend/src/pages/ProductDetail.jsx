@@ -19,6 +19,14 @@ const ProductDetail = () => {
     const [isHovered, setIsHovered] = useState(false);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
+        setMainImg(product.images[0]);
+        setPrice(product.price);
+        setSelectedSize('100ml');
+        setActiveAccordion(null);
+    }, [id, product]);
+
+    useEffect(() => {
         let interval;
         if (!isHovered) {
             interval = setInterval(() => {
