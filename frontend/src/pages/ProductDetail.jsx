@@ -429,16 +429,19 @@ const ProductDetail = () => {
                             padding: '30px',
                             display: 'flex',
                             flexDirection: 'column',
-                            gap: '12px'
+                            gap: '12px',
+                            textAlign: 'left',
+                            alignItems: 'flex-start'
                         }}>
-                            <div style={{ color: '#FFD700', fontSize: '1.2rem', letterSpacing: '2px' }}>
+                            <div style={{ color: '#FFD700', fontSize: '1.2rem', letterSpacing: '2px', textAlign: 'left' }}>
                                 ★★★★★
                             </div>
                             <div style={{
                                 fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
                                 fontWeight: 700,
                                 fontSize: '1.1rem',
-                                color: '#111'
+                                color: '#111',
+                                textAlign: 'left'
                             }}>
                                 {review.name}
                             </div>
@@ -447,7 +450,8 @@ const ProductDetail = () => {
                                 color: '#6e6e73',
                                 lineHeight: '1.6',
                                 fontSize: '1rem',
-                                fontWeight: 400
+                                fontWeight: 400,
+                                textAlign: 'left'
                             }}>
                                 "{review.text}"
                             </p>
@@ -534,7 +538,7 @@ const ProductDetail = () => {
                                             margin: '0 0 2px 0', 
                                             color: '#111',
                                             fontSize: '15px',
-                                            fontWeight: 600,
+                                            fontWeight: 700,
                                             fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
                                         }}
                                     >
