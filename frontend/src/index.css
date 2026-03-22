@@ -1471,6 +1471,7 @@ footer {
     }
 }
 
+
 @media (max-width: 600px) {
     .influencer-card {
         flex: 0 0 88%;
@@ -1480,3 +1481,374 @@ footer {
         display: none; /* Usually hide arrows on mobile, manual swipe is better */
     }
 }
+
+/* NEW 'BUY NOW' CTA STYLES */
+.buy-now-cta {
+    width: 100%;
+    padding: 22px;
+    background: #000; /* Solid black background */
+    color: #fff; /* Pure white text */
+    border: none;
+    border-radius: 0; /* Strict square/rectangular shape */
+    font-size: 1.15rem; /* Standard text size as seen in image_2.png */
+    font-weight: 700; /* Standard weight as seen in image_2.png */
+    letter-spacing: 0.05em; /* Premium spacing */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; /* Standard font from image_2 */
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.buy-now-cta:hover {
+    background: #1a1a1a;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+}
+
+.buy-now-cta:hover .free-badge {
+    background: #FFD700; /* Darker yellow on hover for better visibility */
+}
+
+.buy-now-cta:active {
+    transform: translateY(0);
+}
+
+.free-badge {
+    background: #FFEF00; /* Solid bright yellow background */
+    color: #000; /* Pure black text */
+    padding: 6px 14px; /* Maintain height as seen in image_8 */
+    border-radius: 8px; /* Precise rounded corners (as seen in image_8) */
+    font-weight: 900; /* Bold badge text */
+    font-size: 0.85rem; /* Badge font size */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1; /* Vertically centered */
+    text-transform: uppercase;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    vertical-align: middle;
+    margin-left: 4px;
+}
+
+/* ADDRESS SELECTION MODAL STYLES */
+.address-modal {
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+}
+
+.address-modal .modal-header {
+    padding: 24px 24px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.address-modal .modal-title {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-transform: none !important;
+    font-variant: normal !important;
+    margin: 0;
+}
+
+.address-modal .add-new-btn {
+    color: #27ae60;
+    background: none;
+    border: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.address-scroll-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 24px;
+    background: #f9f9f9;
+}
+
+.address-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.address-card .card-heading {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #86868b;
+    margin-bottom: 16px;
+    text-transform: none !important;
+    font-variant: normal !important;
+}
+
+.address-card .card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.address-card .radio-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.address-card .radio-group input[type="radio"] {
+    margin-top: 4px; /* Centering radio with recipient name line only */
+    cursor: pointer;
+}
+
+.address-card .radio-group label {
+    flex: 1;
+    cursor: pointer;
+}
+
+.address-card .recipient-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.address-card .recipient-name {
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+
+.address-card .address-details p,
+.address-card .contact-info p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #1d1d1f;
+    line-height: 1.6; /* Increased for better readability */
+}
+
+.address-card .contact-info {
+    margin-top: 12px;
+}
+
+.address-card .info-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 16px;
+    padding: 10px 14px;
+    background: #f9f9f9; /* Muted neutral grey */
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: #d35400; /* Soft burnt orange */
+}
+
+.address-card .info-note ion-icon {
+    color: #d35400; /* Soft burnt orange for the icon */
+    font-size: 1rem;
+}
+
+.address-card .edit-btn {
+    background: #f5f5f7; /* Light grey background */
+    border: none; /* No border */
+    color: #1d1d1f;
+    padding: 12px 24px;
+    border-radius: 0; /* Strict square corners */
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    width: fit-content;
+    margin-top: 20px;
+    margin-bottom: 20px; /* 20px vertical padding before card border */
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.address-card .edit-btn:hover {
+    background: #e1e1e3;
+}
+
+.address-modal .modal-footer {
+    padding: 24px;
+    background: #fff;
+    border-top: 1px solid #f0f0f0;
+}
+
+/* Mobile specific styling */
+@media (max-width: 600px) {
+    .modal-overlay {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .address-modal {
+        max-width: 100% !important;
+        width: 100% !important;
+        max-height: 85vh;
+        position: relative;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        animation: slideUp 0.4s cubic-bezier(0.2, 1, 0.2, 1);
+    }
+}
+
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+/* GIFT SELECTION MODAL STYLES */
+.gift-modal .modal-title {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-transform: none !important;
+    font-variant: normal !important;
+    letter-spacing: -0.01em;
+}
+
+.gift-modal .modal-subtitle {
+    color: #6e6e73;
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+}
+
+.sample-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sample-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 20px;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    cursor: pointer;
+    background: #fff;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sample-item.selected {
+    border: 1.5px solid #000;
+    background: #f9f9f9;
+}
+
+.radio-icon {
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid #d2d2d7;
+    border-radius: 50%; /* Circular radio */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.sample-item.selected .radio-icon {
+    border-color: #000;
+}
+
+.radio-inner {
+    width: 10px;
+    height: 10px;
+    background: #000;
+    border-radius: 50%;
+    transform: scale(0);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.sample-item.selected .radio-inner {
+    transform: scale(1);
+}
+
+.sample-img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.sample-name {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #1d1d1f;
+}
+
+.full-width-btn {
+    width: 100% !important;
+    border-radius: 0 !important;
+}
+
+/* ORDER SUMMARY MODAL STYLES */
+.checkout-modal .modal-title {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+    text-transform: none !important;
+    font-variant: normal !important;
+}
+
+.summary-list {
+    padding: 20px 0;
+    border-top: 1px solid #f0f0f0;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0; /* Increased spacing between rows */
+}
+
+.summary-row .label {
+    color: #6e6e73;
+    font-size: 0.95rem;
+}
+
+.summary-row .value {
+    color: #111;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 0;
+    margin-top: 8px;
+    border-top: 1px solid #eeeeee; /* Thin light-grey divider */
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.total-price {
+    font-size: 1.45rem; /* Increased size for visual hierarchy */
+    color: #000;
+}
+
+
+
+

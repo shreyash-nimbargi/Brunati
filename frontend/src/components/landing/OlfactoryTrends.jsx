@@ -41,8 +41,7 @@ const TrendVideo = ({ src }) => {
 
 const OlfactoryTrends = () => {
     const navigate = useNavigate();
-    const scrollContainerRef = useRef(null);
-    
+    const scrollContainerRef = useRef(null);    
     // We filter out the gift set and map the actual products for the trends section
     const trendProducts = Object.keys(productsData).filter(key => key !== 'gift1');
 

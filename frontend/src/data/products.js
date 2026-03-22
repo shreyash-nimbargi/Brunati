@@ -6,7 +6,7 @@ export const productsData = {
         secondaryPrice: 1095,
         description: "A bold and regal fragrance designed for the modern visionary. Speaking volumes with notes of rich oud, sensual patchouli, and a hint of saffron.",
         images: ["media/dominus/1.png", "media/dominus/2.png", "media/dominus/3.png"],
-        storyVisual: "media/dominus/DE.png",
+        storyVisual: "media/banner/DEc.png",
         videoReel: "https://res.cloudinary.com/dlg3ofqcr/video/upload/v1773762424/Not_every_man_can_wear_this_crown___Dominus_Emperor__Your_signature_scent_arrives_soon___mensfragrances__boldfragrance__whiskynotes__TobaccoVanilla__Stron_nsb78j.mp4", // PASTE YOUR CLOUDINARY LINK HERE FOR DOMINUS
         accords: ["Warm Spicy", "Woody", "Tobacco", "Whiskey", "Oud", "Sweet", "Amber", "Balsamic", "Vanilla", "Smoky"],
         topNotes: "Whiskey",
@@ -20,7 +20,7 @@ export const productsData = {
         secondaryPrice: 1095,
         description: "Crystalline depths of the Mediterranean captured in a bottle. A surge of mineral freshness, aromatic herbs, and marine notes.",
         images: ["media/aqua/1.png", "media/aqua/2.png", "media/aqua/3.png"],
-        storyVisual: "media/aqua/DE.png",
+        storyVisual: "media/banner/BAc.png",
         videoReel: "https://res.cloudinary.com/dlg3ofqcr/video/upload/v1773762426/Unisex___Unique___Unforgettable__On_the_way...____brunati__Brunatiaqua__aquaticvibes__coolfragrances__summerready_MP4_kndck6.mp4", // PASTE YOUR CLOUDINARY LINK HERE FOR AQUA
         accords: ["Aromatic", "Marine", "Fresh Spicy", "Woody", "Citrus", "Earthy"],
         topNotes: "Sea Notes, Bergamot",
@@ -34,7 +34,7 @@ export const productsData = {
         secondaryPrice: 1095,
         description: "An ethereal dance of white florals and creamy sandalwood. Designed for the woman who finds strength in grace.",
         images: ["media/mistia/1.png", "media/mistia/2.png", "media/mistia/3.png"],
-        storyVisual: "media/mistia/DE.png",
+        storyVisual: "media/banner/Mc.png",
         videoReel: "https://res.cloudinary.com/dlg3ofqcr/video/upload/v1773762425/Something_fresh__floral__and_unforgettable__is_on_its_way___For_the_woman_who_blooms_with_grace____MISTEA__ComingSoon__FloralElegance__famininefragra_rppgyu.mp4", // PASTE YOUR CLOUDINARY LINK HERE FOR MISTIA
         accords: ["Floral", "White Floral", "Musky", "Powdery", "Woody"],
         topNotes: "White Florals, Pear",
@@ -48,7 +48,7 @@ export const productsData = {
         secondaryPrice: 1095,
         description: "The warmth of a golden sunset. A sophisticated blend of citrus zest, amber, and warm woody base notes for an elegant presence.",
         images: ["media/dusk/1.png", "media/dusk/2.png", "media/dusk/3.png"],
-        storyVisual: "media/dusk/DE.png",
+        storyVisual: "media/banner/CDc.png",
         videoReel: "", // PASTE YOUR CLOUDINARY LINK HERE FOR DUSK
         accords: ["Citrus", "Amber", "Woody", "Powdery", "Fresh"],
         topNotes: "Citrus Zest, Bergamot",
@@ -62,7 +62,7 @@ export const productsData = {
         secondaryPrice: 1095,
         description: "Provocative and deep. Dark Cherry and Tonka Bean meet a base of smoky Vetiver for a mysterious allure.",
         images: ["media/midnight/1.png", "media/midnight/2.png", "media/midnight/3.png"],
-        storyVisual: "media/midnight/DE.png",
+        storyVisual: "media/banner/MGc.png",
         videoReel: "https://res.cloudinary.com/dlg3ofqcr/video/upload/v1773762425/Sweet___Spicy___After_Dark___MIDNIGHT_GLIMMER___Launching_Soon___midnightglimmer__Brunati___UnisexFragrance__sweetspicyscent__vanillafragrance_MP4_ssal0p.mp4", // PASTE YOUR CLOUDINARY LINK HERE FOR MIDNIGHT
         accords: ["Fruity", "Sweet", "Vanilla", "Balsamic", "Smoky"],
         topNotes: "Dark Cherry, Almond",

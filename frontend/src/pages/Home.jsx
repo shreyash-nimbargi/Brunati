@@ -92,6 +92,42 @@ const Home = () => {
         };
     }, []);
 
+    useEffect(() => {
+        let animationFrameId;
+        const container = influencersRef.current;
+        if (!container) return;
+
+        let isDown = false;
+        const handleDown = () => isDown = true;
+        const handleUp = () => isDown = false;
+
+        container.addEventListener('mousedown', handleDown);
+        container.addEventListener('mouseup', handleUp);
+        container.addEventListener('mouseleave', handleUp);
+        container.addEventListener('touchstart', handleDown, { passive: true });
+        container.addEventListener('touchend', handleUp);
+
+        const scroll = () => {
+            if (!isDown) {
+                container.scrollLeft += 1;
+                if (container.scrollLeft >= container.scrollWidth - container.clientWidth - 1) {
+                    container.scrollLeft = 0;
+                }
+            }
+            animationFrameId = requestAnimationFrame(scroll);
+        };
+        animationFrameId = requestAnimationFrame(scroll);
+
+        return () => {
+            cancelAnimationFrame(animationFrameId);
+            container.removeEventListener('mousedown', handleDown);
+            container.removeEventListener('mouseup', handleUp);
+            container.removeEventListener('mouseleave', handleUp);
+            container.removeEventListener('touchstart', handleDown);
+            container.removeEventListener('touchend', handleUp);
+        };
+    }, []);
+
     // Content for Client Experiences (Reviews)
     const reviews = [
         { name: "Julian V.", text: "The most sophisticated scent I have ever worn. Truly a masterpiece of modern luxury." },
@@ -134,6 +170,8 @@ const Home = () => {
         }
     ];
 
+    const scrollingInfluencers = [...influencersList, ...influencersList];
+
     return (
         <main>
             <Hero />
@@ -166,7 +204,7 @@ const Home = () => {
                     </button>
 
                     <div className="influencers-slider" ref={influencersRef}>
-                        {influencersList.map((influencer, idx) => (
+                        {scrollingInfluencers.map((influencer, idx) => (
                             <div key={idx} className="influencer-card">
                                 <div className="influencer-image-placeholder"></div>
                                 <div className="influencer-info">

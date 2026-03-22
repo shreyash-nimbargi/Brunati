@@ -12,6 +12,7 @@ const ProductDetail = () => {
     const [price, setPrice] = useState(product.price);
     const [activeAccordion, setActiveAccordion] = useState(null);
     const [isGiftModalOpen, setIsGiftModalOpen] = useState(false);
+    const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
     const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
     const [selectedGift, setSelectedGift] = useState(null);
 
@@ -56,7 +57,7 @@ const ProductDetail = () => {
             return;
         }
         setIsGiftModalOpen(false);
-        setIsCheckoutModalOpen(true);
+        setIsAddressModalOpen(true);
     };
 
     return (
@@ -64,56 +65,119 @@ const ProductDetail = () => {
             {/* Gift Modal */}
             {isGiftModalOpen && (
                 <div className="modal-overlay active">
-                    <div className="modal-content">
+                    <div className="modal-content gift-modal">
                         <ion-icon name="close-outline" style={{ position: 'absolute', top: '15px', right: '15px', fontSize: '24px', cursor: 'pointer' }} onClick={() => setIsGiftModalOpen(false)}></ion-icon>
-                        <h2>Select Your Free Gift</h2>
-                        <p style={{ color: '#6e6e73', marginBottom: '20px' }}>Choose 1 complimentary sample</p>
+                        <h2 className="modal-title">Select Your Free Gift</h2>
+                        <p className="modal-subtitle">Choose 1 complimentary sample</p>
 
-                        <div className="sample-list" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <div className="sample-list">
                             {Object.entries(productsData).filter(([key]) => key !== 'gift1').map(([key, p]) => (
                                 <div
                                     key={key}
                                     className={`sample-item ${selectedGift === p.name ? 'selected' : ''}`}
                                     onClick={() => setSelectedGift(p.name)}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '15px',
-                                        padding: '10px',
-                                        border: `1px solid ${selectedGift === p.name ? '#000' : '#eee'}`,
-                                        borderRadius: '12px',
-                                        cursor: 'pointer',
-                                        background: selectedGift === p.name ? '#f9f9f9' : '#fff'
-                                    }}
                                 >
-                                    <div style={{ width: '16px', height: '16px', border: '1px solid #000', borderRadius: '4px', background: selectedGift === p.name ? '#000' : 'transparent' }}></div>
-                                    <img src={getImgSrc(p.images[0])} style={{ width: '40px', height: '40px', objectFit: 'cover' }} alt={p.name} />
-                                    <span>{p.name}</span>
+                                    <div className="radio-icon">
+                                        <div className="radio-inner"></div>
+                                    </div>
+                                    <img src={getImgSrc(p.images[0])} alt={p.name} className="sample-img" />
+                                    <span className="sample-name">{p.name}</span>
                                 </div>
                             ))}
                         </div>
-                        <button className="auth-btn" style={{ marginTop: '20px' }} onClick={handleProceed}>Proceed to Buy</button>
+                        <button className="buy-now-cta full-width-btn" style={{ marginTop: '20px' }} onClick={handleProceed}>Proceed to Buy</button>
                     </div>
                 </div>
             )}
 
-            {/* Checkout Modal */}
+            {/* Address Selection Modal */}
+            {isAddressModalOpen && (
+                <div className="modal-overlay active">
+                    <div className="modal-content address-modal">
+                        <div className="modal-header">
+                            <h2 className="modal-title">Select Address</h2>
+                            <button className="add-new-btn">Add New</button>
+                        </div>
+                        
+                        <div className="address-scroll-container">
+                            <div className="address-card">
+                                <h4 className="card-heading">Saved Address</h4>
+                                <div className="card-content">
+                                    <div className="radio-group">
+                                        <input type="radio" id="addr1" name="address" checked readOnly />
+                                        <label htmlFor="addr1">
+                                            <div className="recipient-row">
+                                                <span className="recipient-name">Shreyash Nimbargi</span>
+                                                <ion-icon name="star" className="star-icon" style={{ color: '#FFD700', fontSize: '1.2rem' }}></ion-icon>
+                                            </div>
+                                            <div className="address-details">
+                                                <p>123 Luxury Avenue, Penthouse 5</p>
+                                                <p>Bandra West, Mumbai, Maharashtra</p>
+                                                <p>PIN: 400050</p>
+                                            </div>
+                                            <div className="contact-info">
+                                                <p>+91 98765 43210</p>
+                                                <p>shreyash@example.com</p>
+                                            </div>
+                                            <div className="info-note">
+                                                <ion-icon name="information-circle-outline" style={{ color: '#f39c12' }}></ion-icon>
+                                                <span>For better reach, include an alternate number.</span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <button className="edit-btn">
+                                        <ion-icon name="pencil-outline"></ion-icon>
+                                        Edit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="modal-footer">
+                            <button className="buy-now-cta" onClick={() => { setIsAddressModalOpen(false); setIsCheckoutModalOpen(true); }}>
+                                Proceed to checkout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
             {isCheckoutModalOpen && (
                 <div className="modal-overlay active">
-                    <div className="modal-content">
+                    <div className="modal-content checkout-modal">
                         <ion-icon name="close-outline" style={{ position: 'absolute', top: '15px', right: '15px', fontSize: '24px', cursor: 'pointer' }} onClick={() => setIsCheckoutModalOpen(false)}></ion-icon>
-                        <h2>Order Summary</h2>
-                        <div style={{ padding: '20px 0', borderTop: '1px solid #eee', borderBottom: '1px solid #eee', marginTop: '10px' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}><span>Product</span><span>{product.name}</span></div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}><span>Size</span><span>{selectedSize}</span></div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}><span>Price</span><span>₹ {price}.00</span></div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}><span>Gift Sample</span><span>{selectedGift}</span></div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Gift Price</span><span style={{ color: '#27ae60' }}>Free</span></div>
+                        <h2 className="modal-title">Order Summary</h2>
+                        
+                        <div className="summary-list">
+                            <div className="summary-row">
+                                <span className="label">Product</span>
+                                <span className="value">{product.name}</span>
+                            </div>
+                            <div className="summary-row">
+                                <span className="label">Size</span>
+                                <span className="value">{selectedSize}</span>
+                            </div>
+                            <div className="summary-row">
+                                <span className="label">Price</span>
+                                <span className="value">₹ {price}.00</span>
+                            </div>
+                            <div className="summary-row">
+                                <span className="label">Gift Sample</span>
+                                <span className="value">{selectedGift}</span>
+                            </div>
+                            <div className="summary-row">
+                                <span className="label">Gift Price</span>
+                                <span className="value" style={{ color: '#27ae60' }}>Free</span>
+                            </div>
                         </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', padding: '20px 0', fontWeight: 'bold', fontSize: '1.2rem' }}>
-                            <span>Total Amount</span><span>₹ {price}.00</span>
+
+                        <div className="total-row">
+                            <span>Total Amount</span>
+                            <span className="total-price">₹ {price}.00</span>
                         </div>
-                        <button className="auth-btn" onClick={() => alert('Redirecting to secure payment...')}>Pay to Checkout</button>
+                        
+                        <button className="buy-now-cta full-width-btn" onClick={() => alert('Redirecting to secure payment...')}>
+                            Pay to Checkout
+                        </button>
                     </div>
                 </div>
             )}
@@ -151,10 +215,8 @@ const ProductDetail = () => {
                             </div>
                         </div>
 
-                        <button className="buy-now-btn" onClick={() => setIsGiftModalOpen(true)}>
-                            <span>Buy Now With</span>
-                            <span className="free-badge">FREE</span>
-                            <span>Gift</span>
+                        <button className="buy-now-cta" onClick={() => setIsGiftModalOpen(true)}>
+                            Buy Now With <span className="free-badge">FREE</span> Gift
                         </button>
 
                         <div className="accordion-group" style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: '#eee', borderRadius: '12px', overflow: 'hidden' }}>
