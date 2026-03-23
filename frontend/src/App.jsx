@@ -9,6 +9,7 @@ import Signin from './pages/Signin';
 import Signup from './pages/Signup';
 import CartPage from './pages/CartPage';
 import WishlistPage from './pages/WishlistPage';
+import AccountDashboard from './pages/AccountDashboard';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
 
@@ -28,6 +29,7 @@ function App() {
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/wishlist" element={<WishlistPage />} />
+                <Route path="/account" element={<AccountDashboard />} />
               </Routes>
             </main>
             <Footer />
