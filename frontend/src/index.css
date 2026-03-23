@@ -2133,6 +2133,7 @@ footer {
     display: flex;
     flex-direction: column;
     max-height: 90vh;
+    overflow-y: auto; /* Allow internal scrolling when form exceeds viewport */
 }
 
 .address-scroll-container {
@@ -2253,68 +2254,157 @@ footer {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
 }
 
-/* FORM STYYLES */
+/* FORM STYLES — Minimalist Wireframe */
+
+/* Modal header: bold sans-serif, all-caps */
+.address-form-modal .modal-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.address-form-modal .modal-title {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #111;
+}
+
+/* Close button — shared across all modals */
+.modal-close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.4rem;
+    color: #111;
+    line-height: 1;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.modal-close-btn:hover {
+    color: #555;
+}
+
 .address-form {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 0;
     text-align: left;
+    padding: 20px 0 0;
 }
 
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 0 16px; /* horizontal gap only; vertical handled by form-group margin-top */
 }
 
+/* Each field wrapper: relative so the floating label can sit on the border */
 .form-group {
+    position: relative;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    margin-top: 22px; /* space for the label chip floating above */
 }
 
 .form-group.full-width {
     grid-column: span 2;
 }
 
+/* Floating label — sits above the top border */
 .form-group label {
-    font-size: 0.85rem;
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    background: #ffffff;
+    padding: 0 4px;
+    font-size: 11px;
     font-weight: 600;
-    color: #1d1d1f;
+    color: #888888;
+    line-height: 1;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 1;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
 }
 
+/* Required asterisk in red — applies to every label (all fields are required) */
+.form-group label::after {
+    content: ' *';
+    color: #e03030;
+    font-weight: 700;
+}
+
+/* Input field: wireframe style — sharp corners, light grey border */
 .form-group input {
-    padding: 16px;
-    border: 1.5px solid #eee;
-    border-radius: 12px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
+    padding: 12px 10px;
+    border: 1px solid #cccccc;
+    border-radius: 0;          /* Strictly sharp corners */
+    background: #ffffff;
+    font-size: 0.95rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    color: #111;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+    outline: none;
 }
 
 .form-group input:focus {
-    border-color: #000;
-    outline: none;
+    border-color: #111111;
+    background: #ffffff;
+}
+
+/* Read-only / auto-fill fields get a muted background */
+.form-group input[readonly],
+.form-group input[disabled] {
+    background: #f9f9f9;
+    color: #666;
+    cursor: default;
 }
 
 .form-actions {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin: 40px -40px -40px !important; /* Flush with bottom and sides of the modal */
+    align-items: stretch; /* Button spans full container width */
+    gap: 0;
+    margin-top: 32px;
     padding: 0;
 }
 
+/* Save button: full-width, solid black, rectangular, all-caps */
 .save-btn {
     width: 100%;
-    padding: 20px; /* Premium height scaling */
-    background: #000;
-    color: #fff;
+    height: 52px;
+    background: #000000;
+    color: #ffffff;
     border: none;
-    font-weight: 600;
-    font-size: 1.1rem;
+    border-radius: 0;          /* Strictly rectangular */
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     cursor: pointer;
-    transition: all 0.3s;
-    border-radius: 0 !important; /* Strictly square/rectangular */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.save-btn:hover {
+    background: #222222;
+}
+
+.save-btn:active {
+    background: #000000;
 }
 
 .cancel-btn {
@@ -2370,6 +2460,48 @@ footer {
 @keyframes slideUpModal {
     from { transform: translateY(100%); }
     to { transform: translateY(0); }
+}
+
+/* EDIT ADDRESS FORM — Mobile fix: full-width, stacked inputs */
+@media (max-width: 600px) {
+    .address-form-modal {
+        width: 95% !important;
+        margin: 10px auto;
+        padding: 15px;
+        border-radius: 16px;
+        /* Override the 768px slide-up sheet behaviour for very small screens */
+        position: relative;
+        bottom: auto;
+        left: auto;
+        right: auto;
+        animation: none;
+    }
+
+    /* Mobile: stack all form fields vertically */
+    .form-grid {
+        display: block; /* Stack all columns */
+    }
+
+    .form-group {
+        margin-top: 22px; /* keep label chip spacing */
+    }
+
+    .form-group.full-width {
+        grid-column: unset;
+    }
+
+    .form-group input {
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    .form-actions {
+        margin-top: 24px;
+    }
+
+    .save-btn {
+        border-radius: 0; /* Keep rectangular on mobile too */
+    }
 }
 
 

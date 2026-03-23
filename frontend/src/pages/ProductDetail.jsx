@@ -127,11 +127,14 @@ const ProductDetail = () => {
                     <div className="modal-content address-modal">
                         <div className="modal-header">
                             <h2 className="modal-title">Select Address</h2>
-                            <button className="add-new-btn" onClick={() => {
-                                setCurrentAddress({ name: "", phone: "", email: "", address1: "", address2: "", pin: "" });
-                                setIsEditing(false);
-                                setIsAddressFormOpen(true);
-                            }}>Add New</button>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                                <button className="add-new-btn" onClick={() => {
+                                    setCurrentAddress({ name: "", phone: "", email: "", address1: "", address2: "", pin: "" });
+                                    setIsEditing(false);
+                                    setIsAddressFormOpen(true);
+                                }}>Add New</button>
+                                <button className="modal-close-btn" onClick={() => setIsAddressModalOpen(false)} aria-label="Close">✕</button>
+                            </div>
                         </div>
                         
                         <div className="address-scroll-container">
@@ -184,8 +187,9 @@ const ProductDetail = () => {
             {isAddressFormOpen && (
                 <div className="modal-overlay active form-overlay">
                     <div className="modal-content address-form-modal">
-                        <div className="modal-header">
+                        <div className="modal-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                             <h2 className="modal-title">{isEditing ? 'Edit Address' : 'Add New Address'}</h2>
+                            <button className="modal-close-btn" onClick={() => setIsAddressFormOpen(false)} aria-label="Close">✕</button>
                         </div>
                         
                         <form className="address-form" onSubmit={(e) => {
@@ -357,7 +361,7 @@ const ProductDetail = () => {
                             </div>
                         </div>
 
-                        <div style={{ display: 'flex', gap: '2px', flexDirection: 'column' }}>
+                        <div style={{ display: 'flex', gap: '12px', flexDirection: 'column' }}>
                             <button 
                                 className="buy-now-cta" 
                                 style={{ background: '#fff', color: '#111', border: '1px solid #111' }}
