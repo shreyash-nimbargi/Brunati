@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useCart } from '../../context/CartContext';
 
 const GenderSlider = () => {
+    const navigate = useNavigate();
+    const { addToCart } = useCart();
     const products = [
         {
             id: 1,
@@ -124,7 +128,21 @@ const GenderSlider = () => {
                         ))}
                     </div>
 
-                    <div className="add-to-cart-bar">
+                    <div 
+                        className="add-to-cart-bar"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                            addToCart({
+                                id: String(currentProduct.id),
+                                name: currentProduct.fullName,
+                                size: selectedSize,
+                                price: parseFloat(currentProduct.price.replace(/[^0-9.]/g, '')),
+                                quantity: 1,
+                                image: currentProduct.image,
+                            });
+                            navigate('/cart');
+                        }}
+                    >
                         <span>Add to cart</span>
                         <span>{currentProduct.price}</span>
                     </div>

@@ -1,14 +1,33 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
 
 const ProductCard = ({ id, name, meta, price, img1, img2, accords, description }) => {
     const navigate = useNavigate();
+    const { addToCart } = useCart();
+    const { isWishlisted, toggleWishlist } = useWishlist();
+    const wishlisted = isWishlisted(String(id));
 
     return (
         <div className="product-card" onClick={() => navigate(`/product/${id}`)}>
             <div className="img-container">
-                <div className="wishlist-overlay">
-                    <ion-icon name="heart-outline"></ion-icon>
+                <div
+                    className="wishlist-overlay"
+                    style={{ color: wishlisted ? '#e74c3c' : '#1d1d1f' }}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        toggleWishlist({
+                            id: String(id),
+                            name,
+                            badge: meta,
+                            price: parseFloat(String(price).replace(/[^0-9.]/g, '')),
+                            image: img1,
+                            size: '100ml',
+                        });
+                    }}
+                >
+                    <ion-icon name={wishlisted ? 'heart' : 'heart-outline'}></ion-icon>
                 </div>
                 <img src={img1} className="prod-img-primary" alt={name} />
                 <img src={img2} className="prod-img-secondary" alt={`${name} Hover`} />
@@ -51,9 +70,17 @@ const ProductCard = ({ id, name, meta, price, img1, img2, accords, description }
 
                 <button className="add-to-bag-btn" onClick={(e) => {
                     e.stopPropagation();
-                    console.log('Added to bag:', name);
+                    addToCart({
+                        id: String(id),
+                        name,
+                        size: '100ml',
+                        price: parseFloat(String(price).replace(/[^0-9.]/g, '')),
+                        quantity: 1,
+                        image: img1,
+                    });
+                    navigate('/cart');
                 }}>
-                    Add To Bag - {price}
+                    Add to Cart — {price}
                 </button>
                 <p className="complimentary-gift-text">
                     Complimentary Gift on orders above ₹149...

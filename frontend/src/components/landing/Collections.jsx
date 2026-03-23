@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ProductCard from '../product/ProductCard';
 import { productsData } from '../../data/products';
+import { useCart } from '../../context/CartContext';
 
 const Collections = () => {
+    const navigate = useNavigate();
+    const { addToCart } = useCart();
     const [activeTab, setActiveTab] = useState('him');
     const [sliderIndex, setSliderIndex] = useState(0);
     const [selectedSize, setSelectedSize] = useState('50ML');
@@ -139,7 +143,21 @@ const Collections = () => {
                             ))}
                         </div>
 
-                        <div className="slider-add-bar">
+                        <div 
+                            className="slider-add-bar"
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => {
+                                addToCart({
+                                    id: currentProduct.id,
+                                    name: currentProduct.name,
+                                    size: selectedSize,
+                                    price: parseFloat(currentProduct.price.replace(/[^0-9.]/g, '')),
+                                    quantity: 1,
+                                    image: currentProduct.img1,
+                                });
+                                navigate('/cart');
+                            }}
+                        >
                             <span>Add to cart</span>
                             <span>{currentProduct.price}</span>
                         </div>
