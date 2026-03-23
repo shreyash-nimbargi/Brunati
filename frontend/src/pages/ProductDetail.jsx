@@ -29,12 +29,13 @@ const ProductDetail = () => {
             phone: "+91 98765 43210",
             email: "shreyash@example.com",
             address1: "123 Luxury Avenue, Penthouse 5",
-            address2: "Bandra West, Mumbai, Maharashtra",
+            city: "Mumbai",
+            state: "Maharashtra",
             pin: "400050"
         }
     ]);
     const [currentAddress, setCurrentAddress] = useState({
-        name: "", phone: "", email: "", address1: "", address2: "", pin: ""
+        name: "", phone: "", email: "", address1: "", city: "", state: "", pin: ""
     });
     const [isEditing, setIsEditing] = useState(false);
     const [editIndex, setEditIndex] = useState(null);
@@ -129,7 +130,7 @@ const ProductDetail = () => {
                             <h2 className="modal-title">Select Address</h2>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                                 <button className="add-new-btn" onClick={() => {
-                                    setCurrentAddress({ name: "", phone: "", email: "", address1: "", address2: "", pin: "" });
+                                    setCurrentAddress({ name: "", phone: "", email: "", address1: "", city: "", state: "", pin: "" });
                                     setIsEditing(false);
                                     setIsAddressFormOpen(true);
                                 }}>Add New</button>
@@ -151,7 +152,7 @@ const ProductDetail = () => {
                                                 </div>
                                                 <div className="address-details">
                                                     <p>{addr.address1}</p>
-                                                    <p>{addr.address2}</p>
+                                                    <p>{[addr.city, addr.state].filter(Boolean).join(', ')}</p>
                                                     <p>PIN: {addr.pin}</p>
                                                 </div>
                                                 <div className="contact-info">
@@ -222,12 +223,16 @@ const ProductDetail = () => {
                                     <input type="text" value={currentAddress.address1} onChange={(e) => setCurrentAddress({...currentAddress, address1: e.target.value})} required placeholder="Address line 1" />
                                 </div>
                                 <div className="form-group">
-                                    <label>City / State</label>
-                                    <input type="text" value={currentAddress.address2} onChange={(e) => setCurrentAddress({...currentAddress, address2: e.target.value})} required placeholder="City, State" />
+                                    <label>City</label>
+                                    <input type="text" id="field-city" value={currentAddress.city} onChange={(e) => setCurrentAddress({...currentAddress, city: e.target.value})} required placeholder="e.g. Mumbai" />
+                                </div>
+                                <div className="form-group">
+                                    <label>State</label>
+                                    <input type="text" id="field-state" value={currentAddress.state} onChange={(e) => setCurrentAddress({...currentAddress, state: e.target.value})} required placeholder="e.g. Maharashtra" />
                                 </div>
                                 <div className="form-group">
                                     <label>Pincode</label>
-                                    <input type="text" value={currentAddress.pin} onChange={(e) => setCurrentAddress({...currentAddress, pin: e.target.value})} required placeholder="XXXXXX" />
+                                    <input type="text" id="field-pin" value={currentAddress.pin} onChange={(e) => setCurrentAddress({...currentAddress, pin: e.target.value})} required placeholder="XXXXXX" />
                                 </div>
                             </div>
 
