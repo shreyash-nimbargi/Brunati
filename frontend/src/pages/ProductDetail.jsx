@@ -39,6 +39,40 @@ const ProductDetail = () => {
     });
     const [isEditing, setIsEditing] = useState(false);
     const [editIndex, setEditIndex] = useState(null);
+    const [formErrors, setFormErrors] = useState({});
+    const [touched, setTouched] = useState({});
+
+    const validateAddress = (addr) => {
+        const errors = {};
+        if (!addr.name.trim() || addr.name.trim().length < 2)
+            errors.name = 'Full name must be at least 2 characters.';
+        else if (!/^[a-zA-Z\s.'-]+$/.test(addr.name.trim()))
+            errors.name = 'Name can only contain letters, spaces, or . \' -';
+        const phoneDigits = addr.phone.replace(/[\s+\-()]/g, '');
+        if (!phoneDigits)
+            errors.phone = 'Phone number is required.';
+        else if (!/^(91)?[6-9]\d{9}$/.test(phoneDigits))
+            errors.phone = 'Enter a valid 10-digit Indian mobile number.';
+        if (!addr.email.trim())
+            errors.email = 'Email address is required.';
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(addr.email.trim()))
+            errors.email = 'Enter a valid email address.';
+        if (!addr.address1.trim() || addr.address1.trim().length < 5)
+            errors.address1 = 'Address must be at least 5 characters.';
+        if (!addr.city.trim() || addr.city.trim().length < 2)
+            errors.city = 'City is required (min 2 characters).';
+        else if (!/^[a-zA-Z\s]+$/.test(addr.city.trim()))
+            errors.city = 'City name can only contain letters.';
+        if (!addr.state.trim() || addr.state.trim().length < 2)
+            errors.state = 'State is required (min 2 characters).';
+        else if (!/^[a-zA-Z\s]+$/.test(addr.state.trim()))
+            errors.state = 'State name can only contain letters.';
+        if (!addr.pin.trim())
+            errors.pin = 'Pincode is required.';
+        else if (!/^[1-9][0-9]{5}$/.test(addr.pin.trim()))
+            errors.pin = 'Enter a valid 6-digit Indian pincode.';
+        return errors;
+    };
 
     const scrollRef = React.useRef(null);
     const [isHovered, setIsHovered] = useState(false);
@@ -195,6 +229,11 @@ const ProductDetail = () => {
                         
                         <form className="address-form" onSubmit={(e) => {
                             e.preventDefault();
+                            // Mark all fields as touched on submit attempt
+                            setTouched({ name: true, phone: true, email: true, address1: true, city: true, state: true, pin: true });
+                            const errors = validateAddress(currentAddress);
+                            setFormErrors(errors);
+                            if (Object.keys(errors).length > 0) return; // Block submit
                             if(isEditing) {
                                 const newAddrs = [...addresses];
                                 newAddrs[editIndex] = currentAddress;
@@ -203,36 +242,147 @@ const ProductDetail = () => {
                                 setAddresses([...addresses, currentAddress]);
                                 setSelectedAddressIndex(addresses.length);
                             }
+                            setFormErrors({});
+                            setTouched({});
                             setIsAddressFormOpen(false);
                         }}>
                             <div className="form-grid">
                                 <div className="form-group full-width">
                                     <label>Full Name</label>
-                                    <input type="text" value={currentAddress.name} onChange={(e) => setCurrentAddress({...currentAddress, name: e.target.value})} required placeholder="Enter full name" />
+                                    <input
+                                        type="text"
+                                        value={currentAddress.name}
+                                        onChange={(e) => {
+                                            const val = e.target.value;
+                                            setCurrentAddress({...currentAddress, name: val});
+                                            if (touched.name) setFormErrors(prev => ({ ...prev, name: validateAddress({...currentAddress, name: val}).name }));
+                                        }}
+                                        onBlur={() => {
+                                            setTouched(prev => ({ ...prev, name: true }));
+                                            setFormErrors(prev => ({ ...prev, name: validateAddress(currentAddress).name }));
+                                        }}
+                                        placeholder="Enter full name"
+                                        style={touched.name && formErrors.name ? { borderColor: '#e03030' } : {}}
+                                    />
+                                    {touched.name && formErrors.name && <span className="field-error">{formErrors.name}</span>}
                                 </div>
                                 <div className="form-group">
                                     <label>Phone Number</label>
-                                    <input type="tel" value={currentAddress.phone} onChange={(e) => setCurrentAddress({...currentAddress, phone: e.target.value})} required placeholder="+91" />
+                                    <input
+                                        type="tel"
+                                        value={currentAddress.phone}
+                                        onChange={(e) => {
+                                            const val = e.target.value;
+                                            setCurrentAddress({...currentAddress, phone: val});
+                                            if (touched.phone) setFormErrors(prev => ({ ...prev, phone: validateAddress({...currentAddress, phone: val}).phone }));
+                                        }}
+                                        onBlur={() => {
+                                            setTouched(prev => ({ ...prev, phone: true }));
+                                            setFormErrors(prev => ({ ...prev, phone: validateAddress(currentAddress).phone }));
+                                        }}
+                                        placeholder="+91 XXXXX XXXXX"
+                                        style={touched.phone && formErrors.phone ? { borderColor: '#e03030' } : {}}
+                                    />
+                                    {touched.phone && formErrors.phone && <span className="field-error">{formErrors.phone}</span>}
                                 </div>
                                 <div className="form-group">
                                     <label>Email ID</label>
-                                    <input type="email" value={currentAddress.email} onChange={(e) => setCurrentAddress({...currentAddress, email: e.target.value})} required placeholder="example@gmail.com" />
+                                    <input
+                                        type="email"
+                                        value={currentAddress.email}
+                                        onChange={(e) => {
+                                            const val = e.target.value;
+                                            setCurrentAddress({...currentAddress, email: val});
+                                            if (touched.email) setFormErrors(prev => ({ ...prev, email: validateAddress({...currentAddress, email: val}).email }));
+                                        }}
+                                        onBlur={() => {
+                                            setTouched(prev => ({ ...prev, email: true }));
+                                            setFormErrors(prev => ({ ...prev, email: validateAddress(currentAddress).email }));
+                                        }}
+                                        placeholder="example@gmail.com"
+                                        style={touched.email && formErrors.email ? { borderColor: '#e03030' } : {}}
+                                    />
+                                    {touched.email && formErrors.email && <span className="field-error">{formErrors.email}</span>}
                                 </div>
                                 <div className="form-group full-width">
                                     <label>Building / Area / Street</label>
-                                    <input type="text" value={currentAddress.address1} onChange={(e) => setCurrentAddress({...currentAddress, address1: e.target.value})} required placeholder="Address line 1" />
+                                    <input
+                                        type="text"
+                                        value={currentAddress.address1}
+                                        onChange={(e) => {
+                                            const val = e.target.value;
+                                            setCurrentAddress({...currentAddress, address1: val});
+                                            if (touched.address1) setFormErrors(prev => ({ ...prev, address1: validateAddress({...currentAddress, address1: val}).address1 }));
+                                        }}
+                                        onBlur={() => {
+                                            setTouched(prev => ({ ...prev, address1: true }));
+                                            setFormErrors(prev => ({ ...prev, address1: validateAddress(currentAddress).address1 }));
+                                        }}
+                                        placeholder="Address line 1"
+                                        style={touched.address1 && formErrors.address1 ? { borderColor: '#e03030' } : {}}
+                                    />
+                                    {touched.address1 && formErrors.address1 && <span className="field-error">{formErrors.address1}</span>}
                                 </div>
                                 <div className="form-group">
                                     <label>City</label>
-                                    <input type="text" id="field-city" value={currentAddress.city} onChange={(e) => setCurrentAddress({...currentAddress, city: e.target.value})} required placeholder="e.g. Mumbai" />
+                                    <input
+                                        type="text"
+                                        id="field-city"
+                                        value={currentAddress.city}
+                                        onChange={(e) => {
+                                            const val = e.target.value;
+                                            setCurrentAddress({...currentAddress, city: val});
+                                            if (touched.city) setFormErrors(prev => ({ ...prev, city: validateAddress({...currentAddress, city: val}).city }));
+                                        }}
+                                        onBlur={() => {
+                                            setTouched(prev => ({ ...prev, city: true }));
+                                            setFormErrors(prev => ({ ...prev, city: validateAddress(currentAddress).city }));
+                                        }}
+                                        placeholder="e.g. Mumbai"
+                                        style={touched.city && formErrors.city ? { borderColor: '#e03030' } : {}}
+                                    />
+                                    {touched.city && formErrors.city && <span className="field-error">{formErrors.city}</span>}
                                 </div>
                                 <div className="form-group">
                                     <label>State</label>
-                                    <input type="text" id="field-state" value={currentAddress.state} onChange={(e) => setCurrentAddress({...currentAddress, state: e.target.value})} required placeholder="e.g. Maharashtra" />
+                                    <input
+                                        type="text"
+                                        id="field-state"
+                                        value={currentAddress.state}
+                                        onChange={(e) => {
+                                            const val = e.target.value;
+                                            setCurrentAddress({...currentAddress, state: val});
+                                            if (touched.state) setFormErrors(prev => ({ ...prev, state: validateAddress({...currentAddress, state: val}).state }));
+                                        }}
+                                        onBlur={() => {
+                                            setTouched(prev => ({ ...prev, state: true }));
+                                            setFormErrors(prev => ({ ...prev, state: validateAddress(currentAddress).state }));
+                                        }}
+                                        placeholder="e.g. Maharashtra"
+                                        style={touched.state && formErrors.state ? { borderColor: '#e03030' } : {}}
+                                    />
+                                    {touched.state && formErrors.state && <span className="field-error">{formErrors.state}</span>}
                                 </div>
                                 <div className="form-group">
                                     <label>Pincode</label>
-                                    <input type="text" id="field-pin" value={currentAddress.pin} onChange={(e) => setCurrentAddress({...currentAddress, pin: e.target.value})} required placeholder="XXXXXX" />
+                                    <input
+                                        type="text"
+                                        id="field-pin"
+                                        value={currentAddress.pin}
+                                        maxLength={6}
+                                        onChange={(e) => {
+                                            const val = e.target.value.replace(/\D/g, '').slice(0, 6);
+                                            setCurrentAddress({...currentAddress, pin: val});
+                                            if (touched.pin) setFormErrors(prev => ({ ...prev, pin: validateAddress({...currentAddress, pin: val}).pin }));
+                                        }}
+                                        onBlur={() => {
+                                            setTouched(prev => ({ ...prev, pin: true }));
+                                            setFormErrors(prev => ({ ...prev, pin: validateAddress(currentAddress).pin }));
+                                        }}
+                                        placeholder="XXXXXX"
+                                        style={touched.pin && formErrors.pin ? { borderColor: '#e03030' } : {}}
+                                    />
+                                    {touched.pin && formErrors.pin && <span className="field-error">{formErrors.pin}</span>}
                                 </div>
                             </div>
 
