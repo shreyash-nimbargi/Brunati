@@ -1603,7 +1603,7 @@ footer {
 }
 
 .left-arrow {
-    left: 20px;
+    right: 20px;
 }
 
 .right-arrow {
@@ -2509,7 +2509,7 @@ footer {
 
     .form-group input {
         width: 100% !important;
-        box-sizing: border-box;
+               box-sizing: border-box;
     }
 
     .form-actions {
@@ -2518,6 +2518,17 @@ footer {
 
     .save-btn {
         border-radius: 0; /* Keep rectangular on mobile too */
+    }
+}
+
+/* ...existing code... */
+.continue-btn:hover {
+    background: #111;
+}
+
+@media (min-width: 769px) {
+    .gift-modal {
+        transform: scale(0.8);
     }
 }
 
