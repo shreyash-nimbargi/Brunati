@@ -174,10 +174,10 @@ const StatusBadge = ({ status }) => {
 const SectionHead = ({ title, sub }) => (
     <div style={{ marginBottom: 28, paddingBottom: 20, borderBottom: '1px solid #EEEEEE' }}>
         <h2 style={{
-            fontFamily: FONT, fontSize: '1.5rem', fontWeight: 700,
+            fontFamily: FONT, fontSize: '1.2rem', fontWeight: 700,
             color: '#111', margin: 0, letterSpacing: '-0.01em',
         }}>{title}</h2>
-        {sub && <p style={{ fontFamily: FONT, fontSize: '0.82rem', color: '#6e6e73', marginTop: 4 }}>{sub}</p>}
+        {sub && <p style={{ fontFamily: FONT, fontSize: '0.75rem', color: '#6e6e73', marginTop: 4 }}>{sub}</p>}
     </div>
 );
 
@@ -265,10 +265,10 @@ const OrderDetail = ({ order, onBack }) => (
                     />
                 </div>
                 <div style={{ flex: 1 }}>
-                    <p style={{ fontFamily: FONT, fontWeight: 700, fontSize: '0.92rem', color: '#111', marginBottom: 4 }}>{item.name}</p>
-                    <p style={{ fontFamily: FONT, fontSize: '0.75rem', color: '#6e6e73' }}>Size: {item.size}</p>
+                    <p style={{ fontFamily: FONT, fontWeight: 700, fontSize: '0.82rem', color: '#111', marginBottom: 4 }}>{item.name}</p>
+                    <p style={{ fontFamily: FONT, fontSize: '0.72rem', color: '#6e6e73' }}>Size: {item.size}</p>
                 </div>
-                <p style={{ fontFamily: FONT, fontWeight: 600, fontSize: '0.92rem', color: '#111' }}>
+                <p style={{ fontFamily: FONT, fontWeight: 600, fontSize: '0.82rem', color: '#111' }}>
                     ₹ {item.price.toLocaleString('en-IN')}.00
                 </p>
             </div>
@@ -279,7 +279,7 @@ const OrderDetail = ({ order, onBack }) => (
                 <p style={{ fontFamily: FONT, fontSize: '0.72rem', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>
                     Order Total
                 </p>
-                <p style={{ fontFamily: FONT, fontSize: '1.4rem', fontWeight: 700, color: '#111' }}>
+                <p style={{ fontFamily: FONT, fontSize: '1.1rem', fontWeight: 700, color: '#111' }}>
                     ₹ {order.total.toLocaleString('en-IN')}.00
                 </p>
             </div>
@@ -331,10 +331,10 @@ const OrdersView = () => {
                                     </svg>
                                 </div>
                                 <div>
-                                    <p style={{ fontFamily: FONT, fontWeight: 700, fontSize: '0.88rem', color: '#111', marginBottom: 4 }}>
+                                    <p style={{ fontFamily: FONT, fontWeight: 700, fontSize: '0.8rem', color: '#111', marginBottom: 4 }}>
                                         {order.id}
                                     </p>
-                                    <p style={{ fontFamily: FONT, fontSize: '0.75rem', color: '#6e6e73' }}>
+                                    <p style={{ fontFamily: FONT, fontSize: '0.72rem', color: '#6e6e73' }}>
                                         {order.date} · {order.items.length} item{order.items.length > 1 ? 's' : ''} · ₹ {order.total.toLocaleString('en-IN')}.00
                                     </p>
                                 </div>
@@ -373,7 +373,7 @@ const ProfileView = ({ addresses, onAddAddress, onEditAddress }) => {
                             {label}
                         </span>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                            <span style={{ fontFamily: FONT, fontSize: '0.9rem', color: '#111' }}>{value}</span>
+                            <span style={{ fontFamily: FONT, fontSize: '0.82rem', color: '#111' }}>{value}</span>
                             <TextBtn>Edit</TextBtn>
                         </div>
                     </div>
@@ -384,8 +384,8 @@ const ProfileView = ({ addresses, onAddAddress, onEditAddress }) => {
             <div style={{ marginTop: 40 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 28, paddingBottom: 20, borderBottom: '1px solid #EEEEEE' }}>
                     <div>
-                        <h2 style={{ fontFamily: FONT, fontSize: '1.5rem', fontWeight: 700, color: '#111', margin: 0 }}>Saved Addresses</h2>
-                        <p style={{ fontFamily: FONT, fontSize: '0.82rem', color: '#6e6e73', marginTop: 4 }}>Your saved delivery addresses.</p>
+                        <h2 style={{ fontFamily: FONT, fontSize: '1.2rem', fontWeight: 700, color: '#111', margin: 0 }}>Saved Addresses</h2>
+                        <p style={{ fontFamily: FONT, fontSize: '0.75rem', color: '#6e6e73', marginTop: 4 }}>Your saved delivery addresses.</p>
                     </div>
                     <TextBtn onClick={onAddAddress}>+ Add New Address</TextBtn>
                 </div>
