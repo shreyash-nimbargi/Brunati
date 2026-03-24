@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const SigninForm = () => {
+    const navigate = useNavigate();
     const [signinForm, setSigninForm] = useState({ mobile: '', password: '' });
     const [errors, setErrors] = useState({});
     const [showPassword, setShowPassword] = useState(false);
@@ -31,8 +32,7 @@ const SigninForm = () => {
         const isPasswordValid = validateField('password', signinForm.password);
         
         if (isMobileValid && isPasswordValid) {
-            console.log("Sign in submit", signinForm);
-            // Submit form logic would go here
+            navigate('/account');
         }
     };
 

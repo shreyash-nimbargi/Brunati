@@ -82,7 +82,7 @@ const Navbar = () => {
                             )}
                         </span>
                     </Link>
-                    <Link to="/account" className="icon-btn" aria-label="Account">
+                    <Link to="/signin" className="icon-btn" aria-label="Account">
                         <ion-icon name="person-outline"></ion-icon>
                     </Link>
                 </div>
