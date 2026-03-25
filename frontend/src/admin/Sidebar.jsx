@@ -1,0 +1,132 @@
+import React, { useState } from 'react';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { LayoutDashboard, ShoppingCart, Package, Users, LogOut } from 'lucide-react';
+import useAdminAuth from './hooks/useAdminAuth';
+
+const Sidebar = ({ isOpen, onClose }) => {
+    const FONT_ROBOTO = '"Roboto", sans-serif';
+
+    const location = useLocation();
+    const navigate = useNavigate();
+    const { adminLogout } = useAdminAuth();
+    const [toast, setToast] = useState('');
+    const [hoveredPath, setHoveredPath] = useState(null);
+
+    const menuItems = [
+        { name: 'Overview', path: '/admin/dashboard', icon: LayoutDashboard, pathsPrefix: '/admin/dashboard' },
+        { name: 'Orders', path: '/admin/orders', icon: ShoppingCart, pathsPrefix: '/admin/orders' },
+        { name: 'Inventory', path: '/admin/inventory', icon: Package, pathsPrefix: '/admin/inventory' },
+        { name: 'Customers', path: '/admin/customers', icon: Users, pathsPrefix: '/admin/customers' },
+    ];
+
+    const handleLogout = () => {
+        if (adminLogout) adminLogout();
+        else {
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('user_auth');
+        }
+        
+        setToast('Logged out successfully');
+        setTimeout(() => navigate('/'), 1200);
+    };
+
+    return (
+        <aside style={{
+            width: '240px',
+            background: '#ffffff',
+            borderRight: '1px solid #EEEEEE',
+            height: '100vh',
+            position: 'fixed',
+            left: isOpen ? 0 : '-240px',
+            top: 0,
+            zIndex: 50,
+            transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            display: 'flex',
+            flexDirection: 'column',
+            padding: '40px 0',
+            boxShadow: isOpen ? '4px 0 24px rgba(0,0,0,0.05)' : 'none',
+        }}>
+            
+            {/* Log out Toast Wrapper Context */}
+            {toast && (
+                <div style={{
+                    position: 'fixed', top: 24, left: '50%', transform: 'translateX(-50%)', background: '#111827', color: '#fff',
+                    padding: '12px 24px', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 500, fontFamily: FONT_ROBOTO,
+                    boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)', zIndex: 1000, animation: 'fadeInDown 0.3s ease-out'
+                }}>
+                    {toast}
+                </div>
+            )}
+            {/* "Admin panel" Heading: Sans-serif + Sentence case */}
+            <div style={{ padding: '0 24px 48px' }}>
+                <h1 style={{
+                    fontFamily: FONT_ROBOTO,
+                    fontSize: '1.4rem',
+                    fontWeight: 700,
+                    margin: 0,
+                    textTransform: 'none',
+                    letterSpacing: 'normal',
+                    color: '#000000'
+                }}>
+                    Admin panel
+                </h1>
+            </div>
+
+            <nav style={{ flex: 1 }}>
+                {menuItems.map(item => {
+                    const isActive = location.pathname.startsWith(item.pathsPrefix);
+                    const isHovered = hoveredPath === item.path;
+
+                    return (
+                        <NavLink
+                            key={item.name}
+                            to={item.path}
+                            onClick={onClose}
+                            onMouseEnter={() => setHoveredPath(item.path)}
+                            onMouseLeave={() => setHoveredPath(null)}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                padding: '14px 24px',
+                                color: isActive ? '#000000' : '#666666',
+                                backgroundColor: isHovered && !isActive ? '#f9fafb' : 'transparent',
+                                textDecoration: 'none',
+                                fontSize: '14px',
+                                fontFamily: FONT_ROBOTO,
+                                fontWeight: isActive ? 500 : 400,
+                                borderLeft: isActive ? '2px solid #000000' : '2px solid transparent',
+                                transition: 'all 0.15s ease-in-out',
+                                gap: '14px'
+                            }}
+                        >
+                            <item.icon size={18} strokeWidth={isActive ? 2.5 : 2} />
+                            <span style={{ marginTop: '2px' }}>{item.name}</span>
+                        </NavLink>
+                    );
+                })}
+            </nav>
+
+            {/* Logout Action */}
+            <div style={{ padding: '0 24px' }}>
+                <button 
+                    onClick={handleLogout}
+                    onMouseEnter={() => setHoveredPath('logout')}
+                    onMouseLeave={() => setHoveredPath(null)}
+                    style={{
+                        display: 'flex', width: '100%', alignItems: 'center', gap: '14px', padding: '14px',
+                        color: '#666666', backgroundColor: hoveredPath === 'logout' ? '#fef2f2' : 'transparent',
+                        border: 'none', borderRadius: '6px', fontSize: '14px', fontFamily: FONT_ROBOTO, 
+                        fontWeight: 400, cursor: 'pointer', transition: 'all 0.15s ease-in-out', textAlign: 'left'
+                    }}
+                >
+                    <LogOut size={18} strokeWidth={2} style={{ color: hoveredPath === 'logout' ? '#ef4444' : '#666666', transition: 'color 0.15s' }} />
+                    <span style={{ marginTop: '2px', color: hoveredPath === 'logout' ? '#ef4444' : '#666666', transition: 'color 0.15s' }}>Logout</span>
+                </button>
+            </div>
+
+            <style>{`@keyframes fadeInDown { from { opacity: 0; transform: translate(-50%, -10px); } to { opacity: 1; transform: translate(-50%, 0); } }`}</style>
+        </aside>
+    );
+};
+
+export default Sidebar;
