@@ -1,7 +1,9 @@
 import React, { useRef, useEffect } from 'react';
+import { useStorefront } from '../../context/StorefrontContext';
 
 const ScentArt = () => {
     const scrollRef = useRef(null);
+    const { scentArt } = useStorefront();
 
     useEffect(() => {
         let animationFrameId;
@@ -50,20 +52,9 @@ const ScentArt = () => {
             
             <div className="scent-carousel-base" ref={scrollRef}>
                 <div className="scent-track">
-                    {[
-                        "media/mistia/1.png",
-                        "media/midnight/1.png",
-                        "media/dusk/1.png",
-                        "media/dominus/1.png",
-                        "media/aqua/1.png",
-                        "media/mistia/1.png",
-                        "media/midnight/1.png",
-                        "media/dusk/1.png",
-                        "media/dominus/1.png",
-                        "media/aqua/1.png"
-                    ].map((img, idx) => (
+                    {[...scentArt, ...scentArt].map((item, idx) => (
                         <div key={idx} className="scent-slide-wrapper">
-                            <img src={img} className="scent-slide-img" alt={`Scent ${idx}`} />
+                            <img src={item.url} className="scent-slide-img" alt={`Scent ${idx}`} />
                         </div>
                     ))}
                 </div>

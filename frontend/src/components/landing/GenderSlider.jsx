@@ -6,7 +6,7 @@ const GenderSlider = () => {
             id: 1,
             name: "Dominus Emperor",
             fullName: "Dominus Emperor",
-            gender: "For Him",
+            gender: "Men",
             description: "A commanding presence. Sicilian Bergamot and Pink Pepper open the gates to a heart of rich Patchouli and exotic spices. Designed for the leader who demands excellence.",
             intro: "Sicilian Bergamot / Pink Pepper",
             discovery: "Patchouli / Spiced Nutmeg",
@@ -19,7 +19,7 @@ const GenderSlider = () => {
             id: 2,
             name: "Brunati Aqua",
             fullName: "Brunati Aqua",
-            gender: "For Him",
+            gender: "Men",
             description: "The spirit of the Mediterranean. A surge of mineral freshness combined with Sea Salt and Atlas Cedarwood. Capturing the power of the ocean in its most refined form.",
             intro: "Sea Salt / Bergamot",
             discovery: "Cardamom / Sage",
@@ -32,7 +32,7 @@ const GenderSlider = () => {
             id: 3,
             name: "Mistia",
             fullName: "Mestia",
-            gender: "For Her",
+            gender: "Women",
             description: "Ethereal and timeless. A delicate dance of Rose De Grasse and Jasmine, anchored by the subtle depth of White Musk and Sandalwood. Elegance in its pure essence.",
             intro: "Rose De Grasse / Pear",
             discovery: "Jasmine / Tuberose",
@@ -81,7 +81,10 @@ const GenderSlider = () => {
                     <div className="spotlight-header">
                         <h2 className="spotlight-title">{currentProduct.fullName}</h2>
                         <span className="spotlight-divider">\</span>
-                        <span className="spotlight-gender">{currentProduct.gender}</span>
+                        <div style={{ display: 'inline-flex', alignItems: 'baseline' }}>
+                            <span className="spotlight-gender">{currentProduct.gender}</span>
+                            <div className="red-dot" style={{width: '6px', height: '6px', background: '#D22B2B', borderRadius: '50%', marginLeft: '4px', transform: 'translateY(0px)'}}></div>
+                        </div>
                     </div>
 
                     <div className="spotlight-reviews">

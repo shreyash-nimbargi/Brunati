@@ -4,11 +4,56 @@ import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import Home from './pages/Home';
 import ProductDetail from './pages/ProductDetail';
+<<<<<<< Updated upstream
 import Admin from './pages/Admin';
+=======
+import Signin from './pages/Signin';
+import Signup from './pages/Signup';
+import CartPage from './pages/CartPage';
+import WishlistPage from './pages/WishlistPage';
+import AccountDashboard from './pages/AccountDashboard';
+import { CartProvider } from './context/CartContext';
+import { WishlistProvider } from './context/WishlistContext';
+import { AuthProvider } from './context/AuthContext';
+import { StorefrontProvider } from './context/StorefrontContext';
+import AdminLayout from './admin/AdminLayout.jsx';
+import AdminLogin from './admin/pages/AdminLogin.jsx';
+>>>>>>> Stashed changes
 
 function App() {
+  React.useEffect(() => {
+    let keyBuffer = '';
+    let timeoutId;
+    
+    const handleKeyDown = (e) => {
+      clearTimeout(timeoutId);
+      keyBuffer += e.key.toLowerCase();
+      if (keyBuffer.length > 7) {
+        keyBuffer = keyBuffer.slice(-7);
+      }
+      
+      if (keyBuffer === 'brunati') {
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('admin_token');
+        localStorage.removeItem('user_auth');
+        window.open('/management-portal/login', '_blank');
+      }
+      
+      timeoutId = setTimeout(() => {
+        keyBuffer = '';
+      }, 3000);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
   return (
     <Router>
+<<<<<<< Updated upstream
       <div className="App">
         <Navbar />
         <Routes>
@@ -18,6 +63,46 @@ function App() {
         </Routes>
         <Footer />
       </div>
+=======
+      <StorefrontProvider>
+        <AuthProvider>
+          <CartProvider>
+            <WishlistProvider>
+              <Routes>
+                {/*
+                 * ── Admin Route ──────────────────────────────────────────────
+                 * Hidden management route behind secret key sequence.
+                 */}
+                <Route path="/management-portal/login" element={<AdminLogin />} />
+                <Route path="/management-portal/*" element={<AdminLayout />} />
+
+                {/* ── Storefront Routes ─────────────────────────────────────── */}
+                <Route
+                  path="/*"
+                  element={
+                    <div className="App flex flex-col min-h-screen relative">
+                      <Navbar />
+                      <main className="flex-1">
+                        <Routes>
+                          <Route path="/" element={<Home />} />
+                          <Route path="/product/:id" element={<ProductDetail />} />
+                          <Route path="/signin" element={<Signin />} />
+                          <Route path="/signup" element={<Signup />} />
+                          <Route path="/cart" element={<CartPage />} />
+                          <Route path="/wishlist" element={<WishlistPage />} />
+                          <Route path="/account" element={<AccountDashboard />} />
+                        </Routes>
+                      </main>
+                      <Footer />
+                    </div>
+                  }
+                />
+              </Routes>
+            </WishlistProvider>
+          </CartProvider>
+        </AuthProvider>
+      </StorefrontProvider>
+>>>>>>> Stashed changes
     </Router>
   );
 }

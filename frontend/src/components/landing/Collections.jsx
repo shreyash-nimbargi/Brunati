@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 import ProductCard from '../product/ProductCard';
 import { productsData } from '../../data/products';
+<<<<<<< Updated upstream
 
 const Collections = () => {
+=======
+import { useCart } from '../../context/CartContext';
+import { useStorefront } from '../../context/StorefrontContext';
+
+const Collections = () => {
+    const navigate = useNavigate();
+    const { addToCart } = useCart();
+    const { collections: collectionsRows } = useStorefront();
+>>>>>>> Stashed changes
     const [activeTab, setActiveTab] = useState('him');
     const [sliderIndex, setSliderIndex] = useState(0);
     const [selectedSize, setSelectedSize] = useState('50ML');
-
-    const collectionsRows = {
-        him: ['dominus', 'aqua', 'dusk'],
-        her: ['mistia', 'midnight'],
-        gift: ['gift1']
-    };
 
     const currentTabProducts = collectionsRows[activeTab];
 
@@ -96,11 +100,20 @@ const Collections = () => {
                     </div>
 
                     <div className="slider-info-col">
-                        <div className="slider-title-row">
+                        <div className="slider-title-row" style={{ display: 'flex', alignItems: 'center' }}>
                             <h2 className="slider-title">{currentProduct.name}</h2>
-                            <span className="slider-divider">\</span>
-                            <span className="slider-category">{currentProduct.gender}</span>
-                            <div className="red-dot" style={{width: '10px', height: '10px', background: '#D22B2B', borderRadius: '50%', marginLeft: 'auto', marginRight: '20px'}}></div>
+                            <span className="slider-divider" style={{ margin: '0 8px' }}>\</span>
+                            <div style={{ display: 'inline-flex', alignItems: 'baseline' }}>
+                                <span className="slider-category" style={{ marginRight: 0 }}>
+                                    {{
+                                        'him': 'Men',
+                                        'her': 'Women',
+                                        'gift': 'Unisex',
+                                        'unisex': 'Unisex'
+                                    }[activeTab] || currentProduct.gender}
+                                </span>
+                                <div className="red-dot" style={{width: '6px', height: '6px', background: '#D22B2B', borderRadius: '50%', marginLeft: '4px', transform: 'translateY(0px)'}}></div>
+                            </div>
                         </div>
 
                         <div className="slider-rating">

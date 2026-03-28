@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Hero.css';
+import { useStorefront } from '../../context/StorefrontContext';
 
 const Hero = () => {
+<<<<<<< Updated upstream
     const slides = [
         { id: 1, title: 'MISTIA', subtitle: 'An ethereal and captivating blend' },
         { id: 2, title: 'DOMINUS', subtitle: 'Commanding and powerful presence' },
@@ -12,6 +14,24 @@ const Hero = () => {
     
     const [currentIndex, setCurrentIndex] = useState(0);
     const [scrollProgress, setScrollProgress] = useState(0);
+=======
+    const { topPhotos: originalSlides } = useStorefront();
+    
+    if (!originalSlides || originalSlides.length === 0) return null;
+    
+    // TRULY INFINITE SCROLL:
+    // Append the last slide to the front, and the first slide to the back
+    // Layout: [Clone DUSK] - [MISTIA] - [DOMINUS] - [AQUA] - [MIDNIGHT] - [DUSK] - [Clone MISTIA]
+    // Index:      0             1           2          3           4         5           6
+    const slides = [
+        { ...(originalSlides[originalSlides.length - 1] || {}), id: 'clone-end' },
+        ...(originalSlides || []),
+        { ...(originalSlides[0] || {}), id: 'clone-start' }
+    ];
+    
+    // Start at real MISTIA (Index 1)
+    const [currentIndex, setCurrentIndex] = useState(1);
+>>>>>>> Stashed changes
     const sliderRef = useRef(null);
 
     const handleScroll = () => {

@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+<<<<<<< Updated upstream
+=======
+import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
+import { useNavigate } from 'react-router-dom';
+>>>>>>> Stashed changes
 
 const Navbar = () => {
+    const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
 
@@ -26,7 +33,12 @@ const Navbar = () => {
                     </button>
                 </div>
 
-                <Link to="/" className="logo-text">Brunati</Link>
+                <Link 
+                    to="/" 
+                    className="logo-text"
+                >
+                    Brunati
+                </Link>
 
                 <div className="nav-group right">
                     {/* Only visible on desktop */}
@@ -48,6 +60,7 @@ const Navbar = () => {
                 <Link to="/discovery" className="menu-item" onClick={() => setIsMenuOpen(false)}>Discovery sets</Link>
                 <Link to="/stores" className="menu-item" onClick={() => setIsMenuOpen(false)}>Store locator</Link>
             </nav>
+
         </div>
     );
 };

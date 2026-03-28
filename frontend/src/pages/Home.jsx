@@ -3,10 +3,12 @@ import Hero from '../components/landing/Hero';
 import Collections from '../components/landing/Collections';
 import ScentArt from '../components/landing/ScentArt';
 import OlfactoryTrends from '../components/landing/OlfactoryTrends';
+import { useStorefront } from '../context/StorefrontContext';
 
 const Home = () => {
     const reviewsRef = useRef(null);
     const influencersRef = useRef(null);
+    const { reviews, influencers: influencersList } = useStorefront();
 
     const scrollInfluencers = (direction) => {
         if (influencersRef.current) {
@@ -51,6 +53,7 @@ const Home = () => {
         };
     }, []);
 
+<<<<<<< Updated upstream
     useEffect(() => {
         let animationFrameId;
         const container = influencersRef.current;
@@ -130,6 +133,9 @@ const Home = () => {
     ];
 
     const scrollingInfluencers = [...influencersList, ...influencersList];
+=======
+    const scrollingInfluencers = [...(influencersList || []), ...(influencersList || [])];
+>>>>>>> Stashed changes
 
     return (
         <main>
@@ -143,7 +149,7 @@ const Home = () => {
             <section className="reviews-section">
                 <div className="section-header"><h2 className="section-title">Reviews</h2></div>
                 <div className="scroll-container" ref={reviewsRef}>
-                    {reviews.map((r, idx) => (
+                    {reviews?.map((r, idx) => (
                         <div key={idx} className="review-card">
                             <div>
                                 <div className="stars">★★★★★</div>

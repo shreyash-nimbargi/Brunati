@@ -1,11 +1,9 @@
 import React from 'react';
+import { useStorefront } from '../../context/StorefrontContext';
 
 const Testimonials = () => {
-    const reviews = [
-        { author: "Marcus J.", text: "The most realistic marine scent I've ever smelled. It feels like standing on a cliffside by the sea." },
-        { author: "Elena S.", text: "Perfectly balanced. Usually, marine scents disappear quickly, but this one lasts all day." },
-        { author: "Rahul K.", text: "I get compliments every time I wear this. The dry down is incredible." }
-    ];
+    const { reviews: rawReviews } = useStorefront();
+    const reviews = rawReviews && rawReviews.length > 0 ? rawReviews : [];
 
     return (
         <section className="reviews-section" style={{ padding: '80px 0', backgroundColor: 'var(--apple-off-white)' }}>
@@ -18,7 +16,7 @@ const Testimonials = () => {
                         <div className="stars" style={{ color: 'var(--star-yellow)', marginBottom: '12px' }}>★★★★★</div>
                         <p className="review-text" style={{ fontStyle: 'italic', marginBottom: '15px' }}>"{review.text}"</p>
                         <div className="review-author" style={{ borderTop: '1px solid var(--apple-border)', paddingTop: '12px', marginTop: 'auto' }}>
-                            {review.author}
+                            {review.name}
                         </div>
                     </div>
                 ))}

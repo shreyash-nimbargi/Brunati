@@ -1,11 +1,54 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { productsData } from '../data/products';
+<<<<<<< Updated upstream
+=======
+import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
+import { useStorefront } from '../context/StorefrontContext';
+>>>>>>> Stashed changes
 
 const ProductDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+<<<<<<< Updated upstream
+=======
+    const { addToCart } = useCart();
+    const { isWishlisted, toggleWishlist } = useWishlist();
+    const { collections } = useStorefront();
+>>>>>>> Stashed changes
     const product = productsData[id] || productsData['dominus'];
+
+    const getDynamicBadge = () => {
+        if (!collections) return product.badge;
+        const matchingCats = [];
+        for (const [key, pIds] of Object.entries(collections)) {
+            if (pIds.includes(id)) {
+                let formatted = key.charAt(0).toUpperCase() + key.slice(1);
+                const lKey = key.toLowerCase();
+                if (lKey === 'him') formatted = 'Men';
+                else if (lKey === 'her') formatted = 'Women';
+                else if (lKey === 'gift' || lKey === 'unisex') formatted = 'Unisex';
+                matchingCats.push(formatted);
+            }
+        }
+        
+        if (matchingCats.length > 0) {
+            const catStr = matchingCats.join(', ');
+            const splitBadge = product.badge.split(' • ');
+            if (splitBadge.length > 1) {
+                return (
+                    <span style={{ display: 'inline-flex', alignItems: 'baseline' }}>
+                        <span style={{ marginRight: 0 }}>{catStr}</span>
+                        <div className="red-dot" style={{ width: '6px', height: '6px', background: '#D22B2B', borderRadius: '50%', marginLeft: '4px', marginRight: '4px', transform: 'translateY(0px)' }}></div>
+                        <span>{splitBadge[1]}</span>
+                    </span>
+                );
+            }
+            return catStr;
+        }
+        return product.badge;
+    };
 
     const [mainImg, setMainImg] = useState(product.images[0]);
     const [selectedSize, setSelectedSize] = useState('100ml');
@@ -202,10 +245,48 @@ const ProductDetail = () => {
                 </div>
 
                 <div className="product-info-sidebar">
+<<<<<<< Updated upstream
                     <div className="sidebar-content" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                         <span className="badge" style={{ background: '#f5f5f7', padding: '6px 14px', borderRadius: '20px', width: 'fit-content', fontSize: '0.8rem', fontWeight: 600 }}>{product.badge}</span>
                         <h1 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>{product.name}</h1>
                         <div className="price" style={{ fontSize: '1.8rem', fontWeight: 700 }}>₹ {price}.00</div>
+=======
+                    <div className="sidebar-content">
+                        <span className="badge" style={{ background: '#f5f5f7', padding: '6px 14px', borderRadius: '20px', width: 'fit-content', fontSize: '0.8rem', fontWeight: 600 }}>{getDynamicBadge()}</span>
+                        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
+                            <h1 className="product-title-desktop">{product.name}</h1>
+                            {/* Wishlist heart */}
+                            <button
+                                onClick={() => toggleWishlist({
+                                    id: id || 'dominus',
+                                    name: product.name,
+                                    badge: product.badge,
+                                    price: price,
+                                    image: getImgSrc(product.images[0]),
+                                    size: selectedSize,
+                                })}
+                                title={isWishlisted(id || 'dominus') ? 'Remove from wishlist' : 'Add to wishlist'}
+                                style={{
+                                    background: 'none', border: 'none', cursor: 'pointer', flexShrink: 0,
+                                    color: isWishlisted(id || 'dominus') ? '#e74c3c' : '#9e9ea3',
+                                    fontSize: 24, padding: '4px 0', marginTop: 4,
+                                    transition: 'color 0.2s, transform 0.2s',
+                                    display: 'flex', alignItems: 'center',
+                                }}
+                                onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.15)'; }}
+                                onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; }}
+                            >
+                                <ion-icon name={isWishlisted(id || 'dominus') ? 'heart' : 'heart-outline'}></ion-icon>
+                            </button>
+                        </div>
+                        <div className="price" style={{
+                            fontSize: '1.8rem',
+                            fontWeight: 360,
+                            marginBottom: '24px',
+                            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                            color: '#1d1d1f'
+                        }}>₹ {price}.00</div>
+>>>>>>> Stashed changes
 
                         <div className="size-selector">
                             <span style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, color: '#6e6e73', marginBottom: '10px' }}>Select Size</span>
