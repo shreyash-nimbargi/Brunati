@@ -49,8 +49,10 @@ const orderSchema = new mongoose.Schema({
         name: String,
         email: String,
         phone: String,
+        alternatePhone: String,
         street: String,
         city: String,
+        state: String,
         pincode: String
     },
 

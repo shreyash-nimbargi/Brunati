@@ -1,44 +1,90 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProductCard from '../product/ProductCard';
-import { productsData } from '../../data/products';
 import { useCart } from '../../context/CartContext';
+import { productService } from '../../services/productService';
 
 const Collections = () => {
     const navigate = useNavigate();
     const { addToCart } = useCart();
     const [activeTab, setActiveTab] = useState('him');
     const [sliderIndex, setSliderIndex] = useState(0);
-    const [selectedSize, setSelectedSize] = useState('50ML');
+    const [selectedSize, setSelectedSize] = useState('100ml');
+    const [productsByTab, setProductsByTab] = useState({ him: [], her: [], gift: [] });
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const collectionsRows = {
-        him: ['dominus', 'aqua', 'dusk'],
-        her: ['mistia', 'midnight'],
-        gift: ['gift1']
-    };
+    useEffect(() => {
+        const fetchAndCategorize = async () => {
+            try {
+                setLoading(true);
+                const response = await productService.getAllProducts();
+                if (response.status) {
+                    const allProducts = response.data;
+                    const categorized = {
+                        him: [],
+                        her: [],
+                        gift: []
+                    };
 
-    const currentTabProducts = collectionsRows[activeTab];
+                    allProducts.forEach(p => {
+                        const cat = p.category?.toLowerCase() || '';
+                        if (cat.includes('women')) {
+                            categorized.her.push(p);
+                        } else if (cat.includes('men')) {
+                            categorized.him.push(p);
+                        } else {
+                            categorized.gift.push(p);
+                        }
+                    });
+                    
+                    // Final fallback to populated tabs if some are empty but data exists
+                    if (allProducts.length > 0) {
+                        if (categorized.him.length === 0) categorized.him = allProducts.slice(0, 3);
+                        if (categorized.her.length === 0) categorized.her = allProducts.slice(3, 5);
+                    }
+
+
+                    setProductsByTab(categorized);
+                }
+            } catch (err) {
+                console.error('Collections fetch error:', err);
+                setError('Failed to load collections.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchAndCategorize();
+    }, []);
 
     // Reset slider index when tab changes
-    React.useEffect(() => {
+    useEffect(() => {
         setSliderIndex(0);
     }, [activeTab]);
 
-    const getProductInfo = (id) => {
-        const p = productsData[id];
+    if (loading) return null; // Or a subtle loader
+    if (error) return <div className="text-center py-10 text-red-500">{error}</div>;
+
+    const currentTabProducts = productsByTab[activeTab] || [];
+    if (currentTabProducts.length === 0) return null;
+
+    const getProductInfo = (p) => {
+        if (!p) return {};
         return {
-            id,
+            id: p._id,
+            slug: p.slug,
             name: p.name,
-            meta: p.badge,
-            price: `₹ ${p.price}.00`,
-            img1: p.images[0],
-            img2: p.images[1] || p.images[0],
-            accords: p.accords,
+            meta: `${p.category} • Extrait De Parfum`,
+            price: `₹ ${p.sizes?.[0]?.price || 0}.00`,
+            img1: p.images?.[0]?.startsWith('http') ? p.images[0] : `/${p.images?.[0]}`,
+            img2: p.images?.[1] ? (p.images[1].startsWith('http') ? p.images[1] : `/${p.images[1]}`) : (p.images?.[0]?.startsWith('http') ? p.images[0] : `/${p.images?.[0]}`),
+            accords: p.mainAccords,
             description: p.description,
-            topNotes: p.topNotes,
-            middleNotes: p.middleNotes,
-            baseNotes: p.baseNotes,
-            gender: p.badge.split(' • ')[0]
+            topNotes: p.perfumePyramid?.top?.join(', '),
+            middleNotes: p.perfumePyramid?.middle?.join(', '),
+            baseNotes: p.perfumePyramid?.base?.join(', '),
+            gender: p.category
         };
     };
 
@@ -51,6 +97,7 @@ const Collections = () => {
     };
 
     const currentProduct = getProductInfo(currentTabProducts[sliderIndex]);
+
 
     return (
         <section className="content-wrap">
@@ -168,11 +215,12 @@ const Collections = () => {
             {/* Mobile Grid View */}
             <div className="category-view active mobile-only-grid">
                 <div className="product-grid">
-                    {currentTabProducts.map(id => (
-                        <ProductCard key={id} {...getProductInfo(id)} />
+                    {currentTabProducts.map(p => (
+                        <ProductCard key={p._id} {...getProductInfo(p)} />
                     ))}
                 </div>
             </div>
+
         </section>
     );
 };

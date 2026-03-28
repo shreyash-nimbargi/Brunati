@@ -1,13 +1,38 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SignupForm from '../components/auth/SignupForm';
+import { userService } from '../services/userService';
 
 const Signup = () => {
     const navigate = useNavigate();
+    const [authChecking, setAuthChecking] = React.useState(true);
 
     useEffect(() => {
+        const checkUserAuth = async () => {
+            try {
+                const response = await userService.checkAuth();
+                if (response.isLoggedIn) {
+                    navigate('/account', { replace: true });
+                } else {
+                    setAuthChecking(false);
+                }
+            } catch (err) {
+                console.error("Auth check failed on signup page", err);
+                setAuthChecking(false);
+            }
+        };
+        checkUserAuth();
         window.scrollTo({ top: 0, behavior: 'instant' });
-    }, []);
+    }, [navigate]);
+
+    if (authChecking) {
+        return (
+            <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff' }}>
+                <div style={{ width: 40, height: 40, border: '2px solid #f3f3f3', borderTop: '2px solid #000', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+                <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
+            </div>
+        );
+    }
 
     return (
         <div style={{

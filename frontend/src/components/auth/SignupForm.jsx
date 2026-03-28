@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { userService } from '../../services/userService';
+import toast from 'react-hot-toast';
+
 
 const SignupForm = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [signupForm, setSignupForm] = useState({ name: '', mobile: '', email: '', password: '' });
     const [errors, setErrors] = useState({});
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const validateField = (name, value) => {
         let errorMsg = '';
@@ -34,7 +39,7 @@ const SignupForm = () => {
         return !errorMsg;
     };
 
-    const handleSignupSubmit = (e) => {
+    const handleSignupSubmit = async (e) => {
         e.preventDefault();
         const isNameValid = validateField('name', signupForm.name);
         const isMobileValid = validateField('mobile', signupForm.mobile);
@@ -42,9 +47,29 @@ const SignupForm = () => {
         const isPasswordValid = validateField('password', signupForm.password);
         
         if (isNameValid && isMobileValid && isEmailValid && isPasswordValid) {
-            navigate('/signin');
+            try {
+                setLoading(true);
+                const response = await userService.register({
+                    name: signupForm.name,
+                    phone: signupForm.mobile,
+                    email: signupForm.email,
+                    password: signupForm.password
+                });
+                if (response.status) {
+                    toast.success("Account created successfully! Please sign in.");
+                    navigate(`/signin${location.search}`);
+                } else {
+                    setErrors({ general: response.message });
+                }
+            } catch (err) {
+                setErrors({ general: err.response?.data?.message || "Registration failed. Please try again." });
+                toast.error(err.response?.data?.message || "Registration failed.");
+            } finally {
+                setLoading(false);
+            }
         }
     };
+
 
     return (
         <div className="w-full max-w-md mx-auto bg-white p-8 md:p-16 flex flex-col justify-center shadow-[0_0_40px_rgba(0,0,0,0.05)] md:shadow-2xl">
@@ -147,7 +172,7 @@ const SignupForm = () => {
 
                 <p className="text-center mt-6 text-[12px] text-[#6B7280]">
                     Already have an account?{' '}
-                    <Link to="/signin" className="text-black underline uppercase text-[12px] font-semibold tracking-wider ml-1">
+                    <Link to={`/signin${location.search}`} className="text-black underline uppercase text-[12px] font-semibold tracking-wider ml-1">
                         Sign In
                     </Link>
                 </p>

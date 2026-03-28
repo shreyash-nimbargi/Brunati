@@ -1,19 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { userService } from '../../services/userService';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const { cartCount } = useCart();
     const { wishlistCount } = useWishlist();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const handleScroll = () => {
             setScrolled(window.scrollY > 50);
         };
         window.addEventListener('scroll', handleScroll);
+        
+        // Verify Authentication to map Header action destination
+        userService.checkAuth().then(res => {
+            if (res.status && res.isLoggedIn) {
+                setIsLoggedIn(true);
+            }
+        }).catch(err => {
+            console.error("Auth check failed in Navbar", err);
+        });
+
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
@@ -82,9 +95,14 @@ const Navbar = () => {
                             )}
                         </span>
                     </Link>
-                    <Link to="/signin" className="icon-btn" aria-label="Account">
+                    <button 
+                        onClick={() => navigate(isLoggedIn ? "/account" : "/signin")} 
+                        className="icon-btn" 
+                        aria-label="Account"
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                    >
                         <ion-icon name="person-outline"></ion-icon>
-                    </Link>
+                    </button>
                 </div>
             </header>
 

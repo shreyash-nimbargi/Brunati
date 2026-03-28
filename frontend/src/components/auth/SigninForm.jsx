@@ -1,11 +1,20 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { userService } from '../../services/userService';
+
 
 const SigninForm = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [signinForm, setSigninForm] = useState({ mobile: '', password: '' });
     const [errors, setErrors] = useState({});
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    // Extract redirect info
+    const query = new URLSearchParams(location.search);
+    const redirectTo = location.state?.redirect || query.get('redirect') || '/account';
+    const redirectState = location.state?.redirectState || null;
 
     const validateField = (name, value) => {
         let errorMsg = '';
@@ -26,15 +35,32 @@ const SigninForm = () => {
         return !errorMsg;
     };
 
-    const handleSigninSubmit = (e) => {
+    const handleSigninSubmit = async (e) => {
         e.preventDefault();
         const isMobileValid = validateField('mobile', signinForm.mobile);
         const isPasswordValid = validateField('password', signinForm.password);
         
         if (isMobileValid && isPasswordValid) {
-            navigate('/account');
+            try {
+                setLoading(true);
+                const response = await userService.login({ phone: signinForm.mobile, password: signinForm.password });
+                if (response.status) {
+                    // Token is handled via cookies withCredentials. 
+                    // Store user only for UI display.
+                    localStorage.setItem('user', JSON.stringify(response.data.user));
+                    navigate(redirectTo, { state: redirectState });
+                } else {
+
+                    setErrors({ general: response.message });
+                }
+            } catch (err) {
+                setErrors({ general: err.response?.data?.message || 'Login failed. Please try again.' });
+            } finally {
+                setLoading(false);
+            }
         }
     };
+
 
     return (
         <div className="w-full max-w-md mx-auto bg-white p-8 md:p-16 flex flex-col justify-center shadow-[0_0_40px_rgba(0,0,0,0.05)] md:shadow-2xl">
@@ -104,7 +130,7 @@ const SigninForm = () => {
 
                 <p className="text-center mt-6 text-[12px] text-[#6B7280]">
                     Don't have an account?{' '}
-                    <Link to="/signup" className="text-black underline uppercase text-[12px] font-semibold tracking-wider ml-1">
+                    <Link to={`/signup${location.search}`} className="text-black underline uppercase text-[12px] font-semibold tracking-wider ml-1">
                         Create one
                     </Link>
                 </p>

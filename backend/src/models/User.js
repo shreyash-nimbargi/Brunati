@@ -14,11 +14,15 @@ const userSchema = new mongoose.Schema({
         unique: true,
         required: true
     },
-    address: {
+    addresses: [{
+        name: String,
+        phone: String,
+        alternatePhone: String,
         street: String,
         city: String,
+        state: String,
         pincode: String
-    },
+    }],
     isAdmin: {
         type: Boolean,
         default: false

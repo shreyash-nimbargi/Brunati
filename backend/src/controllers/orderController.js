@@ -7,17 +7,47 @@ exports.createOrder = async (req, res) => {
 
     try {
 
-        const { items, sampleId, street, city, pincode } = req.body;
+        const { items, sampleId, shippingAddress } = req.body;
 
-        // Auto-populate customer info from logged-in user
+        if (shippingAddress) {
+            // Check if this address already exists structurally
+            const existingNum = req.user.addresses?.findIndex(a => 
+                a.street === shippingAddress.street && 
+                a.pincode === shippingAddress.pincode &&
+                a.city === shippingAddress.city
+            );
+
+            if (existingNum === -1 || existingNum === undefined) {
+                if (!req.user.addresses) req.user.addresses = [];
+                req.user.addresses.push({
+                    name: shippingAddress.name || req.user.name,
+                    phone: shippingAddress.phone || req.user.phone,
+                    alternatePhone: shippingAddress.alternatePhone || "",
+                    street: shippingAddress.street,
+                    city: shippingAddress.city,
+                    state: shippingAddress.state,
+                    pincode: shippingAddress.pincode
+                });
+                await req.user.save();
+            } else if (existingNum >= 0 && req.user.addresses) {
+                // Update specific phone or name if they changed the name
+                req.user.addresses[existingNum].name = shippingAddress.name || req.user.addresses[existingNum].name;
+                req.user.addresses[existingNum].phone = shippingAddress.phone || req.user.addresses[existingNum].phone;
+                req.user.addresses[existingNum].alternatePhone = shippingAddress.alternatePhone || req.user.addresses[existingNum].alternatePhone;
+                await req.user.save();
+            }
+        }
+
+        // Populate customer info for the Order model
         const customer = {
-            name:    req.user.name,
+            name:    shippingAddress?.name || req.user.name,
             email:   req.user.email,
-            phone:   req.user.phone,
-            // Use address from request body, or fall back to saved default address
-            street:  street  || req.user.address?.street  || "",
-            city:    city    || req.user.address?.city     || "",
-            pincode: pincode || req.user.address?.pincode  || ""
+            phone:   shippingAddress?.phone || req.user.phone,
+            alternatePhone: shippingAddress?.alternatePhone || "",
+            street:  shippingAddress?.street || "",
+            city:    shippingAddress?.city || "",
+            state:   shippingAddress?.state || "",
+            pincode: shippingAddress?.pincode || ""
         };
 
         let orderItems = [];

@@ -4,6 +4,8 @@ import Collections from '../components/landing/Collections';
 import ScentArt from '../components/landing/ScentArt';
 import OlfactoryTrends from '../components/landing/OlfactoryTrends';
 
+
+
 const Home = () => {
     const reviewsRef = useRef(null);
     const influencersRef = useRef(null);
@@ -18,13 +20,13 @@ const Home = () => {
     useEffect(() => {
         const setupDragToScroll = (container, enableAutoScroll = false, speed = 0.5) => {
             if (!container) return null;
-            
+
             let isDown = false;
             let startX;
             let scrollLeft;
             let animationFrameId;
             let subpixelScroll = 0;
-            
+
             const handleDown = (e) => {
                 isDown = true;
                 container.style.cursor = 'grabbing';
@@ -32,13 +34,13 @@ const Home = () => {
                 startX = (e.pageX || e.touches[0]?.pageX || 0) - container.offsetLeft;
                 scrollLeft = container.scrollLeft;
             };
-            
+
             const handleLeaveOrUp = () => {
                 isDown = false;
                 container.style.cursor = 'grab';
                 container.style.scrollBehavior = ''; // Restore CSS smooth behavior
             };
-            
+
             const handleMove = (e) => {
                 if (!isDown) return;
                 e.preventDefault();
@@ -46,7 +48,7 @@ const Home = () => {
                 const walk = (x - startX) * 2;
                 container.scrollLeft = scrollLeft - walk;
             };
-            
+
             const autoScroll = () => {
                 if (!isDown && enableAutoScroll) {
                     subpixelScroll += speed;
@@ -63,17 +65,17 @@ const Home = () => {
                     animationFrameId = requestAnimationFrame(autoScroll);
                 }
             };
-            
+
             if (enableAutoScroll) {
                 animationFrameId = requestAnimationFrame(autoScroll);
             }
-            
+
             container.style.cursor = 'grab';
             container.addEventListener('mousedown', handleDown);
             container.addEventListener('mouseleave', handleLeaveOrUp);
             container.addEventListener('mouseup', handleLeaveOrUp);
             container.addEventListener('mousemove', handleMove);
-            
+
             return () => {
                 container.removeEventListener('mousedown', handleDown);
                 container.removeEventListener('mouseleave', handleLeaveOrUp);
@@ -144,6 +146,8 @@ const Home = () => {
 
             <ScentArt />
             <OlfactoryTrends />
+
+
 
             {/* Reviews Section */}
             <section className="reviews-section">

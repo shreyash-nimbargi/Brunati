@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-
 const CartPage = () => {
     const navigate = useNavigate();
     const { cartItems, cartCount, updateQuantity, removeFromCart, getSubtotal } = useCart();
@@ -217,6 +216,7 @@ const CartPage = () => {
                         <button
                             className="add-to-bag-btn"
                             style={{ letterSpacing: '2px', textTransform: 'uppercase', fontSize: '0.78rem', border: 'none' }}
+                            onClick={() => navigate('/checkout', { state: { fromCheckout: true } })}
                         >
                             Checkout
                         </button>

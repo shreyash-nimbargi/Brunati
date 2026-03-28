@@ -1,12 +1,30 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { productService } from '../../services/productService';
 
 const ScentArt = () => {
     const scrollRef = useRef(null);
+    const navigate = useNavigate();
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        const fetchAllProducts = async () => {
+            try {
+                const response = await productService.getAllProducts();
+                if (response.status) {
+                    setProducts(response.data);
+                }
+            } catch (err) {
+                console.error('ScentArt fetch error:', err);
+            }
+        };
+        fetchAllProducts();
+    }, []);
 
     useEffect(() => {
         let animationFrameId;
         const container = scrollRef.current;
-        if (!container) return;
+        if (!container || products.length === 0) return;
 
         let isDown = false;
         const handleDown = () => isDown = true;
@@ -37,7 +55,10 @@ const ScentArt = () => {
             container.removeEventListener('touchstart', handleDown);
             container.removeEventListener('touchend', handleUp);
         };
-    }, []);
+    }, [products]);
+
+    // Construct image list (repeat to create infinite scroll effect if few products)
+    const displayProducts = [...products, ...products];
 
     return (
         <section className="middle-poster content-wrap">
@@ -50,22 +71,22 @@ const ScentArt = () => {
             
             <div className="scent-carousel-base" ref={scrollRef}>
                 <div className="scent-track">
-                    {[
-                        "media/mistia/1.png",
-                        "media/midnight/1.png",
-                        "media/dusk/1.png",
-                        "media/dominus/1.png",
-                        "media/aqua/1.png",
-                        "media/mistia/1.png",
-                        "media/midnight/1.png",
-                        "media/dusk/1.png",
-                        "media/dominus/1.png",
-                        "media/aqua/1.png"
-                    ].map((img, idx) => (
-                        <div key={idx} className="scent-slide-wrapper">
-                            <img src={img} className="scent-slide-img" alt={`Scent ${idx}`} />
-                        </div>
-                    ))}
+                    {displayProducts.map((product, idx) => {
+                        const imgPath = product.images?.[0]?.startsWith('http') || product.images?.[0]?.startsWith('/') 
+                            ? product.images[0] 
+                            : `/${product.images[0]}`;
+                        
+                        return (
+                            <div 
+                                key={`${product._id}-${idx}`} 
+                                className="scent-slide-wrapper" 
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => navigate(`/product/${product.slug}`)}
+                            >
+                                <img src={imgPath} className="scent-slide-img" alt={product.name} />
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         </section>
@@ -73,3 +94,4 @@ const ScentArt = () => {
 };
 
 export default ScentArt;
+

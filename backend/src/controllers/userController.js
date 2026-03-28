@@ -146,3 +146,30 @@ exports.changePassword = async (req, res) => {
         res.status(500).json({ status: false, message: error.message, data: null });
     }
 };
+
+exports.checkAuth = async (req, res) => {
+    try {
+        let token;
+        if (req.cookies && req.cookies.token) {
+            token = req.cookies.token;
+        } else if (req.headers.authorization?.startsWith("Bearer")) {
+            token = req.headers.authorization.split(" ")[1];
+        }
+
+        if (!token) {
+            return res.json({ status: true, isLoggedIn: false, data: null });
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findById(decoded.id).select("-password");
+
+        if (!user) {
+            return res.json({ status: true, isLoggedIn: false, data: null });
+        }
+
+        res.json({ status: true, isLoggedIn: true, data: user });
+    } catch (error) {
+        // If JWT verify fails (expired/invalid), still return status true but isLoggedIn false
+        res.json({ status: true, isLoggedIn: false, data: null });
+    }
+};

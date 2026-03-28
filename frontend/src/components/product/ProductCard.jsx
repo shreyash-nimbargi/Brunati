@@ -3,14 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 
-const ProductCard = ({ id, name, meta, price, img1, img2, accords, description }) => {
+const ProductCard = ({ id, name, meta, price, img1, img2, accords, description, slug }) => {
     const navigate = useNavigate();
     const { addToCart } = useCart();
     const { isWishlisted, toggleWishlist } = useWishlist();
     const wishlisted = isWishlisted(String(id));
 
     return (
-        <div className="product-card" onClick={() => navigate(`/product/${id}`)}>
+        <div className="product-card" onClick={() => navigate(`/product/${slug || id}`)}>
+
             <div className="img-container">
                 <div
                     className="wishlist-overlay"

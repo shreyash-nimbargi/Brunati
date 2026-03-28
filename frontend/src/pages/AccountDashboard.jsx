@@ -1,10 +1,76 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { userService } from '../services/userService';
+import { orderService } from '../services/orderService';
+import toast from 'react-hot-toast';
 
 /* ─── Font: same SF Pro / system stack as Cart & Wishlist ─── */
 const FONT = '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif';
 
-/* ─────────────── Mock Data ─────────────── */
+/* ─────────────── CONFIRM DIALOG ─────────────── */
+const ConfirmDialog = ({ dialog, onConfirm, onDismiss }) => {
+    if (!dialog) return null;
+    return (
+        <div
+            style={{
+                position: 'fixed', inset: 0, zIndex: 9900,
+                background: 'rgba(0,0,0,0.42)', backdropFilter: 'blur(4px)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                padding: 20,
+            }}
+            onClick={onDismiss}
+        >
+            <div
+                onClick={e => e.stopPropagation()}
+                style={{
+                    background: '#fff', borderRadius: 14, padding: '32px 28px',
+                    maxWidth: 380, width: '100%',
+                    boxShadow: '0 24px 64px rgba(0,0,0,0.2)',
+                    fontFamily: FONT,
+                    animation: 'dialogIn 0.22s cubic-bezier(.22,1,.36,1)',
+                }}
+            >
+                <style>{`@keyframes dialogIn{from{opacity:0;transform:scale(.95)translateY(8px)}to{opacity:1;transform:scale(1)translateY(0)}}`}</style>
+                <p style={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#9CA3AF', marginBottom: 12 }}>
+                    {dialog.danger ? '⚠️ Action Required' : 'Confirm'}
+                </p>
+                <p style={{ fontSize: '1rem', fontWeight: 700, color: '#111', marginBottom: 8, lineHeight: 1.4 }}>{dialog.title}</p>
+                <p style={{ fontSize: '0.82rem', color: '#6e6e73', marginBottom: 28, lineHeight: 1.65 }}>{dialog.message}</p>
+                <div style={{ display: 'flex', gap: 10 }}>
+                    <button
+                        onClick={onConfirm}
+                        autoFocus
+                        style={{
+                            flex: 1, padding: '11px 0', borderRadius: 8, border: 'none', cursor: 'pointer',
+                            background: dialog.danger ? '#D7373F' : '#111', color: '#fff',
+                            fontFamily: FONT, fontSize: '0.78rem', fontWeight: 700,
+                            letterSpacing: '0.06em', textTransform: 'uppercase',
+                            transition: 'opacity 0.15s',
+                        }}
+                        onMouseEnter={e => { e.currentTarget.style.opacity = '0.85'; }}
+                        onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
+                    >
+                        {dialog.confirmLabel || 'Confirm'}
+                    </button>
+                    <button
+                        onClick={onDismiss}
+                        style={{
+                            flex: 1, padding: '11px 0', borderRadius: 8,
+                            border: '1px solid #E5E7EB', cursor: 'pointer',
+                            background: '#fff', color: '#374151',
+                            fontFamily: FONT, fontSize: '0.78rem', fontWeight: 600,
+                            letterSpacing: '0.06em', textTransform: 'uppercase',
+                        }}
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+/* ─── Mock Data (fallback) ─── */
 const MOCK_USER = {
     name: 'Shreyash Nimbargi',
     email: 'shreyash@example.com',
@@ -24,7 +90,7 @@ const INITIAL_ADDRESSES = [
     },
 ];
 
-const EMPTY_ADDRESS = { name: '', phone: '', email: '', address1: '', city: '', state: '', pin: '' };
+const EMPTY_ADDRESS = { name: '', phone: '', alternatePhone: '', email: '', address1: '', city: '', state: '', pin: '' };
 
 /* ─────────────── Address Validation (same as Checkout) ─────────────── */
 const validateAddress = (addr) => {
@@ -42,6 +108,10 @@ const validateAddress = (addr) => {
         errors.email = 'Email address is required.';
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(addr.email.trim()))
         errors.email = 'Enter a valid email address.';
+    if (addr.alternatePhone && addr.alternatePhone.trim() !== '') {
+        const altDigits = addr.alternatePhone.replace(/[\s+\-()]/g, '');
+        if (!/^(91)?[6-9]\d{9}$/.test(altDigits)) errors.alternatePhone = 'Enter a valid alternate mobile number.';
+    }
     if (!addr.address1.trim() || addr.address1.trim().length < 5)
         errors.address1 = 'Address must be at least 5 characters.';
     if (!addr.city.trim() || addr.city.trim().length < 2)
@@ -153,9 +223,10 @@ const TextBtn = ({ children, onClick }) => (
 const StatusBadge = ({ status }) => {
     const cfg = {
         Delivered: { bg: '#F0FDF4', color: '#15803D', border: '#BBF7D0' },
-        Shipped:   { bg: '#EFF6FF', color: '#1D4ED8', border: '#BFDBFE' },
+        Shipped: { bg: '#EFF6FF', color: '#1D4ED8', border: '#BFDBFE' },
         Confirmed: { bg: '#FFFBEB', color: '#B45309', border: '#FDE68A' },
-        Placed:    { bg: '#F9FAFB', color: '#6B7280', border: '#E5E7EB' },
+        Placed: { bg: '#F9FAFB', color: '#6B7280', border: '#E5E7EB' },
+        Cancelled: { bg: '#FEF2F2', color: '#DC2626', border: '#FECACA' },
     }[status] || { bg: '#F9FAFB', color: '#6B7280', border: '#E5E7EB' };
     return (
         <span style={{
@@ -238,7 +309,7 @@ const StatusTracker = ({ currentStatus }) => {
 };
 
 /* ─────────────── ORDER DETAIL ─────────────── */
-const OrderDetail = ({ order, onBack }) => (
+const OrderDetail = ({ order, onBack, onCancel }) => (
     <div>
         <div style={{ marginBottom: 24 }}>
             <BackButton label="Back to Orders" onClick={onBack} />
@@ -247,7 +318,13 @@ const OrderDetail = ({ order, onBack }) => (
             title={`Order ${order.id}`}
             sub={`Placed on ${order.date}`}
         />
-        <StatusTracker currentStatus={order.status} />
+        {order.status === 'Cancelled' ? (
+            <div style={{ margin: '24px 0', padding: '16px', background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: 4, textAlign: 'center' }}>
+                <p style={{ fontFamily: FONT, fontSize: '0.85rem', fontWeight: 600, color: '#DC2626', margin: 0 }}>This order has been cancelled.</p>
+            </div>
+        ) : (
+            <StatusTracker currentStatus={order.status} />
+        )}
 
         {order.items.map((item, idx) => (
             <div key={idx} style={{
@@ -274,12 +351,29 @@ const OrderDetail = ({ order, onBack }) => (
             </div>
         ))}
 
-        <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '20px 0' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', padding: '20px 0' }}>
+            <div>
+                {['Placed', 'Confirmed'].includes(order.status) && (
+                    <button
+                        onClick={onCancel}
+                        style={{
+                            background: '#fff', color: '#D7373F', border: '1px solid #D7373F',
+                            padding: '8px 16px', borderRadius: 4, cursor: 'pointer',
+                            fontFamily: FONT, fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase',
+                            transition: 'all 0.2s ease'
+                        }}
+                        onMouseEnter={e => { e.currentTarget.style.background = '#FEF2F2'; }}
+                        onMouseLeave={e => { e.currentTarget.style.background = '#fff'; }}
+                    >
+                        Cancel Order
+                    </button>
+                )}
+            </div>
             <div style={{ textAlign: 'right' }}>
                 <p style={{ fontFamily: FONT, fontSize: '0.72rem', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>
                     Order Total
                 </p>
-                <p style={{ fontFamily: FONT, fontSize: '1.1rem', fontWeight: 700, color: '#111' }}>
+                <p style={{ fontFamily: FONT, fontSize: '1.1rem', fontWeight: 700, color: '#111', margin: 0 }}>
                     ₹ {order.total.toLocaleString('en-IN')}.00
                 </p>
             </div>
@@ -288,17 +382,25 @@ const OrderDetail = ({ order, onBack }) => (
 );
 
 /* ─────────────── ORDERS VIEW ─────────────── */
-const OrdersView = () => {
+const OrdersView = ({ orders = [], onCancelOrder }) => {
     const [selectedOrder, setSelectedOrder] = useState(null);
 
+    // Update selectedOrder dynamically if it gets cancelled in background
+    useEffect(() => {
+        if (selectedOrder) {
+            const updated = orders.find(o => o.id === selectedOrder.id);
+            if (updated) setSelectedOrder(updated);
+        }
+    }, [orders]);
+
     if (selectedOrder) {
-        return <OrderDetail order={selectedOrder} onBack={() => setSelectedOrder(null)} />;
+        return <OrderDetail order={selectedOrder} onBack={() => setSelectedOrder(null)} onCancel={() => onCancelOrder(selectedOrder.id)} />;
     }
 
     return (
         <div>
-            <SectionHead title="My Orders" sub={`${MOCK_ORDERS.length} orders placed`} />
-            {MOCK_ORDERS.length === 0 ? (
+            <SectionHead title="My Orders" sub={`${orders.length} orders placed`} />
+            {orders.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '60px 0' }}>
                     <svg width="48" height="48" fill="none" stroke="#D1D5DB" viewBox="0 0 24 24" strokeWidth={1.2} style={{ marginBottom: 16 }}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2" />
@@ -307,7 +409,7 @@ const OrdersView = () => {
                 </div>
             ) : (
                 <div>
-                    {MOCK_ORDERS.map(order => (
+                    {orders.map(order => (
                         <button
                             key={order.id}
                             onClick={() => setSelectedOrder(order)}
@@ -354,8 +456,8 @@ const OrdersView = () => {
 };
 
 /* ─────────────── PROFILE VIEW (with merged Addresses) ─────────────── */
-const ProfileView = ({ addresses, onAddAddress, onEditAddress }) => {
-    const u = MOCK_USER;
+const ProfileView = ({ addresses, onAddAddress, onEditAddress, u, onLogout }) => {
+    if (!u) return null;
     return (
         <div>
             <SectionHead title="My Profile" sub="Your personal information on file." />
@@ -374,7 +476,6 @@ const ProfileView = ({ addresses, onAddAddress, onEditAddress }) => {
                         </span>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                             <span style={{ fontFamily: FONT, fontSize: '0.82rem', color: '#111' }}>{value}</span>
-                            <TextBtn>Edit</TextBtn>
                         </div>
                     </div>
                 ))}
@@ -429,12 +530,34 @@ const ProfileView = ({ addresses, onAddAddress, onEditAddress }) => {
                     </div>
                 )}
             </div>
+
+            {/* ── Sign Out ── */}
+            <div style={{ marginTop: 52, paddingTop: 24, borderTop: '1px solid #EEEEEE' }}>
+                <button
+                    onClick={onLogout}
+                    style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 8,
+                        background: 'none', border: '1px solid #FECACA', borderRadius: 6,
+                        padding: '9px 16px', cursor: 'pointer',
+                        fontFamily: FONT, fontSize: '0.75rem', fontWeight: 700,
+                        color: '#D7373F', letterSpacing: '0.07em', textTransform: 'uppercase',
+                        transition: 'background 0.2s ease',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.background = '#FEF2F2'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'none'; }}
+                >
+                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    Sign Out
+                </button>
+            </div>
         </div>
     );
 };
 
 /* ─────────────── SIDEBAR ─────────────── */
-const Sidebar = ({ active, onNavigate, onLogout }) => (
+const Sidebar = ({ active, onNavigate, user }) => (
     <aside style={{
         width: 220, flexShrink: 0,
         borderRight: '1px solid #EEEEEE',
@@ -450,10 +573,10 @@ const Sidebar = ({ active, onNavigate, onLogout }) => (
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontFamily: FONT, fontSize: '1rem', fontWeight: 700, marginBottom: 10,
             }}>
-                {MOCK_USER.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                {user?.name ? user.name.split(' ').map(n => n[0]).join('').slice(0, 2) : 'U'}
             </div>
-            <p style={{ fontFamily: FONT, fontWeight: 700, fontSize: '0.88rem', color: '#111', marginBottom: 2 }}>{MOCK_USER.name}</p>
-            <p style={{ fontFamily: FONT, fontSize: '0.72rem', color: '#9CA3AF' }}>{MOCK_USER.email}</p>
+            <p style={{ fontFamily: FONT, fontWeight: 700, fontSize: '0.88rem', color: '#111', marginBottom: 2 }}>{user?.name || 'User'}</p>
+            <p style={{ fontFamily: FONT, fontSize: '0.72rem', color: '#9CA3AF' }}>{user?.email || ''}</p>
         </div>
 
         {/* Nav links */}
@@ -487,28 +610,6 @@ const Sidebar = ({ active, onNavigate, onLogout }) => (
 
         {/* Spacer pushes Sign Out to the very bottom */}
         <div style={{ marginTop: 'auto' }} />
-
-        {/* Sign Out — utility zone */}
-        <div style={{ padding: '16px 24px 20px', borderTop: '1px solid #E1E3E5' }}>
-            <button
-                onClick={onLogout}
-                style={{
-                    display: 'flex', alignItems: 'center', gap: 8,
-                    background: 'none', border: 'none', cursor: 'pointer',
-                    fontFamily: FONT, fontSize: '12px', fontWeight: 600,
-                    color: '#D7373F', letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
-                    padding: 0, transition: 'color 0.25s ease',
-                }}
-                onMouseEnter={e => { e.currentTarget.style.color = '#B91C1C'; }}
-                onMouseLeave={e => { e.currentTarget.style.color = '#D7373F'; }}
-            >
-                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                </svg>
-                Sign Out
-            </button>
-        </div>
     </aside>
 );
 
@@ -551,6 +652,7 @@ const AccountDashboard = () => {
     const navigate = useNavigate();
     const [view, setView] = useState('profile');
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+    const [confirmDialog, setConfirmDialog] = useState(null);
 
     /* ── Address CRUD state ── */
     const [addresses, setAddresses] = useState(INITIAL_ADDRESSES);
@@ -561,6 +663,11 @@ const AccountDashboard = () => {
     const [formErrors, setFormErrors] = useState({});
     const [touched, setTouched] = useState({});
 
+    // Live Backend State
+    const [isLoading, setIsLoading] = useState(true);
+    const [userProfile, setUserProfile] = useState(null);
+    const [userOrders, setUserOrders] = useState([]);
+
     useEffect(() => {
         const onResize = () => setIsMobile(window.innerWidth < 768);
         window.addEventListener('resize', onResize);
@@ -568,13 +675,124 @@ const AccountDashboard = () => {
     }, []);
 
     useEffect(() => {
+        const fetchDashboardData = async () => {
+            try {
+                const authCheck = await userService.checkAuth();
+                if (!authCheck.status || !authCheck.isLoggedIn) {
+                    navigate('/signin', { replace: true });
+                    return;
+                }
+                const profileRes = await userService.getProfile();
+                const ordersRes = await userService.getUserOrders();
+
+                if (profileRes.status && ordersRes.status) {
+                    setUserProfile(profileRes.data);
+
+                    if (profileRes.data.addresses) {
+                        setAddresses(profileRes.data.addresses.map((addr, idx) => ({
+                            label: idx === 0 && profileRes.data.addresses.length === 1 ? 'Home' : `Address ${idx + 1}`,
+                            name: addr.name || profileRes.data.name || '',
+                            phone: addr.phone || profileRes.data.phone || '',
+                            alternatePhone: addr.alternatePhone || '',
+                            email: profileRes.data.email || '',
+                            address1: addr.street || '',
+                            city: addr.city || '',
+                            state: addr.state || '',
+                            pin: addr.pincode || ''
+                        })));
+                    } else {
+                        setAddresses([]);
+                    }
+
+                    const mappedOrders = ordersRes.data.map(o => ({
+                        id: o.orderId,
+                        date: new Date(o.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+                        status: o.orderStatus ? o.orderStatus.charAt(0).toUpperCase() + o.orderStatus.slice(1) : 'Placed',
+                        items: o.items.map(i => ({
+                            name: i.productName,
+                            size: i.size,
+                            price: i.price,
+                            image: i.productImage?.[0] || ''
+                        })),
+                        total: o.totalAmount,
+                    }));
+
+                    setUserOrders(mappedOrders);
+                }
+            } catch (error) {
+                console.error("Dashboard fetch error:", error);
+                navigate('/signin', { replace: true });
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchDashboardData();
+    }, [navigate]);
+
+    const reFetchOrdersOnly = async () => {
+        try {
+            const ordersRes = await userService.getUserOrders();
+            if (ordersRes.status) {
+                const mappedOrders = ordersRes.data.map(o => ({
+                    id: o.orderId,
+                    date: new Date(o.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+                    status: o.orderStatus ? o.orderStatus.charAt(0).toUpperCase() + o.orderStatus.slice(1) : 'Placed',
+                    items: o.items.map(i => ({
+                        name: i.productName,
+                        size: i.size,
+                        price: i.price,
+                        image: i.productImage?.[0] || ''
+                    })),
+                    total: o.totalAmount,
+                }));
+                setUserOrders(mappedOrders);
+            }
+        } catch (error) {
+            console.error("Order refetch block failed", error);
+        }
+    };
+
+    const handleCancelOrderProcess = (orderId) => {
+        setConfirmDialog({
+            title: 'Cancel this order?',
+            message: 'This action cannot be undone. Your items will be returned to stock and you will receive a confirmation email.',
+            confirmLabel: 'Yes, Cancel Order',
+            danger: true,
+            onConfirm: async () => {
+                setConfirmDialog(null);
+                try {
+                    const res = await orderService.cancelOrder(orderId);
+                    if (res.status) {
+                        toast.success('Order cancelled successfully.');
+                        reFetchOrdersOnly();
+                    } else {
+                        toast.error(res.message || 'Could not cancel the order.');
+                    }
+                } catch {
+                    toast.error('Something went wrong. Please try again.');
+                }
+            },
+        });
+    };
+
+    useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'instant' });
     }, [view]);
 
     const handleLogout = () => {
-        if (window.confirm('Are you sure you want to sign out?')) {
-            navigate('/signin');
-        }
+        setConfirmDialog({
+            title: 'Sign out of your account?',
+            message: 'You will need to sign in again to view your orders and profile.',
+            confirmLabel: 'Sign Out',
+            danger: false,
+            onConfirm: async () => {
+                setConfirmDialog(null);
+                try {
+                    await userService.logout();
+                } catch {}
+                navigate('/signin');
+            },
+        });
     };
 
     /* ── Address form handlers ── */
@@ -598,10 +816,12 @@ const AccountDashboard = () => {
 
     const handleAddressSubmit = (e) => {
         e.preventDefault();
-        setTouched({ name: true, phone: true, email: true, address1: true, city: true, state: true, pin: true });
+        setTouched({ name: true, phone: true, alternatePhone: true, email: true, address1: true, city: true, state: true, pin: true });
         const errors = validateAddress(currentAddress);
         setFormErrors(errors);
         if (Object.keys(errors).length > 0) return;
+
+        // We will mock updating locally, but user must checkout to save permanently as per current architecture rules!
         if (isEditing && editIndex !== null) {
             const updated = [...addresses];
             updated[editIndex] = { ...currentAddress, label: addresses[editIndex].label || 'Address' };
@@ -609,6 +829,7 @@ const AccountDashboard = () => {
         } else {
             setAddresses([...addresses, { ...currentAddress, label: addresses.length === 0 ? 'Home' : 'Address' }]);
         }
+
         setFormErrors({});
         setTouched({});
         setIsAddressFormOpen(false);
@@ -633,171 +854,165 @@ const AccountDashboard = () => {
             minHeight: '100vh',
             paddingTop: 'var(--header-height, 64px)',
         }}>
-            {/* ── Address Form Modal (reuses checkout CSS classes) ── */}
-            {isAddressFormOpen && (
-                <div className="modal-overlay active form-overlay">
-                    <div className="modal-content address-form-modal">
-                        <div className="modal-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                            <h2 className="modal-title">{isEditing ? 'Edit Address' : 'Add New Address'}</h2>
-                            <button className="modal-close-btn" onClick={() => setIsAddressFormOpen(false)} aria-label="Close">✕</button>
+            {isLoading ? (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
+                    <p style={{ fontFamily: FONT, fontSize: '0.9rem', color: '#6e6e73' }}>Loading Profile...</p>
+                </div>
+            ) : (
+                <>
+                    {/* ── Confirm Dialog ── */}
+                    <ConfirmDialog
+                        dialog={confirmDialog}
+                        onConfirm={() => confirmDialog?.onConfirm()}
+                        onDismiss={() => setConfirmDialog(null)}
+                    />
+                    {/* ── Address Form Modal (reuses checkout CSS classes) ── */}
+                    {isAddressFormOpen && (
+                        <div className="modal-overlay active form-overlay">
+                            <div className="modal-content address-form-modal">
+                                <div className="modal-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <h2 className="modal-title">{isEditing ? 'Edit Address' : 'Add New Address'}</h2>
+                                    <button className="modal-close-btn" onClick={() => setIsAddressFormOpen(false)} aria-label="Close">✕</button>
+                                </div>
+
+                                <form className="address-form" onSubmit={handleAddressSubmit}>
+                                    <div className="form-grid">
+                                        <div className="form-group full-width">
+                                            <label>Full Name</label>
+                                            <input type="text" value={currentAddress.name}
+                                                onChange={e => handleFieldChange('name', e.target.value)}
+                                                onBlur={() => handleFieldBlur('name')}
+                                                placeholder="Enter full name"
+                                                style={touched.name && formErrors.name ? { borderColor: '#e03030' } : {}}
+                                            />
+                                            {touched.name && formErrors.name && <span className="field-error">{formErrors.name}</span>}
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Phone Number</label>
+                                            <input type="tel" value={currentAddress.phone}
+                                                onChange={e => handleFieldChange('phone', e.target.value)}
+                                                onBlur={() => handleFieldBlur('phone')}
+                                                placeholder="+91 XXXXX XXXXX"
+                                                style={touched.phone && formErrors.phone ? { borderColor: '#e03030' } : {}}
+                                            />
+                                            {touched.phone && formErrors.phone && <span className="field-error">{formErrors.phone}</span>}
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Alternate Phone (Optional)</label>
+                                            <input type="tel" value={currentAddress.alternatePhone}
+                                                onChange={e => handleFieldChange('alternatePhone', e.target.value)}
+                                                onBlur={() => handleFieldBlur('alternatePhone')}
+                                                placeholder="+91 Optional"
+                                                style={touched.alternatePhone && formErrors.alternatePhone ? { borderColor: '#e03030' } : {}}
+                                            />
+                                            {touched.alternatePhone && formErrors.alternatePhone && <span className="field-error">{formErrors.alternatePhone}</span>}
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Email ID</label>
+                                            <input type="email" value={currentAddress.email}
+                                                onChange={e => handleFieldChange('email', e.target.value)}
+                                                onBlur={() => handleFieldBlur('email')}
+                                                placeholder="example@gmail.com"
+                                                style={touched.email && formErrors.email ? { borderColor: '#e03030' } : {}}
+                                            />
+                                            {touched.email && formErrors.email && <span className="field-error">{formErrors.email}</span>}
+                                        </div>
+                                        <div className="form-group full-width">
+                                            <label>Building / Area / Street</label>
+                                            <input type="text" value={currentAddress.address1}
+                                                onChange={e => handleFieldChange('address1', e.target.value)}
+                                                onBlur={() => handleFieldBlur('address1')}
+                                                placeholder="Address line 1"
+                                                style={touched.address1 && formErrors.address1 ? { borderColor: '#e03030' } : {}}
+                                            />
+                                            {touched.address1 && formErrors.address1 && <span className="field-error">{formErrors.address1}</span>}
+                                        </div>
+                                        <div className="form-group">
+                                            <label>City</label>
+                                            <input type="text" id="profile-field-city" value={currentAddress.city}
+                                                onChange={e => handleFieldChange('city', e.target.value)}
+                                                onBlur={() => handleFieldBlur('city')}
+                                                placeholder="e.g. Mumbai"
+                                                style={touched.city && formErrors.city ? { borderColor: '#e03030' } : {}}
+                                            />
+                                            {touched.city && formErrors.city && <span className="field-error">{formErrors.city}</span>}
+                                        </div>
+                                        <div className="form-group">
+                                            <label>State</label>
+                                            <input type="text" id="profile-field-state" value={currentAddress.state}
+                                                onChange={e => handleFieldChange('state', e.target.value)}
+                                                onBlur={() => handleFieldBlur('state')}
+                                                placeholder="e.g. Maharashtra"
+                                                style={touched.state && formErrors.state ? { borderColor: '#e03030' } : {}}
+                                            />
+                                            {touched.state && formErrors.state && <span className="field-error">{formErrors.state}</span>}
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Pincode</label>
+                                            <input type="text" id="profile-field-pin" value={currentAddress.pin}
+                                                maxLength={6}
+                                                onChange={e => handleFieldChange('pin', e.target.value)}
+                                                onBlur={() => handleFieldBlur('pin')}
+                                                placeholder="XXXXXX"
+                                                style={touched.pin && formErrors.pin ? { borderColor: '#e03030' } : {}}
+                                            />
+                                            {touched.pin && formErrors.pin && <span className="field-error">{formErrors.pin}</span>}
+                                        </div>
+                                    </div>
+
+                                    <div className="form-actions">
+                                        <button type="submit" className="save-btn">Save Address</button>
+                                        <button type="button" className="cancel-btn" onClick={() => setIsAddressFormOpen(false)}>Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-
-                        <form className="address-form" onSubmit={handleAddressSubmit}>
-                            <div className="form-grid">
-                                <div className="form-group full-width">
-                                    <label>Full Name</label>
-                                    <input type="text" value={currentAddress.name}
-                                        onChange={e => handleFieldChange('name', e.target.value)}
-                                        onBlur={() => handleFieldBlur('name')}
-                                        placeholder="Enter full name"
-                                        style={touched.name && formErrors.name ? { borderColor: '#e03030' } : {}}
-                                    />
-                                    {touched.name && formErrors.name && <span className="field-error">{formErrors.name}</span>}
-                                </div>
-                                <div className="form-group">
-                                    <label>Phone Number</label>
-                                    <input type="tel" value={currentAddress.phone}
-                                        onChange={e => handleFieldChange('phone', e.target.value)}
-                                        onBlur={() => handleFieldBlur('phone')}
-                                        placeholder="+91 XXXXX XXXXX"
-                                        style={touched.phone && formErrors.phone ? { borderColor: '#e03030' } : {}}
-                                    />
-                                    {touched.phone && formErrors.phone && <span className="field-error">{formErrors.phone}</span>}
-                                </div>
-                                <div className="form-group">
-                                    <label>Email ID</label>
-                                    <input type="email" value={currentAddress.email}
-                                        onChange={e => handleFieldChange('email', e.target.value)}
-                                        onBlur={() => handleFieldBlur('email')}
-                                        placeholder="example@gmail.com"
-                                        style={touched.email && formErrors.email ? { borderColor: '#e03030' } : {}}
-                                    />
-                                    {touched.email && formErrors.email && <span className="field-error">{formErrors.email}</span>}
-                                </div>
-                                <div className="form-group full-width">
-                                    <label>Building / Area / Street</label>
-                                    <input type="text" value={currentAddress.address1}
-                                        onChange={e => handleFieldChange('address1', e.target.value)}
-                                        onBlur={() => handleFieldBlur('address1')}
-                                        placeholder="Address line 1"
-                                        style={touched.address1 && formErrors.address1 ? { borderColor: '#e03030' } : {}}
-                                    />
-                                    {touched.address1 && formErrors.address1 && <span className="field-error">{formErrors.address1}</span>}
-                                </div>
-                                <div className="form-group">
-                                    <label>City</label>
-                                    <input type="text" id="profile-field-city" value={currentAddress.city}
-                                        onChange={e => handleFieldChange('city', e.target.value)}
-                                        onBlur={() => handleFieldBlur('city')}
-                                        placeholder="e.g. Mumbai"
-                                        style={touched.city && formErrors.city ? { borderColor: '#e03030' } : {}}
-                                    />
-                                    {touched.city && formErrors.city && <span className="field-error">{formErrors.city}</span>}
-                                </div>
-                                <div className="form-group">
-                                    <label>State</label>
-                                    <input type="text" id="profile-field-state" value={currentAddress.state}
-                                        onChange={e => handleFieldChange('state', e.target.value)}
-                                        onBlur={() => handleFieldBlur('state')}
-                                        placeholder="e.g. Maharashtra"
-                                        style={touched.state && formErrors.state ? { borderColor: '#e03030' } : {}}
-                                    />
-                                    {touched.state && formErrors.state && <span className="field-error">{formErrors.state}</span>}
-                                </div>
-                                <div className="form-group">
-                                    <label>Pincode</label>
-                                    <input type="text" id="profile-field-pin" value={currentAddress.pin}
-                                        maxLength={6}
-                                        onChange={e => handleFieldChange('pin', e.target.value)}
-                                        onBlur={() => handleFieldBlur('pin')}
-                                        placeholder="XXXXXX"
-                                        style={touched.pin && formErrors.pin ? { borderColor: '#e03030' } : {}}
-                                    />
-                                    {touched.pin && formErrors.pin && <span className="field-error">{formErrors.pin}</span>}
-                                </div>
-                            </div>
-
-                            <div className="form-actions">
-                                <button type="submit" className="save-btn">Save Address</button>
-                                <button type="button" className="cancel-btn" onClick={() => setIsAddressFormOpen(false)}>Cancel</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
-
-            <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 20px' }}>
-                {/* Back button row */}
-                <div style={{ padding: '24px 0 0' }}>
-                    <BackButton label="Continue Shopping" onClick={() => navigate(-1)} />
-                </div>
-
-                {/* Page title */}
-                <div style={{ padding: '16px 0 24px', borderBottom: '1px solid #EEEEEE', marginBottom: 0 }}>
-                    <h1 style={{
-                        fontFamily: FONT, fontSize: 'clamp(1.3rem, 3vw, 1.75rem)',
-                        fontWeight: 700, color: '#111', margin: 0,
-                        letterSpacing: '-0.01em',
-                    }}>
-                        My Account
-                    </h1>
-                </div>
-
-                {/* Body */}
-                <div style={{
-                    display: 'flex',
-                    gap: 0,
-                    alignItems: 'flex-start',
-                    minHeight: 'calc(100vh - 180px)',
-                }}>
-                    {/* Sidebar — desktop only */}
-                    {!isMobile && (
-                        <Sidebar active={view} onNavigate={setView} onLogout={handleLogout} />
                     )}
 
-                    {/* Content area */}
-                    <main style={{
-                        flex: 1,
-                        padding: isMobile ? '24px 0' : '32px 40px',
-                        minWidth: 0,
-                    }}>
-                        {/* Mobile top nav */}
-                        {isMobile && <MobileTopNav active={view} onNavigate={setView} />}
+                    <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 20px' }}>
+                        {/* Back button row */}
+                        <div style={{ padding: '24px 0 0' }}>
+                            <BackButton label="Continue Shopping" onClick={() => navigate(-1)} />
+                        </div>
 
-                        {view === 'orders'  && <OrdersView />}
-                        {view === 'profile' && <ProfileView addresses={addresses} onAddAddress={handleAddAddress} onEditAddress={handleEditAddress} />}
-
-                        {/* Mobile Sign Out — placed after page content */}
-                        {isMobile && (
-                            <div style={{
-                                marginTop: 48,
-                                paddingTop: 20,
-                                borderTop: '1px solid #E1E3E5',
-                                paddingBottom: 20,
+                        {/* Page title */}
+                        <div style={{ padding: '16px 0 24px', borderBottom: '1px solid #EEEEEE', marginBottom: 0 }}>
+                            <h1 style={{
+                                fontFamily: FONT, fontSize: 'clamp(1.3rem, 3vw, 1.75rem)',
+                                fontWeight: 700, color: '#111', margin: 0,
+                                letterSpacing: '-0.01em',
                             }}>
-                                <button
-                                    onClick={handleLogout}
-                                    style={{
-                                        display: 'flex', alignItems: 'center', gap: 8,
-                                        background: 'none', border: 'none', cursor: 'pointer',
-                                        fontFamily: FONT, fontSize: '12px', fontWeight: 600,
-                                        color: '#D7373F', letterSpacing: '0.08em',
-                                        textTransform: 'uppercase',
-                                        padding: 0, transition: 'color 0.25s ease',
-                                    }}
-                                    onMouseEnter={e => { e.currentTarget.style.color = '#B91C1C'; }}
-                                    onMouseLeave={e => { e.currentTarget.style.color = '#D7373F'; }}
-                                >
-                                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                    </svg>
-                                    Sign Out
-                                </button>
-                            </div>
-                        )}
-                    </main>
-                </div>
-            </div>
+                                My Account
+                            </h1>
+                        </div>
+
+                        {/* Body */}
+                        <div style={{
+                            display: 'flex', gap: 0,
+                            alignItems: 'flex-start',
+                            minHeight: 'calc(100vh - 180px)',
+                        }}>
+                            {/* Sidebar — desktop only */}
+                            {!isMobile && (
+                                <Sidebar active={view} onNavigate={setView} user={userProfile} />
+                            )}
+
+                            {/* Content area */}
+                            <main style={{
+                                flex: 1,
+                                padding: isMobile ? '24px 0' : '32px 40px',
+                                minWidth: 0,
+                            }}>
+                                {/* Mobile top nav */}
+                                {isMobile && <MobileTopNav active={view} onNavigate={setView} />}
+
+                                {view === 'orders'  && <OrdersView orders={userOrders} onCancelOrder={handleCancelOrderProcess} />}
+                                {view === 'profile' && <ProfileView addresses={addresses} onAddAddress={handleAddAddress} onEditAddress={handleEditAddress} u={userProfile} onLogout={handleLogout} />}
+                            </main>
+                        </div>
+                    </div>
+                </>
+            )}
         </div>
     );
 };
