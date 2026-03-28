@@ -22,7 +22,7 @@ const AdminLogin = () => {
         setError('');
         setLoading(true);
         setTimeout(() => {
-            
+            // Mock: email=admin@brunati.com, password=brunati2026
             const ok = adminLogin(email, password);
             if (ok) {
                 navigate('/admin/dashboard', { replace: true });

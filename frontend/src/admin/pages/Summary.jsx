@@ -33,11 +33,9 @@ const RECENT_ACTIVITY = [
 /* ─── Component ─── */
 const Summary = () => {
     const [loading, setLoading] = useState(false);
-    const [hasMounted, setHasMounted] = useState(false);
     const [viewMode, setViewMode] = useState(window.innerWidth <= 768 ? 'mobile' : 'desktop');
 
     useEffect(() => {
-        setHasMounted(true);
         const handleResize = () => setViewMode(window.innerWidth <= 768 ? 'mobile' : 'desktop');
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
@@ -111,61 +109,59 @@ const Summary = () => {
             </div>
 
             {/* Sales Chart Section */}
-            {hasMounted && (
-                <div style={{
-                    background: '#fff', border: '1px solid #eee', padding: viewMode === 'mobile' ? '20px' : '32px',
-                    marginBottom: 40, overflow: 'hidden'
-                }}>
-                    <div style={{ marginBottom: 24 }}>
-                        <h2 style={{ fontFamily: FONT, fontSize: '1.1rem', fontWeight: 500, margin: 0, color: '#111', textTransform: 'none', letterSpacing: 'normal' }}>Sales trend</h2>
-                        <p style={{ fontSize: '0.78rem', color: '#6e6e73', marginTop: 4 }}>Last 7 days earnings</p>
-                    </div>
-
-                    <div style={{ 
-                        width: '100%', 
-                        aspectRatio: '16 / 9',
-                        minHeight: viewMode === 'mobile' ? 180 : 250,
-                        maxHeight: 400
-                    }}>
-                        <ResponsiveContainer width="100%" height="100%">
-                            <AreaChart data={MOCK_SALES_DATA}>
-                                <defs>
-                                    <linearGradient id="colorAmt" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor="#111" stopOpacity={0.1}/>
-                                        <stop offset="95%" stopColor="#111" stopOpacity={0}/>
-                                    </linearGradient>
-                                </defs>
-                                <XAxis 
-                                    dataKey="name" 
-                                    axisLine={false} 
-                                    tickLine={false} 
-                                    tick={{ fontSize: 11, fill: '#6e6e73' }} 
-                                    dy={10}
-                                />
-                                <YAxis 
-                                    hide={true} 
-                                />
-                                <Tooltip 
-                                    contentStyle={{ 
-                                        background: '#111', color: '#fff', border: 'none', 
-                                        borderRadius: 0, fontSize: '0.8rem', fontWeight: 700 
-                                    }}
-                                    itemStyle={{ color: '#fff' }}
-                                    cursor={{ stroke: '#eee', strokeWidth: 1 }}
-                                />
-                                <Area 
-                                    type="monotone" 
-                                    dataKey="amount" 
-                                    stroke="#111" 
-                                    strokeWidth={3}
-                                    fillOpacity={1} 
-                                    fill="url(#colorAmt)" 
-                                />
-                            </AreaChart>
-                        </ResponsiveContainer>
-                    </div>
+            <div style={{
+                background: '#fff', border: '1px solid #eee', padding: viewMode === 'mobile' ? '20px' : '32px',
+                marginBottom: 40, overflow: 'hidden'
+            }}>
+                <div style={{ marginBottom: 24 }}>
+                    <h2 style={{ fontFamily: FONT, fontSize: '1.1rem', fontWeight: 500, margin: 0, color: '#111', textTransform: 'none', letterSpacing: 'normal' }}>Sales trend</h2>
+                    <p style={{ fontSize: '0.78rem', color: '#6e6e73', marginTop: 4 }}>Last 7 days earnings</p>
                 </div>
-            )}
+
+                <div style={{ 
+                    width: '100%', 
+                    aspectRatio: '16 / 9',
+                    minHeight: viewMode === 'mobile' ? 180 : 250,
+                    maxHeight: 400
+                }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                        <AreaChart data={MOCK_SALES_DATA}>
+                            <defs>
+                                <linearGradient id="colorAmt" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="5%" stopColor="#111" stopOpacity={0.1}/>
+                                    <stop offset="95%" stopColor="#111" stopOpacity={0}/>
+                                </linearGradient>
+                            </defs>
+                            <XAxis 
+                                dataKey="name" 
+                                axisLine={false} 
+                                tickLine={false} 
+                                tick={{ fontSize: 11, fill: '#6e6e73' }} 
+                                dy={10}
+                            />
+                            <YAxis 
+                                hide={true} 
+                            />
+                            <Tooltip 
+                                contentStyle={{ 
+                                    background: '#111', color: '#fff', border: 'none', 
+                                    borderRadius: 0, fontSize: '0.8rem', fontWeight: 700 
+                                }}
+                                itemStyle={{ color: '#fff' }}
+                                cursor={{ stroke: '#eee', strokeWidth: 1 }}
+                            />
+                            <Area 
+                                type="monotone" 
+                                dataKey="amount" 
+                                stroke="#111" 
+                                strokeWidth={3}
+                                fillOpacity={1} 
+                                fill="url(#colorAmt)" 
+                            />
+                        </AreaChart>
+                    </ResponsiveContainer>
+                </div>
+            </div>
 
             {/* Recent Activity Feed */}
             <div style={{ background: '#fff', border: '1px solid #eee', padding: '24px' }}>

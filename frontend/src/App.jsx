@@ -35,7 +35,7 @@ function App() {
         localStorage.removeItem('adminToken');
         localStorage.removeItem('admin_token');
         localStorage.removeItem('user_auth');
-        window.open('/admin/login', '_blank');
+        window.open('/management-portal/login', '_blank');
       }
 
       timeoutId = setTimeout(() => {
