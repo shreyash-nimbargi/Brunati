@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-<<<<<<< Updated upstream
-=======
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 import { useNavigate } from 'react-router-dom';
->>>>>>> Stashed changes
 
 const Navbar = () => {
     const navigate = useNavigate();
