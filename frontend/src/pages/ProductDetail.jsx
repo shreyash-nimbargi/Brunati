@@ -1,22 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { productsData } from '../data/products';
-<<<<<<< Updated upstream
-=======
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useStorefront } from '../context/StorefrontContext';
->>>>>>> Stashed changes
 
 const ProductDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-<<<<<<< Updated upstream
-=======
     const { addToCart } = useCart();
     const { isWishlisted, toggleWishlist } = useWishlist();
     const { collections } = useStorefront();
->>>>>>> Stashed changes
     const product = productsData[id] || productsData['dominus'];
 
     const getDynamicBadge = () => {
@@ -245,12 +239,6 @@ const ProductDetail = () => {
                 </div>
 
                 <div className="product-info-sidebar">
-<<<<<<< Updated upstream
-                    <div className="sidebar-content" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                        <span className="badge" style={{ background: '#f5f5f7', padding: '6px 14px', borderRadius: '20px', width: 'fit-content', fontSize: '0.8rem', fontWeight: 600 }}>{product.badge}</span>
-                        <h1 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>{product.name}</h1>
-                        <div className="price" style={{ fontSize: '1.8rem', fontWeight: 700 }}>₹ {price}.00</div>
-=======
                     <div className="sidebar-content">
                         <span className="badge" style={{ background: '#f5f5f7', padding: '6px 14px', borderRadius: '20px', width: 'fit-content', fontSize: '0.8rem', fontWeight: 600 }}>{getDynamicBadge()}</span>
                         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
@@ -286,7 +274,6 @@ const ProductDetail = () => {
                             fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
                             color: '#1d1d1f'
                         }}>₹ {price}.00</div>
->>>>>>> Stashed changes
 
                         <div className="size-selector">
                             <span style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, color: '#6e6e73', marginBottom: '10px' }}>Select Size</span>
@@ -430,6 +417,13 @@ const ProductDetail = () => {
                     .review-track {
                         scrollbar-width: none; /* Firefox */
                         -ms-overflow-style: none; /* IE and Edge */
+                        display: flex;
+                        gap: 24px;
+                        margin-bottom: 60px;
+                        overflow-x: auto;
+                        scroll-behavior: smooth;
+                        -webkit-overflow-scrolling: touch;
+                        padding-bottom: 10px;
                     }
                     .review-card {
                         flex: 0 0 calc(33.3333% - 16px);
@@ -447,15 +441,7 @@ const ProductDetail = () => {
                     onTouchStart={() => setIsHovered(true)}
                     onTouchEnd={() => setTimeout(() => setIsHovered(false), 2500)}
                     className="review-track"
-                    style={{
-                        display: 'flex',
-                        gap: '24px',
-                        marginBottom: '60px',
-                        overflowX: 'auto',
-                        scrollBehavior: 'smooth',
-                        WebkitOverflowScrolling: 'touch',
-                        paddingBottom: '10px'
-                    }}>
+                >
                     {[
                         { name: "Marcus J.", text: "Absolutely phenomenal presence. The opening is sharp and the dry down lasts easily 12+ hours on my skin. Definitely my new signature." },
                         { name: "Elena S.", text: "A truly elegant and refreshing masterpiece. The complexity of the notes is stunning and it pulls compliments everywhere I go." },
@@ -532,7 +518,7 @@ const ProductDetail = () => {
                 `}</style>
                 <div className="ymal-grid">
                     {Object.entries(productsData)
-                        .filter(([key, _]) => key !== (id || 'dominus') && key !== 'gift1')
+                        .filter(([key]) => key !== (id || 'dominus') && key !== 'gift1')
                         .slice(0, 4)
                         .map(([key, p]) => (
                             <div key={key}

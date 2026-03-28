@@ -54,7 +54,7 @@ const ScentArt = () => {
                 <div className="scent-track">
                     {[...scentArt, ...scentArt].map((item, idx) => (
                         <div key={idx} className="scent-slide-wrapper">
-                            <img src={item.url} className="scent-slide-img" alt={`Scent ${idx}`} />
+                            <img src={item.url.startsWith('/') ? item.url : '/' + item.url} className="scent-slide-img" alt={`Scent ${idx}`} />
                         </div>
                     ))}
                 </div>

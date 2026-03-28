@@ -12,7 +12,7 @@ const Home = () => {
 
     const scrollInfluencers = (direction) => {
         if (influencersRef.current) {
-            const scrollAmount = 300; // manual scroll distance
+            const scrollAmount = 300; 
             influencersRef.current.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
         }
     };
@@ -53,89 +53,7 @@ const Home = () => {
         };
     }, []);
 
-<<<<<<< Updated upstream
-    useEffect(() => {
-        let animationFrameId;
-        const container = influencersRef.current;
-        if (!container) return;
-
-        let isDown = false;
-        const handleDown = () => isDown = true;
-        const handleUp = () => isDown = false;
-
-        container.addEventListener('mousedown', handleDown);
-        container.addEventListener('mouseup', handleUp);
-        container.addEventListener('mouseleave', handleUp);
-        container.addEventListener('touchstart', handleDown, { passive: true });
-        container.addEventListener('touchend', handleUp);
-
-        const scroll = () => {
-            if (!isDown) {
-                container.scrollLeft += 1;
-                if (container.scrollLeft >= container.scrollWidth - container.clientWidth - 1) {
-                    container.scrollLeft = 0;
-                }
-            }
-            animationFrameId = requestAnimationFrame(scroll);
-        };
-        animationFrameId = requestAnimationFrame(scroll);
-
-        return () => {
-            cancelAnimationFrame(animationFrameId);
-            container.removeEventListener('mousedown', handleDown);
-            container.removeEventListener('mouseup', handleUp);
-            container.removeEventListener('mouseleave', handleUp);
-            container.removeEventListener('touchstart', handleDown);
-            container.removeEventListener('touchend', handleUp);
-        };
-    }, []);
-
-    // Content for Client Experiences (Reviews)
-    const reviews = [
-        { name: "Julian V.", text: "The most sophisticated scent I have ever worn. Truly a masterpiece of modern luxury." },
-        { name: "Sophia L.", text: "Brilliant longevity and the sillage is perfect. I get compliments everywhere I go." },
-        { name: "Marcus G.", text: "Fast shipping and the packaging is absolute luxury. A premium experience from start to finish." },
-        { name: "Elena R.", text: "Unique, bold, and staying power that lasts all day. My new signature scent." },
-        { name: "David K.", text: "The Art of Scent indeed. Brunati has redefined what a luxury fragrance should feel like." }
-    ];
-
-    const influencersList = [
-        {
-            name: "KATRINA KAIF",
-            role: "INDIAN ACTRESS",
-            wearing: "WEARING: ILLUMINATI"
-        },
-        {
-            name: "RAFTAAR",
-            role: "MUSICIAN, HIP HOP",
-            wearing: "WEARING: ILLUMINATI"
-        },
-        {
-            name: "PANTHER",
-            role: "MUSICIAN, HIP HOP",
-            wearing: "WEARING: UM VISION"
-        },
-        {
-            name: "SHANAYA KAPOOR",
-            role: "INDIAN ACTRESS",
-            wearing: "WEARING: NINJA NATION // 001"
-        },
-        {
-            name: "VICKY KAUSHAL",
-            role: "INDIAN ACTOR",
-            wearing: "WEARING: OUD WOOD"
-        },
-        {
-            name: "ALIA BHATT",
-            role: "INDIAN ACTRESS",
-            wearing: "WEARING: NIGHT BLOOM"
-        }
-    ];
-
-    const scrollingInfluencers = [...influencersList, ...influencersList];
-=======
     const scrollingInfluencers = [...(influencersList || []), ...(influencersList || [])];
->>>>>>> Stashed changes
 
     return (
         <main>
@@ -186,7 +104,6 @@ const Home = () => {
                     </button>
                 </div>
             </section>
-
         </main>
     );
 };

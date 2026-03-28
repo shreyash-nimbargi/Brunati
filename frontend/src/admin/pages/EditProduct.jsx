@@ -26,7 +26,7 @@ const EditProduct = () => {
     const [originalProduct, setOriginalProduct] = useState(null);
     const fileInputRef = React.useRef(null);
 
-    // ─── UNDO TOAST LOGIC ──────────────────────────────────────────────────
+    // --- UNDO TOAST LOGIC ---
     const triggerUndoToast = (message, stateSetter, previousState) => {
         toast((t) => (
             <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: '8px' }}>
@@ -147,7 +147,7 @@ const EditProduct = () => {
                     color: '#6e6e73', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 500,
                     display: 'inline-flex', alignItems: 'center', transition: 'color 0.2s'
                 }} onMouseEnter={e => e.currentTarget.style.color = '#111'} onMouseLeave={e => e.currentTarget.style.color = '#6e6e73'}>
-                    ← Back to inventory
+                    &larr; Back to inventory
                 </Link>
             </div>
 
@@ -233,7 +233,7 @@ const EditProduct = () => {
                     
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
                         <div>
-                            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: '#374151', marginBottom: 8 }}>Price (₹)</label>
+                            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: '#374151', marginBottom: 8 }}>Price (INR)</label>
                             <input 
                                 type="number" 
                                 min="0"

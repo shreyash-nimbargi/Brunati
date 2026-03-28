@@ -60,16 +60,23 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, setIsCollapsed }) => {
                 </div>
             )}
             {/* "Admin panel" Heading: Sans-serif + Sentence case */}
-            <div style={{ padding: '0 20px 48px', display: 'flex', alignItems: 'center', justifyContent: isCollapsed ? 'center' : 'space-between', position: 'relative' }}>
+            <div style={{ 
+                padding: isCollapsed ? '0 0 32px' : '0 24px 32px', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: isCollapsed ? 'center' : 'space-between', 
+                position: 'relative',
+                minHeight: '40px'
+            }}>
                 {!isCollapsed && (
                     <h1 style={{
                         fontFamily: FONT_ROBOTO,
-                        fontSize: '1.2rem',
+                        fontSize: '1rem',
                         fontWeight: 700,
                         margin: 0,
-                        textTransform: 'none',
-                        letterSpacing: 'normal',
-                        color: '#000000',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        color: '#111',
                         whiteSpace: 'nowrap'
                     }}>
                         Admin Panel
@@ -78,22 +85,26 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, setIsCollapsed }) => {
                 
                 <button 
                     onClick={() => setIsCollapsed(!isCollapsed)}
+                    title={isCollapsed ? "Expand Menu" : "Collapse Menu"}
                     style={{
                         background: '#ffffff',
                         border: '1px solid #EEEEEE',
-                        borderRadius: '50%',
-                        width: '24px',
-                        height: '24px',
+                        borderRadius: '4px',
+                        width: '28px',
+                        height: '28px',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         cursor: 'pointer',
-                        color: '#666',
+                        color: '#111',
                         position: isCollapsed ? 'static' : 'absolute',
-                        right: '16px',
-                        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                        zIndex: 60
+                        right: isCollapsed ? 'auto' : '12px',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+                        zIndex: 60,
+                        transition: 'all 0.2s ease'
                     }}
+                    onMouseEnter={e => e.currentTarget.style.borderColor = '#111'}
+                    onMouseLeave={e => e.currentTarget.style.borderColor = '#EEEEEE'}
                 >
                     {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
                 </button>

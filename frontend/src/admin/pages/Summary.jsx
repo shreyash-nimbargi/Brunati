@@ -3,9 +3,11 @@ import {
     AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer 
 } from 'recharts';
 
+import { ShoppingCart, AlertTriangle, UserCheck, CreditCard, ShieldCheck } from 'lucide-react';
+
 const FONT = '"Roboto", sans-serif';
 
-/* ─── MOCK DATA (In a real app, this comes from backend APIs) ─── */
+/* --- MOCK DATA (In a real app, this comes from backend APIs) --- */
 const MOCK_SALES_DATA = [
     { name: 'Mar 19', amount: 12400 },
     { name: 'Mar 20', amount: 35000 },
@@ -17,20 +19,20 @@ const MOCK_SALES_DATA = [
 ];
 
 const RECENT_ORDERS = [
-    { id: 'BRN-2026-4821', customer: 'Arjun Mehta',    product: 'Dominus Emperor 100ml',  total: '₹1,795', status: 'Shipped' },
-    { id: 'BRN-2026-4820', customer: 'Priya Sharma',   product: 'Brunati Aqua 100ml',      total: '₹1,795', status: 'Placed' },
-    { id: 'BRN-2026-4819', customer: 'Rahul Desai',    product: 'Mestia 100ml',           total: '₹1,795', status: 'Delivered' },
-    { id: 'BRN-2026-4818', customer: 'Sneha Kulkarni', product: 'Citrine Dusk 100ml',     total: '₹1,795', status: 'Confirmed' },
+    { id: 'BRN-2026-4821', customer: 'Arjun Mehta',    product: 'Dominus Emperor 100ml',  total: 'INR 1,795', status: 'Shipped' },
+    { id: 'BRN-2026-4820', customer: 'Priya Sharma',   product: 'Brunati Aqua 100ml',      total: 'INR 1,795', status: 'Placed' },
+    { id: 'BRN-2026-4819', customer: 'Rahul Desai',    product: 'Mestia 100ml',           total: 'INR 1,795', status: 'Delivered' },
+    { id: 'BRN-2026-4818', customer: 'Sneha Kulkarni', product: 'Citrine Dusk 100ml',     total: 'INR 1,795', status: 'Confirmed' },
 ];
 const RECENT_ACTIVITY = [
-    { id: 1, text: "Order #BRN-2026-4821 placed by Arjun Mehta", time: "5 mins ago", icon: '📦' },
-    { id: 2, text: "Perfume 'Midnight Glammer' 100ml went out of stock", time: "1 hour ago", icon: '⚠️' },
-    { id: 3, text: "New staff login from admin@brunati.com", time: "2 hours ago", icon: '🔐' },
-    { id: 4, text: "Customer Priya Sharma updated her shipping address", time: "4 hours ago", icon: '👤' },
-    { id: 5, text: "Payment of ₹1,795 received for Order #BRN-2026-4819", time: "6 hours ago", icon: '💰' },
+    { id: 1, text: "Order #BRN-2026-4821 placed by Arjun Mehta", time: "5 mins ago", icon: <ShoppingCart size={18} color="#1d1d1f" /> },
+    { id: 2, text: "Perfume 'Midnight Glammer' 100ml went out of stock", time: "1 hour ago", icon: <AlertTriangle size={18} color="#DC2626" /> },
+    { id: 3, text: "New staff login from admin@brunati.com", time: "2 hours ago", icon: <ShieldCheck size={18} color="#16a34a" /> },
+    { id: 4, text: "Customer Priya Sharma updated her shipping address", time: "4 hours ago", icon: <UserCheck size={18} color="#1d1d1f" /> },
+    { id: 5, text: "Payment of INR 1,795 received for Order #BRN-2026-4819", time: "6 hours ago", icon: <CreditCard size={18} color="#1d1d1f" /> },
 ];
 
-/* ─── Component ─── */
+/* --- Component --- */
 const Summary = () => {
     const [loading, setLoading] = useState(false);
     const [viewMode, setViewMode] = useState(window.innerWidth <= 768 ? 'mobile' : 'desktop');
@@ -81,7 +83,7 @@ const Summary = () => {
                 {/* CARD 1: Today's sales */}
                 <div className="metric-card">
                     <p className="card-label">Today's sales</p>
-                    <p className="card-value">₹ 42,000</p>
+                    <p className="card-value">INR 42,000</p>
                     <p className="card-meta">Collected from 5 orders</p>
                 </div>
 

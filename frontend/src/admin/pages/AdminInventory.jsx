@@ -120,7 +120,7 @@ const AdminInventory = () => {
                                         {p.stock < 5 ? (p.stock === 0 ? <span style={{color: '#dc2626', fontWeight: 600}}>Out of Stock</span> : <span style={{color: '#ea580c', fontWeight: 600}}>Low Stock ({p.stock})</span>) : `${p.stock} in stock`}
                                     </td>
                                 )}
-                                <td style={{ padding: '8px 16px', fontSize: '0.85rem', color: '#4b5563' }}>₹{p.price.toLocaleString()}</td>
+                                <td style={{ padding: '8px 16px', fontSize: '0.85rem', color: '#4b5563' }}>INR {p.price.toLocaleString()}</td>
                                 <td style={{ padding: '8px 16px', textAlign: 'right' }}>
                                     <Link to={`/management-portal/inventory/edit/${p.id}`} state={{ product: p }} style={{
                                         display: 'inline-block', textDecoration: 'none', color: '#2563eb', fontWeight: 500, fontSize: '0.85rem', cursor: 'pointer', padding: '10px'

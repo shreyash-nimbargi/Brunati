@@ -5,7 +5,6 @@ const StorefrontContext = createContext();
 export const useStorefront = () => useContext(StorefrontContext);
 
 export const StorefrontProvider = ({ children }) => {
-    // Initial data matching the original hardcoded landing page
     const defaultTopPhotos = [
         { id: 1, title: 'MISTIA', subtitle: 'An ethereal and captivating blend', image: '' },
         { id: 2, title: 'DOMINUS', subtitle: 'Commanding and powerful presence', image: '' },
@@ -74,7 +73,6 @@ export const StorefrontProvider = ({ children }) => {
     const [inventoryProducts, setInventoryProducts] = useState(() => getInitialState('sf_inventory', defaultInventory));
     const [orders, setOrders] = useState(() => getInitialState('sf_orders', defaultOrders));
 
-    // Effect: Hide archived products from collections
     useEffect(() => {
         const archivedIds = inventoryProducts.filter(p => p.status === 'Archived').map(p => p.id);
         let collectionsChanged = false;
@@ -87,7 +85,6 @@ export const StorefrontProvider = ({ children }) => {
         if (collectionsChanged) setCollections(newCollections);
     }, [inventoryProducts]);
 
-    // Effect: Decrement stock on Paid/Fulfilled orders and auto-mark Out of Stock
     useEffect(() => {
         let inventoryChanged = false;
         const newInventory = [...inventoryProducts];
@@ -105,7 +102,6 @@ export const StorefrontProvider = ({ children }) => {
         });
 
         newInventory.forEach((p, idx) => {
-            // Auto out-of-stock check
             if (p.stock === 0 && p.status !== 'Out of Stock' && p.status !== 'Archived') {
                 newInventory[idx] = { ...p, status: 'Out of Stock' };
                 inventoryChanged = true;
@@ -116,7 +112,6 @@ export const StorefrontProvider = ({ children }) => {
             setInventoryProducts(newInventory);
         }
         
-        // We ensure we save the 'stockDecremented' flag
         if (JSON.stringify(newOrders) !== JSON.stringify(orders)) {
             setOrders(newOrders);
         }

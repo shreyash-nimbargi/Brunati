@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ProductCard from '../product/ProductCard';
 import { productsData } from '../../data/products';
-<<<<<<< Updated upstream
-
-const Collections = () => {
-=======
 import { useCart } from '../../context/CartContext';
 import { useStorefront } from '../../context/StorefrontContext';
 
@@ -12,12 +9,11 @@ const Collections = () => {
     const navigate = useNavigate();
     const { addToCart } = useCart();
     const { collections: collectionsRows } = useStorefront();
->>>>>>> Stashed changes
     const [activeTab, setActiveTab] = useState('him');
     const [sliderIndex, setSliderIndex] = useState(0);
     const [selectedSize, setSelectedSize] = useState('50ML');
 
-    const currentTabProducts = collectionsRows[activeTab];
+    const currentTabProducts = collectionsRows ? collectionsRows[activeTab] || [] : [];
 
     // Reset slider index when tab changes
     React.useEffect(() => {
@@ -25,7 +21,7 @@ const Collections = () => {
     }, [activeTab]);
 
     const getProductInfo = (id) => {
-        const p = productsData[id];
+        const p = productsData[id] || productsData['dominus'];
         return {
             id,
             name: p.name,
@@ -38,19 +34,23 @@ const Collections = () => {
             topNotes: p.topNotes,
             middleNotes: p.middleNotes,
             baseNotes: p.baseNotes,
-            gender: p.badge.split(' • ')[0]
+            gender: p.badge ? p.badge.split(' • ')[0] : 'Unisex'
         };
     };
 
     const nextSlide = () => {
+        if (currentTabProducts.length === 0) return;
         setSliderIndex((prev) => (prev + 1) % currentTabProducts.length);
     };
 
     const prevSlide = () => {
+        if (currentTabProducts.length === 0) return;
         setSliderIndex((prev) => (prev - 1 + currentTabProducts.length) % currentTabProducts.length);
     };
 
-    const currentProduct = getProductInfo(currentTabProducts[sliderIndex]);
+    const currentProduct = currentTabProducts.length > 0 ? getProductInfo(currentTabProducts[sliderIndex]) : null;
+
+    if (!currentProduct && currentTabProducts.length > 0) return null;
 
     return (
         <section className="content-wrap">
@@ -79,86 +79,88 @@ const Collections = () => {
             </div>
 
             {/* Desktop Slider View */}
-            <div className="product-slider-desktop">
-                <div className="slider-side-nav">
-                    <button className="side-nav-btn" onClick={prevSlide}>
-                        <svg width="20" height="34" viewBox="0 0 24 40" fill="none" stroke="#e74c3c" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 2 2 20 20 38"></polyline></svg>
-                    </button>
-                    <button className="side-nav-btn" onClick={nextSlide}>
-                        <svg width="20" height="34" viewBox="0 0 24 40" fill="none" stroke="#e74c3c" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 2 22 20 4 38"></polyline></svg>
-                    </button>
-                </div>
-
-                <div className="slider-main-container">
-                    <div className="slider-img-wrap">
-                        <img 
-                            src={currentProduct.img1} 
-                            alt={currentProduct.name} 
-                            className="slider-img" 
-                            key={currentProduct.id}
-                        />
+            {currentProduct && (
+                <div className="product-slider-desktop">
+                    <div className="slider-side-nav">
+                        <button className="side-nav-btn" onClick={prevSlide}>
+                            <svg width="20" height="34" viewBox="0 0 24 40" fill="none" stroke="#e74c3c" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 2 2 20 20 38"></polyline></svg>
+                        </button>
+                        <button className="side-nav-btn" onClick={nextSlide}>
+                            <svg width="20" height="34" viewBox="0 0 24 40" fill="none" stroke="#e74c3c" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 2 22 20 4 38"></polyline></svg>
+                        </button>
                     </div>
 
-                    <div className="slider-info-col">
-                        <div className="slider-title-row" style={{ display: 'flex', alignItems: 'center' }}>
-                            <h2 className="slider-title">{currentProduct.name}</h2>
-                            <span className="slider-divider" style={{ margin: '0 8px' }}>\</span>
-                            <div style={{ display: 'inline-flex', alignItems: 'baseline' }}>
-                                <span className="slider-category" style={{ marginRight: 0 }}>
-                                    {{
-                                        'him': 'Men',
-                                        'her': 'Women',
-                                        'gift': 'Unisex',
-                                        'unisex': 'Unisex'
-                                    }[activeTab] || currentProduct.gender}
-                                </span>
-                                <div className="red-dot" style={{width: '6px', height: '6px', background: '#D22B2B', borderRadius: '50%', marginLeft: '4px', transform: 'translateY(0px)'}}></div>
-                            </div>
+                    <div className="slider-main-container">
+                        <div className="slider-img-wrap" onClick={() => navigate(`/product/${currentProduct.id}`)} style={{ cursor: 'pointer' }}>
+                            <img 
+                                src={currentProduct.img1} 
+                                alt={currentProduct.name} 
+                                className="slider-img" 
+                                key={currentProduct.id}
+                            />
                         </div>
 
-                        <div className="slider-rating">
-                            <div className="stars">★★★★★</div>
-                            <span className="review-text-link">16 reviews</span>
-                        </div>
-
-                        <p className="slider-description">
-                            {currentProduct.description}
-                        </p>
-
-                        <div className="slider-notes-grid">
-                            <div className="slider-note-item">
-                                <h4>Introduction:</h4>
-                                <p>{currentProduct.topNotes && currentProduct.topNotes.replace(/,\s*/g, '/')}</p>
+                        <div className="slider-info-col">
+                            <div className="slider-title-row" style={{ display: 'flex', alignItems: 'center' }}>
+                                <h2 className="slider-title">{currentProduct.name}</h2>
+                                <span className="slider-divider" style={{ margin: '0 8px' }}>\</span>
+                                <div style={{ display: 'inline-flex', alignItems: 'baseline' }}>
+                                    <span className="slider-category" style={{ marginRight: 0 }}>
+                                        {{
+                                            'him': 'Men',
+                                            'her': 'Women',
+                                            'gift': 'Unisex',
+                                            'unisex': 'Unisex'
+                                        }[activeTab] || currentProduct.gender}
+                                    </span>
+                                    <div className="red-dot" style={{width: '6px', height: '6px', background: '#D22B2B', borderRadius: '50%', marginLeft: '4px', transform: 'translateY(0px)'}}></div>
+                                </div>
                             </div>
-                            <div className="slider-note-item">
-                                <h4>Discovery:</h4>
-                                <p>{(currentProduct.middleNotes || "Floral Symphony").replace(/,\s*/g, '/')}</p>
-                            </div>
-                            <div className="slider-note-item">
-                                <h4>Impression:</h4>
-                                <p>{currentProduct.baseNotes.split(',').slice(0,2).join('/')}</p>
-                            </div>
-                        </div>
 
-                        <div className="slider-size-row">
-                            {['50ML', '100ML'].map(size => (
-                                <button 
-                                    key={size} 
-                                    className={`slider-size-btn ${selectedSize.toLowerCase() === size.toLowerCase() ? 'active' : ''}`}
-                                    onClick={() => setSelectedSize(size)}
-                                >
-                                    {size}
-                                </button>
-                            ))}
-                        </div>
+                            <div className="slider-rating">
+                                <div className="stars">★★★★★</div>
+                                <span className="review-text-link">16 reviews</span>
+                            </div>
 
-                        <div className="slider-add-bar">
-                            <span>Add to cart</span>
-                            <span>{currentProduct.price}</span>
+                            <p className="slider-description">
+                                {currentProduct.description}
+                            </p>
+
+                            <div className="slider-notes-grid">
+                                <div className="slider-note-item">
+                                    <h4>Introduction:</h4>
+                                    <p>{currentProduct.topNotes && currentProduct.topNotes.replace(/,\s*/g, '/')}</p>
+                                </div>
+                                <div className="slider-note-item">
+                                    <h4>Discovery:</h4>
+                                    <p>{(currentProduct.middleNotes || "Floral Symphony").replace(/,\s*/g, '/')}</p>
+                                </div>
+                                <div className="slider-note-item">
+                                    <h4>Impression:</h4>
+                                    <p>{currentProduct.baseNotes.split(',').slice(0,2).join('/')}</p>
+                                </div>
+                            </div>
+
+                            <div className="slider-size-row">
+                                {['50ML', '100ML'].map(size => (
+                                    <button 
+                                        key={size} 
+                                        className={`slider-size-btn ${selectedSize.toLowerCase() === size.toLowerCase() ? 'active' : ''}`}
+                                        onClick={() => setSelectedSize(size)}
+                                    >
+                                        {size}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <div className="slider-add-bar" onClick={() => navigate(`/product/${currentProduct.id}`)} style={{ cursor: 'pointer' }}>
+                                <span>Learn more</span>
+                                <span>{currentProduct.price}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            )}
 
             {/* Mobile Grid View */}
             <div className="category-view active mobile-only-grid">
@@ -166,6 +168,9 @@ const Collections = () => {
                     {currentTabProducts.map(id => (
                         <ProductCard key={id} {...getProductInfo(id)} />
                     ))}
+                    {currentTabProducts.length === 0 && (
+                        <p style={{ gridColumn: 'span 2', textAlign: 'center', padding: '40px', color: '#6B7280' }}>No products in this category.</p>
+                    )}
                 </div>
             </div>
         </section>
