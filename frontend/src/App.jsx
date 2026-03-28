@@ -4,6 +4,9 @@ import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import Home from './pages/Home';
 import ProductDetail from './pages/ProductDetail';
+<<<<<<< Updated upstream
+import Admin from './pages/Admin';
+=======
 import Signin from './pages/Signin';
 import Signup from './pages/Signup';
 import CartPage from './pages/CartPage';
@@ -15,6 +18,7 @@ import { AuthProvider } from './context/AuthContext';
 import { StorefrontProvider } from './context/StorefrontContext';
 import AdminLayout from './admin/AdminLayout.jsx';
 import AdminLogin from './admin/pages/AdminLogin.jsx';
+>>>>>>> Stashed changes
 
 function App() {
   React.useEffect(() => {
@@ -49,6 +53,17 @@ function App() {
 
   return (
     <Router>
+<<<<<<< Updated upstream
+      <div className="App">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/admin" element={<Admin />} />
+        </Routes>
+        <Footer />
+      </div>
+=======
       <StorefrontProvider>
         <AuthProvider>
           <CartProvider>
@@ -87,6 +102,7 @@ function App() {
           </CartProvider>
         </AuthProvider>
       </StorefrontProvider>
+>>>>>>> Stashed changes
     </Router>
   );
 }
