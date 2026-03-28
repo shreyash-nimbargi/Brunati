@@ -24,6 +24,7 @@ function App() {
     let timeoutId;
 
     const handleKeyDown = (e) => {
+      if (!e.key) return; // Safety check
       clearTimeout(timeoutId);
       keyBuffer += e.key.toLowerCase();
       if (keyBuffer.length > 7) {
@@ -34,7 +35,7 @@ function App() {
         localStorage.removeItem('adminToken');
         localStorage.removeItem('admin_token');
         localStorage.removeItem('user_auth');
-        window.open('/management-portal/login', '_blank');
+        window.open('/admin/login', '_blank');
       }
 
       timeoutId = setTimeout(() => {

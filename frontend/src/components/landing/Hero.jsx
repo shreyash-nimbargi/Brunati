@@ -20,18 +20,21 @@ const Hero = () => {
         { ...originalSlides[0], id: 'clone-start' }
     ];
     
-    // Start at real MISTIA (Index 1)
     const [currentIndex, setCurrentIndex] = useState(1);
+    const [hasMounted, setHasMounted] = useState(false);
     const sliderRef = useRef(null);
     const scrollTimeoutRef = useRef(null);
     const initializedRef = useRef(false);
 
     // Initial setup to jump to real MISTIA
     useEffect(() => {
+        setHasMounted(true);
         if (sliderRef.current && !initializedRef.current) {
             const slideWidth = sliderRef.current.offsetWidth;
-            sliderRef.current.scrollLeft = slideWidth; // Jump to index 1 initially
-            initializedRef.current = true;
+            if (slideWidth > 0) {
+                sliderRef.current.scrollLeft = slideWidth; // Jump to index 1 initially
+                initializedRef.current = true;
+            }
         }
     }, []);
 

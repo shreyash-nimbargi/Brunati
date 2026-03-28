@@ -6,6 +6,7 @@ const ScentArt = () => {
     const scrollRef = useRef(null);
     const navigate = useNavigate();
     const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchAllProducts = async () => {
@@ -16,6 +17,8 @@ const ScentArt = () => {
                 }
             } catch (err) {
                 console.error('ScentArt fetch error:', err);
+            } finally {
+                setLoading(false);
             }
         };
         fetchAllProducts();
@@ -71,22 +74,38 @@ const ScentArt = () => {
             
             <div className="scent-carousel-base" ref={scrollRef}>
                 <div className="scent-track">
-                    {displayProducts.map((product, idx) => {
-                        const imgPath = product.images?.[0]?.startsWith('http') || product.images?.[0]?.startsWith('/') 
-                            ? product.images[0] 
-                            : `/${product.images[0]}`;
-                        
-                        return (
-                            <div 
-                                key={`${product._id}-${idx}`} 
-                                className="scent-slide-wrapper" 
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => navigate(`/product/${product.slug}`)}
-                            >
-                                <img src={imgPath} className="scent-slide-img" alt={product.name} />
-                            </div>
-                        );
-                    })}
+                    {products.length > 0 ? (
+                        displayProducts.map((product, idx) => {
+                            const imgPath = product.images?.[0]?.startsWith('http') || product.images?.[0]?.startsWith('/') 
+                                ? product.images[0] 
+                                : `/${product.images[0]}`;
+                            
+                            return (
+                                <div 
+                                    key={`${product._id || idx}-${idx}`} 
+                                    className="scent-slide-wrapper" 
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={() => navigate(`/product/${product.slug}`)}
+                                >
+                                    <img src={imgPath} className="scent-slide-img" alt={product.name} />
+                                </div>
+                            );
+                        })
+                    ) : (
+                        <div style={{
+                            width: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '80px 0',
+                            color: '#86868b',
+                            fontSize: '0.9rem',
+                            letterSpacing: '0.1em',
+                            textTransform: 'uppercase'
+                        }}>
+                            {loading ? "Preparing our masterpieces..." : "New artistic expressions coming soon."}
+                        </div>
+                    )}
                 </div>
             </div>
         </section>

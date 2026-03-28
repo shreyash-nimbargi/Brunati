@@ -67,7 +67,7 @@ const Collections = () => {
     if (error) return <div className="text-center py-10 text-red-500">{error}</div>;
 
     const currentTabProducts = productsByTab[activeTab] || [];
-    if (currentTabProducts.length === 0) return null;
+    // if (currentTabProducts.length === 0) return null; // MOVED: Replaced with an inline message below to prevent page from looking blank
 
     const getProductInfo = (p) => {
         if (!p) return {};
@@ -98,6 +98,30 @@ const Collections = () => {
 
     const currentProduct = getProductInfo(currentTabProducts[sliderIndex]);
 
+
+    if (currentTabProducts.length === 0) {
+        return (
+            <section className="content-wrap">
+                <div className="section-header">
+                    <h2 className="section-title">Luxury Collections</h2>
+                    <div className="tabs">
+                        {['him', 'her', 'gift'].map(tab => (
+                            <button 
+                                key={tab}
+                                className={`tab-btn ${activeTab === tab ? 'active' : ''}`} 
+                                onClick={() => setActiveTab(tab)}
+                            >
+                                {tab === 'him' ? 'For Him' : tab === 'her' ? 'For Her' : 'Unisex'}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+                <div style={{ padding: '100px 0', textAlign: 'center', color: '#6e6e73', fontSize: '1.1rem' }}>
+                    Discover our {activeTab === 'gift' ? 'Unisex' : activeTab === 'him' ? 'For Him' : 'For Her'} collection soon.
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section className="content-wrap">

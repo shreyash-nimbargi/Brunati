@@ -15,9 +15,12 @@ const CheckoutRoute = () => {
         const validateAccessAndCheckAuth = async () => {
             // 1. Check if the user is following proper steps (clicked a button)
             const hasValidState = state.fromCheckout || state.isDirectBuy;
+            // Check if we have items OR if it's a direct buy (which doesn't use the cart)
             const hasItems = cartItems.length > 0 || state.isDirectBuy;
 
-            if (!hasValidState || !hasItems) {
+            // Only redirect if they have NO items AND it's not a direct buy
+            // AND we haven't already authorized them (to prevent kick-out after success)
+            if (!hasItems && !isAuthorized) {
                 navigate('/cart', { replace: true });
                 return;
             }
