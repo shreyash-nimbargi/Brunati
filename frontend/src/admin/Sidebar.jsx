@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, ShoppingCart, Package, Users, LogOut } from 'lucide-react';
+import { LayoutDashboard, ShoppingCart, Package, Users, LogOut, ChevronLeft, ChevronRight } from 'lucide-react';
 import useAdminAuth from './hooks/useAdminAuth';
 
-const Sidebar = ({ isOpen, onClose }) => {
+const Sidebar = ({ isOpen, onClose, isExpanded, onToggleExpand, isMobile }) => {
     const FONT_ROBOTO = '"Roboto", sans-serif';
 
     const location = useLocation();
@@ -13,10 +13,10 @@ const Sidebar = ({ isOpen, onClose }) => {
     const [hoveredPath, setHoveredPath] = useState(null);
 
     const menuItems = [
-        { name: 'Overview', path: '/admin/dashboard', icon: LayoutDashboard, pathsPrefix: '/admin/dashboard' },
-        { name: 'Orders', path: '/admin/orders', icon: ShoppingCart, pathsPrefix: '/admin/orders' },
-        { name: 'Inventory', path: '/admin/inventory', icon: Package, pathsPrefix: '/admin/inventory' },
+        { name: 'Sales', path: '/admin/orders', icon: ShoppingCart, pathsPrefix: '/admin/orders' },
+        { name: 'My Items', path: '/admin/inventory', icon: Package, pathsPrefix: '/admin/inventory' },
         { name: 'Customers', path: '/admin/customers', icon: Users, pathsPrefix: '/admin/customers' },
+        { name: 'Edit Site', path: '/admin/editsite', icon: LayoutDashboard, pathsPrefix: '/admin/editsite' },
     ];
 
     const handleLogout = () => {
@@ -32,19 +32,20 @@ const Sidebar = ({ isOpen, onClose }) => {
 
     return (
         <aside style={{
-            width: '240px',
+            width: isExpanded ? '256px' : '80px',
             background: '#ffffff',
             borderRight: '1px solid #EEEEEE',
             height: '100vh',
             position: 'fixed',
-            left: isOpen ? 0 : '-240px',
+            left: isOpen ? 0 : (isExpanded ? '-256px' : '-80px'),
             top: 0,
             zIndex: 50,
-            transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
             display: 'flex',
             flexDirection: 'column',
             padding: '40px 0',
             boxShadow: isOpen ? '4px 0 24px rgba(0,0,0,0.05)' : 'none',
+            overflowX: 'hidden'
         }}>
             
             {/* Log out Toast Wrapper Context */}
@@ -57,19 +58,52 @@ const Sidebar = ({ isOpen, onClose }) => {
                     {toast}
                 </div>
             )}
-            {/* "Admin panel" Heading: Sans-serif + Sentence case */}
-            <div style={{ padding: '0 24px 48px' }}>
-                <h1 style={{
-                    fontFamily: FONT_ROBOTO,
-                    fontSize: '1.4rem',
-                    fontWeight: 700,
-                    margin: 0,
-                    textTransform: 'none',
-                    letterSpacing: 'normal',
-                    color: '#000000'
+            {/* Admin Header Title in Sidebar */}
+            <div style={{ padding: isExpanded ? '0 24px 32px' : '0 0 24px', position: 'relative' }}>
+                <div style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: isExpanded ? 'space-between' : 'center', 
+                    width: '100%',
+                    minHeight: '32px'
                 }}>
-                    Admin panel
-                </h1>
+                    {isExpanded && (
+                        <h1 style={{
+                            fontFamily: FONT_ROBOTO,
+                            fontSize: '1.25rem',
+                            fontWeight: 700,
+                            margin: 0,
+                            color: '#000',
+                            letterSpacing: '-0.02em'
+                        }}>
+                            Admin Access
+                        </h1>
+                    )}
+                    
+                    {!isMobile && (
+                        <button 
+                            onClick={onToggleExpand} 
+                            style={{ 
+                                background: '#f5f5f7', 
+                                border: 'none', 
+                                cursor: 'pointer', 
+                                borderRadius: '50%',
+                                width: '28px',
+                                height: '28px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                transition: 'background 0.2s',
+                                position: isExpanded ? 'relative' : 'absolute',
+                                right: isExpanded ? '0' : 'auto'
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.background = '#e8e8ed'}
+                            onMouseLeave={e => e.currentTarget.style.background = '#f5f5f7'}
+                        >
+                            {isExpanded ? <ChevronLeft size={16} color="#666" /> : <ChevronRight size={16} color="#666" />}
+                        </button>
+                    )}
+                </div>
             </div>
 
             <nav style={{ flex: 1 }}>
@@ -87,7 +121,8 @@ const Sidebar = ({ isOpen, onClose }) => {
                             style={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                padding: '14px 24px',
+                                justifyContent: isExpanded ? 'flex-start' : 'center',
+                                padding: isExpanded ? '14px 24px' : '14px 0',
                                 color: isActive ? '#000000' : '#666666',
                                 backgroundColor: isHovered && !isActive ? '#f9fafb' : 'transparent',
                                 textDecoration: 'none',
@@ -96,31 +131,33 @@ const Sidebar = ({ isOpen, onClose }) => {
                                 fontWeight: isActive ? 500 : 400,
                                 borderLeft: isActive ? '2px solid #000000' : '2px solid transparent',
                                 transition: 'all 0.15s ease-in-out',
-                                gap: '14px'
+                                gap: isExpanded ? '14px' : '0'
                             }}
+                            title={!isExpanded ? item.name : ''}
                         >
-                            <item.icon size={18} strokeWidth={isActive ? 2.5 : 2} />
-                            <span style={{ marginTop: '2px' }}>{item.name}</span>
+                            <item.icon size={20} className="shrink-0" strokeWidth={isActive ? 2.5 : 2} style={{ margin: isExpanded ? '0' : 'auto' }} />
+                            {isExpanded && <span style={{ marginTop: '2px', whiteSpace: 'nowrap' }}>{item.name}</span>}
                         </NavLink>
                     );
                 })}
             </nav>
 
-            {/* Logout Action */}
-            <div style={{ padding: '0 24px' }}>
+            {/* Exit Action */}
+            <div style={{ padding: isExpanded ? '0 24px' : '0' }}>
                 <button 
                     onClick={handleLogout}
+                    title={!isExpanded ? "Exit" : ""}
                     onMouseEnter={() => setHoveredPath('logout')}
                     onMouseLeave={() => setHoveredPath(null)}
                     style={{
-                        display: 'flex', width: '100%', alignItems: 'center', gap: '14px', padding: '14px',
+                        display: 'flex', width: '100%', alignItems: 'center', justifyContent: isExpanded ? 'flex-start' : 'center', gap: isExpanded ? '14px' : '0', padding: isExpanded ? '14px' : '14px 0',
                         color: '#666666', backgroundColor: hoveredPath === 'logout' ? '#fef2f2' : 'transparent',
                         border: 'none', borderRadius: '6px', fontSize: '14px', fontFamily: FONT_ROBOTO, 
                         fontWeight: 400, cursor: 'pointer', transition: 'all 0.15s ease-in-out', textAlign: 'left'
                     }}
                 >
-                    <LogOut size={18} strokeWidth={2} style={{ color: hoveredPath === 'logout' ? '#ef4444' : '#666666', transition: 'color 0.15s' }} />
-                    <span style={{ marginTop: '2px', color: hoveredPath === 'logout' ? '#ef4444' : '#666666', transition: 'color 0.15s' }}>Logout</span>
+                    <LogOut size={20} strokeWidth={2} style={{ color: hoveredPath === 'logout' ? '#ef4444' : '#666666', transition: 'color 0.15s', margin: isExpanded ? '0' : 'auto' }} />
+                    {isExpanded && <span style={{ marginTop: '2px', color: hoveredPath === 'logout' ? '#ef4444' : '#666666', transition: 'color 0.15s', whiteSpace: 'nowrap' }}>Exit</span>}
                 </button>
             </div>
 

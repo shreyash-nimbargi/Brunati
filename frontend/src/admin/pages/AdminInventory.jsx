@@ -1,40 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { productService } from '../../services/productService';
 
 const FONT = '"Roboto", sans-serif';
 
-const ALL_PRODUCTS = [
-    { id: 'BRN-101', name: 'Dominus Emperor',    price: 1795, stock: 24, image: '/media/dominus/1.png', status: 'Active' },
-    { id: 'BRN-102', name: 'Brunati Aqua',       price: 1795, stock: 3,  image: '/media/aqua/1.png',    status: 'Active' },
-    { id: 'BRN-103', name: 'Mestia',             price: 1795, stock: 32, image: '/media/mistia/1.png',  status: 'Draft' },
-    { id: 'BRN-104', name: 'Citrine Dusk',       price: 1795, stock: 0,  image: '/media/dusk/1.png',    status: 'Archived' },
-    { id: 'BRN-105', name: 'Midnight Glammer',   price: 1795, stock: 9,  image: '/media/midnight/1.png',status: 'Active' },
-];
-
 const AdminInventory = () => {
-    const [products, setProducts] = useState(ALL_PRODUCTS);
-    const [searchQuery, setSearchQuery] = useState('');
+    const location = useLocation();
+    const [products, setProducts] = useState([]);
+    const [searchQuery, setSearchQuery] = useState(location.state?.filterCategory || '');
     const [viewMode, setViewMode] = useState(window.innerWidth <= 768 ? 'mobile' : 'desktop');
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const handleResize = () => setViewMode(window.innerWidth <= 768 ? 'mobile' : 'desktop');
         window.addEventListener('resize', handleResize);
+        fetchProducts();
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const filteredProducts = products.filter(p => {
-        return p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-               p.id.toLowerCase().includes(searchQuery.toLowerCase());
-    });
-
-    const getStatusBadgeStyle = (status) => {
-        switch(status) {
-            case 'Active': return { background: '#dcfce7', color: '#166534' };
-            case 'Archived': return { background: '#fef3c7', color: '#92400e' };
-            case 'Draft':
-            default: return { background: '#f3f4f6', color: '#374151' };
+    const fetchProducts = async () => {
+        setLoading(true);
+        try {
+            const res = await productService.getAllProducts();
+            if (res.status && res.data) {
+                const data = res.data.luxury_collection || res.data.luxury || (Array.isArray(res.data) ? res.data : []);
+                setProducts(data);
+            }
+        } catch (err) {
+            console.error('Inventory fetch error:', err);
+        } finally {
+            setLoading(false);
         }
     };
+
+    const filteredProducts = products.filter(p => {
+        const search = searchQuery.toLowerCase();
+        return p.name.toLowerCase().includes(search) || 
+               p.category?.toLowerCase() === search ||
+               p._id?.toLowerCase().includes(search);
+    });
 
     return (
         <div style={{ fontFamily: FONT, width: '100%', animation: 'fadeIn 0.3s ease-in-out' }}>
@@ -100,33 +104,34 @@ const AdminInventory = () => {
                     </thead>
                     <tbody>
                         {filteredProducts.length > 0 ? filteredProducts.map((p, idx) => (
-                            <tr key={p.id} style={{ borderBottom: idx === filteredProducts.length - 1 ? 'none' : '1px solid #e5e7eb', transition: 'background-color 0.15s' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f9fafb'} onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}>
+                            <tr key={p._id} style={{ borderBottom: idx === filteredProducts.length - 1 ? 'none' : '1px solid #e5e7eb', transition: 'background-color 0.15s' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f9fafb'} onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}>
                                 <td style={{ padding: '8px 16px' }}>
                                     <div style={{ width: 40, height: 40, border: '1px solid #e5e7eb', borderRadius: 4, background: '#f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                                        <img src={p.image} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                                        <img src={p.images?.[0]?.startsWith('http') ? p.images[0] : (p.images?.[0] ? `/${p.images[0]}` : '/placeholder.png')} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                                     </div>
                                 </td>
                                 <td style={{ padding: '8px 16px' }}>
                                     <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#111827' }}>{p.name}</div>
+                                    <div style={{ fontSize: '11px', color: '#9ca3af' }}>{p.category}</div>
                                 </td>
                                 {viewMode === 'desktop' && (
                                     <td style={{ padding: '8px 16px' }}>
                                         <span style={{ 
-                                            ...getStatusBadgeStyle(p.status),
-                                            padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 500, display: 'inline-flex', alignItems: 'center', justifyContent: 'center'
+                                            padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 500, display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                                            background: p.isActive ? '#dcfce7' : '#f3f4f6', color: p.isActive ? '#166534' : '#374151'
                                         }}>
-                                            {p.status}
+                                            {p.isActive ? 'Active' : 'Draft'}
                                         </span>
                                     </td>
                                 )}
                                 {viewMode === 'desktop' && (
-                                    <td style={{ padding: '8px 16px', fontSize: '0.85rem', color: p.stock < 5 ? '#ef4444' : '#4b5563', fontWeight: p.stock < 5 ? 600 : 400 }}>
-                                        {p.stock} in stock
+                                    <td style={{ padding: '8px 16px', fontSize: '0.85rem', color: '#4b5563' }}>
+                                        {p.sizes?.[0]?.stock || 0} in stock
                                     </td>
                                 )}
-                                <td style={{ padding: '8px 16px', fontSize: '0.85rem', color: '#4b5563' }}>₹{p.price.toLocaleString()}</td>
+                                <td style={{ padding: '8px 16px', fontSize: '0.85rem', color: '#4b5563' }}>₹{p.sizes?.[0]?.price?.toLocaleString() || '0'}</td>
                                 <td style={{ padding: '8px 16px', textAlign: 'right' }}>
-                                    <Link to={`/admin/inventory/edit/${p.id}`} state={{ product: p }} style={{
+                                    <Link to={`/admin/inventory/edit/${p._id}`} state={{ product: p }} style={{
                                         display: 'inline-block', textDecoration: 'none', color: '#2563eb', fontWeight: 500, fontSize: '0.85rem', cursor: 'pointer', padding: '10px'
                                     }}>
                                         Edit

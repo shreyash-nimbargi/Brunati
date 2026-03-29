@@ -54,8 +54,8 @@ const Summary = () => {
                 display: 'flex', justifyContent: 'space-between', alignItems: 'center' 
             }}>
                 <div style={{ paddingRight: 20 }}>
-                    <h1 style={{ fontFamily: FONT, fontSize: '1.4rem', fontWeight: 700, color: '#1d1d1f', margin: 0, textTransform: 'none', letterSpacing: 'normal' }}>Store summary</h1>
-                    <p style={{ fontSize: '0.85rem', color: '#6e6e73', marginTop: 4, fontWeight: 400 }}>An overview of how your business is doing.</p>
+                    <h1 style={{ fontFamily: FONT, fontSize: '1.4rem', fontWeight: 700, color: '#000', margin: 0, textTransform: 'none', letterSpacing: 'normal' }}>Sales</h1>
+                    <p style={{ fontSize: '0.85rem', color: '#6e6e73', marginTop: 4, fontWeight: 400 }}>Analytics Overview</p>
                 </div>
                 <button 
                     onClick={handleRefresh}
@@ -114,7 +114,7 @@ const Summary = () => {
                 marginBottom: 40, overflow: 'hidden'
             }}>
                 <div style={{ marginBottom: 24 }}>
-                    <h2 style={{ fontFamily: FONT, fontSize: '1.1rem', fontWeight: 500, margin: 0, color: '#111', textTransform: 'none', letterSpacing: 'normal' }}>Sales trend</h2>
+                    <h2 style={{ fontFamily: FONT, fontSize: '1.1rem', fontWeight: 700, margin: 0, color: '#000', textTransform: 'none', letterSpacing: 'normal' }}>Sales trend</h2>
                     <p style={{ fontSize: '0.78rem', color: '#6e6e73', marginTop: 4 }}>Last 7 days earnings</p>
                 </div>
 
@@ -165,7 +165,7 @@ const Summary = () => {
 
             {/* Recent Activity Feed */}
             <div style={{ background: '#fff', border: '1px solid #eee', padding: '24px' }}>
-                <h2 style={{ fontFamily: FONT, fontSize: '1rem', fontWeight: 500, marginBottom: 20, color: '#111', textTransform: 'none', letterSpacing: 'normal' }}>Recent activity</h2>
+                <h2 style={{ fontFamily: FONT, fontSize: '1.1rem', fontWeight: 700, marginBottom: 20, color: '#000', textTransform: 'none', letterSpacing: 'normal' }}>Recent activity</h2>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
                     {RECENT_ACTIVITY.map((activity, i) => (
                         <div key={activity.id} style={{

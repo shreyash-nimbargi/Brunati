@@ -4,9 +4,12 @@ import ProductCard from '../product/ProductCard';
 import { useCart } from '../../context/CartContext';
 import { productService } from '../../services/productService';
 
+import { useStorefront } from '../../context/StorefrontContext';
+
 const Collections = () => {
     const navigate = useNavigate();
     const { addToCart } = useCart();
+    const { categories, setCategories, fetchCategories } = useStorefront();
     const [activeTab, setActiveTab] = useState('him');
     const [sliderIndex, setSliderIndex] = useState(0);
     const [selectedSize, setSelectedSize] = useState('100ml');
@@ -14,24 +17,46 @@ const Collections = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // Dynamic labels from context
+    const labelMen = categories?.[0] || 'Men';
+    const labelWomen = categories?.[1] || 'Women';
+    const labelUnisex = categories?.[2] || 'Unisex';
+
     useEffect(() => {
         const fetchAndCategorize = async () => {
             try {
                 setLoading(true);
                 const response = await productService.getAllProducts();
                 if (response.status) {
-                    const allProducts = response.data;
+                    console.log("[Collections] API Response Data:", response.data);
+                    
+                    let allProducts = response.data?.luxury_collection || response.data?.luxury || [];
+                    
+                    // If no explicit luxury collection key, filter from global product array using new backend keys
+                    if (!allProducts || allProducts.length === 0) {
+                        const rawData = Array.isArray(response.data) ? response.data : [];
+                        allProducts = rawData.filter(p => p?.collectionType === 'luxury' || p?.isLuxury === true);
+                        
+                        // Fallback to basic categorizing if collectionType isn't found
+                        if (allProducts.length === 0) {
+                            allProducts = rawData;
+                        }
+                    }
+
                     const categorized = {
                         him: [],
                         her: [],
                         gift: []
                     };
 
-                    allProducts.forEach(p => {
-                        const cat = p.category?.toLowerCase() || '';
-                        if (cat.includes('women')) {
+                    allProducts?.forEach(p => {
+                        const cat = p?.category?.toLowerCase() || '';
+                        const type = p?.collectionType?.toLowerCase() || '';
+                        
+                        // Use collectionType if available, or fallback to category text matching
+                        if (cat.includes('women') || type === 'her') {
                             categorized.her.push(p);
-                        } else if (cat.includes('men')) {
+                        } else if (cat.includes('men') || type === 'him') {
                             categorized.him.push(p);
                         } else {
                             categorized.gift.push(p);
@@ -39,7 +64,7 @@ const Collections = () => {
                     });
                     
                     // Final fallback to populated tabs if some are empty but data exists
-                    if (allProducts.length > 0) {
+                    if (allProducts?.length > 0) {
                         if (categorized.him.length === 0) categorized.him = allProducts.slice(0, 3);
                         if (categorized.her.length === 0) categorized.her = allProducts.slice(3, 5);
                     }
@@ -72,19 +97,19 @@ const Collections = () => {
     const getProductInfo = (p) => {
         if (!p) return {};
         return {
-            id: p._id,
-            slug: p.slug,
-            name: p.name,
-            meta: `${p.category} • Extrait De Parfum`,
-            price: `₹ ${p.sizes?.[0]?.price || 0}.00`,
-            img1: p.images?.[0]?.startsWith('http') ? p.images[0] : `/${p.images?.[0]}`,
-            img2: p.images?.[1] ? (p.images[1].startsWith('http') ? p.images[1] : `/${p.images[1]}`) : (p.images?.[0]?.startsWith('http') ? p.images[0] : `/${p.images?.[0]}`),
-            accords: p.mainAccords,
-            description: p.description,
-            topNotes: p.perfumePyramid?.top?.join(', '),
-            middleNotes: p.perfumePyramid?.middle?.join(', '),
-            baseNotes: p.perfumePyramid?.base?.join(', '),
-            gender: p.category
+            id: p?._id,
+            slug: p?.slug,
+            name: p?.name,
+            meta: `${p?.category} • Extrait De Parfum`,
+            price: `₹ ${p?.sizes?.[0]?.price || 0}.00`,
+            img1: p?.images?.[0]?.startsWith('http') ? p?.images?.[0] : `/${p?.images?.[0]}`,
+            img2: p?.images?.[1] ? (p?.images?.[1]?.startsWith('http') ? p?.images?.[1] : `/${p?.images?.[1]}`) : (p?.images?.[0]?.startsWith('http') ? p?.images?.[0] : `/${p?.images?.[0]}`),
+            accords: p?.mainAccords,
+            description: p?.description,
+            topNotes: p?.perfumePyramid?.top?.join(', '),
+            middleNotes: p?.perfumePyramid?.middle?.join(', '),
+            baseNotes: p?.perfumePyramid?.base?.join(', '),
+            gender: p?.category
         };
     };
 
@@ -96,14 +121,14 @@ const Collections = () => {
         setSliderIndex((prev) => (prev - 1 + currentTabProducts.length) % currentTabProducts.length);
     };
 
-    const currentProduct = getProductInfo(currentTabProducts[sliderIndex]);
+    const currentProduct = getProductInfo(currentTabProducts?.[sliderIndex]);
 
 
-    if (currentTabProducts.length === 0) {
+    if (!currentTabProducts || currentTabProducts.length === 0) {
         return (
             <section className="content-wrap">
                 <div className="section-header">
-                    <h2 className="section-title">Luxury Collections</h2>
+                    <h2 className="section-title" style={{ fontFamily: '"Roboto", sans-serif', fontWeight: 700, textTransform: 'none' }}>Luxury Collections</h2>
                     <div className="tabs">
                         {['him', 'her', 'gift'].map(tab => (
                             <button 
@@ -111,13 +136,13 @@ const Collections = () => {
                                 className={`tab-btn ${activeTab === tab ? 'active' : ''}`} 
                                 onClick={() => setActiveTab(tab)}
                             >
-                                {tab === 'him' ? 'For Him' : tab === 'her' ? 'For Her' : 'Unisex'}
+                                {tab === 'him' ? labelMen : tab === 'her' ? labelWomen : labelUnisex}
                             </button>
                         ))}
                     </div>
                 </div>
                 <div style={{ padding: '100px 0', textAlign: 'center', color: '#6e6e73', fontSize: '1.1rem' }}>
-                    Discover our {activeTab === 'gift' ? 'Unisex' : activeTab === 'him' ? 'For Him' : 'For Her'} collection soon.
+                    Discover our {activeTab === 'gift' ? labelUnisex : activeTab === 'him' ? labelMen : labelWomen} collection soon.
                 </div>
             </section>
         );
@@ -126,25 +151,25 @@ const Collections = () => {
     return (
         <section className="content-wrap">
             <div className="section-header">
-                <h2 className="section-title">Luxury Collections</h2>
+                <h2 className="section-title" style={{ fontFamily: '"Roboto", sans-serif', fontWeight: 700, textTransform: 'none' }}>Luxury Collections</h2>
                 <div className="tabs">
                     <button 
                         className={`tab-btn ${activeTab === 'him' ? 'active' : ''}`} 
                         onClick={() => setActiveTab('him')}
                     >
-                        For Him
+                        {labelMen}
                     </button>
                     <button 
                         className={`tab-btn ${activeTab === 'her' ? 'active' : ''}`} 
                         onClick={() => setActiveTab('her')}
                     >
-                        For Her
+                        {labelWomen}
                     </button>
                     <button 
                         className={`tab-btn ${activeTab === 'gift' ? 'active' : ''}`} 
                         onClick={() => setActiveTab('gift')}
                     >
-                        Unisex
+                        {labelUnisex}
                     </button>
                 </div>
             </div>
@@ -171,11 +196,11 @@ const Collections = () => {
                     </div>
 
                     <div className="slider-info-col">
-                        <div className="slider-title-row">
-                            <h2 className="slider-title">{currentProduct.name}</h2>
-                            <span className="slider-divider">\</span>
+                        <div className="slider-title-row" style={{ display: 'flex', alignItems: 'baseline' }}>
+                            <h2 className="slider-title" style={{ fontFamily: '"Roboto", sans-serif', fontWeight: 700, textTransform: 'none' }}>{currentProduct.name}</h2>
+                            <span className="slider-divider" style={{ margin: '0 8px' }}>\</span>
                             <span className="slider-category">{currentProduct.gender}</span>
-                            <div className="red-dot" style={{width: '10px', height: '10px', background: '#D22B2B', borderRadius: '50%', marginLeft: 'auto', marginRight: '20px'}}></div>
+                            <div className="red-dot" style={{ width: '4px', height: '4px', background: '#D22B2B', borderRadius: '50%', marginLeft: '4px', alignSelf: 'baseline' }}></div>
                         </div>
 
                         <div className="slider-rating">
@@ -239,8 +264,8 @@ const Collections = () => {
             {/* Mobile Grid View */}
             <div className="category-view active mobile-only-grid">
                 <div className="product-grid">
-                    {currentTabProducts.map(p => (
-                        <ProductCard key={p._id} {...getProductInfo(p)} />
+                    {currentTabProducts?.map(p => (
+                        <ProductCard key={p?._id || Math.random()} {...getProductInfo(p)} />
                     ))}
                 </div>
             </div>

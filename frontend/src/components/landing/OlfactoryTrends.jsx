@@ -117,7 +117,7 @@ const OlfactoryTrends = () => {
                         const productInfo = productsData[item];
                         return (
                             <div key={idx} className="trend-card">
-                                <TrendVideo src={productInfo.videoReel || ""} />
+                                <TrendVideo src={productInfo.videoReel || null} />
                                 <div className="trend-bottom-area">
                                     <div 
                                         className="trend-small-image placeholder-light"

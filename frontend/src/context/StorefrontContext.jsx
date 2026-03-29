@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { categoryService } from '../services/categoryService';
 
 const StorefrontContext = createContext();
 
@@ -6,11 +7,11 @@ export const useStorefront = () => useContext(StorefrontContext);
 
 export const StorefrontProvider = ({ children }) => {
     const defaultTopPhotos = [
-        { id: 1, title: 'MISTIA', subtitle: 'An ethereal and captivating blend', image: '' },
-        { id: 2, title: 'DOMINUS', subtitle: 'Commanding and powerful presence', image: '' },
-        { id: 3, title: 'AQUA', subtitle: 'Fresh, vibrant, and deep oceanic notes', image: '' },
-        { id: 4, title: 'MIDNIGHT', subtitle: 'A deep, mysterious evening experience', image: '' },
-        { id: 5, title: 'DUSK', subtitle: 'Warm, woody notes for the bold', image: '' }
+        { id: 1, title: 'MISTIA', subtitle: 'An ethereal and captivating blend', imageUrl: 'media/mistia/1.png' },
+        { id: 2, title: 'DOMINUS', subtitle: 'Commanding and powerful presence', imageUrl: 'media/dominus/1.png' },
+        { id: 3, title: 'AQUA', subtitle: 'Fresh, vibrant, and deep oceanic notes', imageUrl: 'media/aqua/1.png' },
+        { id: 4, title: 'MIDNIGHT', subtitle: 'A deep, mysterious evening experience', imageUrl: 'media/midnight/1.png' },
+        { id: 5, title: 'DUSK', subtitle: 'Warm, woody notes for the bold', imageUrl: 'media/dusk/1.png' }
     ];
 
     const defaultCollections = {
@@ -65,7 +66,20 @@ export const StorefrontProvider = ({ children }) => {
         return savedData ? JSON.parse(savedData) : defaultData;
     };
 
+    const fetchCategories = useCallback(async () => {
+        try {
+            const res = await categoryService.getAllCategories();
+            if (res.status && res.data) {
+                const names = res.data.map(c => c.name);
+                setCategories(names.length > 0 ? names : ['Men', 'Women', 'Unisex']);
+            }
+        } catch (err) {
+            console.error('Categories fetch error:', err);
+        }
+    }, []);
+
     const [topPhotos, setTopPhotos] = useState(() => getInitialState('sf_photos', defaultTopPhotos));
+    const [categories, setCategories] = useState(() => getInitialState('sf_categories', ['Men', 'Women', 'Unisex']));
     const [collections, setCollections] = useState(() => getInitialState('sf_collections', defaultCollections));
     const [scentArt, setScentArt] = useState(() => getInitialState('sf_scent', defaultScentArt));
     const [reviews, setReviews] = useState(() => getInitialState('sf_reviews', defaultReviews));
@@ -118,6 +132,7 @@ export const StorefrontProvider = ({ children }) => {
     }, [orders, inventoryProducts]);
 
     useEffect(() => { localStorage.setItem('sf_photos', JSON.stringify(topPhotos)); }, [topPhotos]);
+    useEffect(() => { localStorage.setItem('sf_categories', JSON.stringify(categories)); }, [categories]);
     useEffect(() => { localStorage.setItem('sf_collections', JSON.stringify(collections)); }, [collections]);
     useEffect(() => { localStorage.setItem('sf_scent', JSON.stringify(scentArt)); }, [scentArt]);
     useEffect(() => { localStorage.setItem('sf_reviews', JSON.stringify(reviews)); }, [reviews]);
@@ -128,12 +143,14 @@ export const StorefrontProvider = ({ children }) => {
     return (
         <StorefrontContext.Provider value={{
             topPhotos, setTopPhotos,
+            categories, setCategories,
             collections, setCollections,
             scentArt, setScentArt,
             reviews, setReviews,
             influencers, setInfluencers,
             inventoryProducts, setInventoryProducts,
-            orders, setOrders
+            orders, setOrders,
+            fetchCategories
         }}>
             {children}
         </StorefrontContext.Provider>

@@ -35,7 +35,7 @@ function App() {
         localStorage.removeItem('adminToken');
         localStorage.removeItem('admin_token');
         localStorage.removeItem('user_auth');
-        window.open('/management-portal/login', '_blank');
+        window.open('/admin/login', '_blank');
       }
 
       timeoutId = setTimeout(() => {
@@ -68,8 +68,8 @@ function App() {
                   Admin Route 
                   Hidden management route behind secret key sequence.
                 */}
-                <Route path="/management-portal/login" element={<AdminLogin />} />
-                <Route path="/management-portal/*" element={<AdminLayout />} />
+                <Route path="/admin/login" element={<AdminLogin />} />
+                <Route path="/admin/*" element={<AdminLayout />} />
 
                 {/* Storefront Routes */}
                 <Route

@@ -12,6 +12,7 @@ const adminAnnouncementController = require("../controllers/admin/adminAnnouncem
 const adminSettingsController = require("../controllers/admin/adminSettingsController");
 const adminCategoryController = require("../controllers/admin/adminCategoryController");
 const adminDashboardController = require("../controllers/admin/adminDashboardController");
+const adminBannerController = require("../controllers/admin/adminBannerController");
 
 router.use(adminMiddleware);
 
@@ -61,6 +62,14 @@ router.get("/announcements", adminAnnouncementController.getAllAnnouncements);
 router.get("/orders", adminOrderController.getAllOrders);
 router.get("/orders/:orderId", adminOrderController.getOrderDetails);
 router.patch("/orders/:orderId/status", adminOrderController.updateOrderStatus);
+
+
+/* BANNER MANAGEMENT */
+
+router.post("/banners", upload.single("image"), adminBannerController.createBanner);
+router.put("/banners/:id", upload.single("image"), adminBannerController.updateBanner);
+router.delete("/banners/:id", adminBannerController.deleteBanner);
+router.get("/banners", adminBannerController.getAllBanners);
 
 
 /* SETTINGS */

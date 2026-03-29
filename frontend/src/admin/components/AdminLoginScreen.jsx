@@ -72,7 +72,7 @@ const AdminLoginScreen = () => {
                         <label style={{
                             display: 'block', fontSize: '0.72rem', fontWeight: 600,
                             color: '#6e6e73', marginBottom: 6,
-                            textTransform: 'uppercase', letterSpacing: '0.07em',
+                            textTransform: 'none', letterSpacing: '0.07em',
                             fontFamily: FONT,
                         }}>
                             Username
@@ -100,7 +100,7 @@ const AdminLoginScreen = () => {
                         <label style={{
                             display: 'block', fontSize: '0.72rem', fontWeight: 600,
                             color: '#6e6e73', marginBottom: 6,
-                            textTransform: 'uppercase', letterSpacing: '0.07em',
+                            textTransform: 'none', letterSpacing: '0.07em',
                             fontFamily: FONT,
                         }}>
                             Passcode

@@ -13,7 +13,19 @@ const ScentArt = () => {
             try {
                 const response = await productService.getAllProducts();
                 if (response.status) {
-                    setProducts(response.data);
+                    console.log("[ScentArt] API Response:", response.data);
+                    let aosData = response.data?.art_of_scent || response.data?.aos || response.data?.gallery || [];
+                    
+                    // Filter from global if no specialized key exists
+                    if (!aosData || aosData.length === 0) {
+                        const rawData = Array.isArray(response.data) ? response.data : [];
+                        aosData = rawData.filter(p => p?.collectionType === 'aos' || p?.collectionType === 'gallery' || p?.isAOS === true);
+                        
+                        // Last fallback to showing all if specific Art of Scent flags aren't found
+                        if (aosData.length === 0) aosData = rawData;
+                    }
+                    
+                    setProducts(aosData);
                 }
             } catch (err) {
                 console.error('ScentArt fetch error:', err);
@@ -66,7 +78,7 @@ const ScentArt = () => {
     return (
         <section className="middle-poster content-wrap">
             <div className="section-header">
-                <h2 className="section-title">The Art of Scent</h2>
+                <h2 className="section-title" style={{ fontFamily: '"Roboto", sans-serif', fontWeight: 700, textTransform: 'none' }}>The Art of Scent</h2>
                 <p className="section-subtitle" style={{ color: 'var(--text-secondary)', maxWidth: '600px', margin: '0 auto', lineHeight: 1.6 }}>
                     Explore a symphony of olfactory notes, meticulously crafted for the modern visionary who demands excellence.
                 </p>
@@ -74,20 +86,25 @@ const ScentArt = () => {
             
             <div className="scent-carousel-base" ref={scrollRef}>
                 <div className="scent-track">
-                    {products.length > 0 ? (
-                        displayProducts.map((product, idx) => {
-                            const imgPath = product.images?.[0]?.startsWith('http') || product.images?.[0]?.startsWith('/') 
-                                ? product.images[0] 
-                                : `/${product.images[0]}`;
+                    {products?.length > 0 ? (
+                        displayProducts?.map((product, idx) => {
+                            // Backend key flexibility: handle images or imageUrl
+                            const rawImg = product?.imageUrl || product?.image || product?.images?.[0] || '';
+                            const imgPath = rawImg?.startsWith('http') || rawImg?.startsWith('/') 
+                                ? rawImg 
+                                : `/${rawImg}`;
+                            
+                            // Prevent invisible cards if imgPath is empty or just "/"
+                            if (!rawImg) return null;
                             
                             return (
                                 <div 
-                                    key={`${product._id || idx}-${idx}`} 
+                                    key={`${product?._id || idx}-${idx}`} 
                                     className="scent-slide-wrapper" 
                                     style={{ cursor: 'pointer' }}
-                                    onClick={() => navigate(`/product/${product.slug}`)}
+                                    onClick={() => navigate(`/product/${product?.slug}`)}
                                 >
-                                    <img src={imgPath} className="scent-slide-img" alt={product.name} />
+                                    <img src={imgPath} className="scent-slide-img" alt={product?.name} />
                                 </div>
                             );
                         })

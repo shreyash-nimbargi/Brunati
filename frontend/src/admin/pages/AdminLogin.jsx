@@ -52,7 +52,7 @@ const AdminLogin = () => {
                 className="admin-login-panel"
             >
                 <div>
-                    <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.7rem', letterSpacing: '0.14em', textTransform: 'uppercase', margin: 0 }}>
+                    <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.7rem', letterSpacing: '0.14em', textTransform: 'none', margin: 0 }}>
                         Brunati
                     </p>
                     <p style={{ fontFamily: '"Roboto", sans-serif', color: '#ffffff', fontSize: '1.4rem', fontWeight: 700, margin: '4px 0 0', textTransform: 'none', letterSpacing: 'normal' }}>
@@ -81,7 +81,7 @@ const AdminLogin = () => {
                     <div style={{ marginBottom: 40 }}>
                         <p style={{
                             fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.14em',
-                            textTransform: 'uppercase', color: '#6e6e73', margin: '0 0 10px',
+                            textTransform: 'none', color: '#6e6e73', margin: '0 0 10px',
                         }}>
                             Brunati · Staff Entry
                         </p>
@@ -100,7 +100,7 @@ const AdminLogin = () => {
                             <label style={{
                                 display: 'block', fontSize: '0.72rem', fontWeight: 600,
                                 color: '#6e6e73', marginBottom: 8,
-                                textTransform: 'uppercase', letterSpacing: '0.07em',
+                                textTransform: 'none', letterSpacing: '0.07em',
                             }}>
                                 Email Address
                             </label>
@@ -131,7 +131,7 @@ const AdminLogin = () => {
                             <label style={{
                                 display: 'block', fontSize: '0.72rem', fontWeight: 600,
                                 color: '#6e6e73', marginBottom: 8,
-                                textTransform: 'uppercase', letterSpacing: '0.07em',
+                                textTransform: 'none', letterSpacing: '0.07em',
                             }}>
                                 Password
                             </label>
