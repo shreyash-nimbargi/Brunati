@@ -165,21 +165,24 @@ const EditSite = () => {
         switch(id) {
             case 'banners':
                 return (
-                    <div className="max-w-[1200px] mx-auto w-full px-0 md:px-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                        <div className={`flex ${isMobile ? 'flex-col' : 'flex-row items-center justify-between'} mb-8`}>
-                            <h2 style={{ 
-                                fontFamily: FONT_ROBOTO_BOLD, 
-                                fontWeight: 700, 
-                                fontSize: isMobile ? '1.75rem' : '1.5rem',
-                                margin: 0
-                            }}>
-                                Banners
-                            </h2>
+                    <div className="max-w-[1200px] mx-auto w-full px-0 md:px-0 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                        <div className={`flex ${isMobile ? 'flex-col items-center text-center' : 'flex-row items-center justify-between'} mb-10`}>
+                            <div className={isMobile ? 'mb-6' : ''}>
+                                <h2 style={{ 
+                                    fontFamily: FONT_ROBOTO_BOLD, 
+                                    fontWeight: 700, 
+                                    fontSize: isMobile ? '1.5rem' : '1.85rem',
+                                    margin: 0
+                                }}>
+                                    Banners
+                                </h2>
+                                <p className="text-gray-500 mt-2 font-roboto font-normal text-sm">Manage your homepage hero slides and visual collections.</p>
+                            </div>
                             <button 
                                 onClick={() => { setEditingBanner(null); setIsModalOpen(true); }}
                                 className={`
                                     bg-black text-white hover:bg-gray-800 transition-all rounded-xl font-bold flex items-center justify-center gap-2
-                                    ${isMobile ? 'w-full py-4 text-base mt-4' : 'w-fit py-2 px-5 text-sm'}
+                                    ${isMobile ? 'w-fit px-10 py-3.5 text-sm' : 'w-fit py-2.5 px-6 text-sm'}
                                 `}
                                 style={{ fontFamily: FONT_ROBOTO_BOLD }}
                             >
@@ -193,15 +196,15 @@ const EditSite = () => {
                                 <span className="text-sm font-medium">Synchronizing banners...</span>
                             </div>
                         ) : banners.length === 0 ? (
-                            <div className="py-32 flex flex-col items-center justify-center bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
+                            <div className="py-24 flex flex-col items-center justify-center bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
                                 <div className="p-4 bg-white rounded-full shadow-sm mb-4">
                                     <Camera size={24} className="text-gray-300" />
                                 </div>
-                                <h3 className="font-bold text-black" style={{ fontFamily: FONT_ROBOTO_BOLD }}>No Active Banners</h3>
+                                <h3 className="font-bold text-black" style={{ fontFamily: FONT_ROBOTO_BOLD }}>No active banners</h3>
                                 <p className="text-sm text-gray-500 mt-1">Add your first banner to see it on the storefront</p>
                             </div>
                         ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full mx-auto">
                                 {banners.map(b => (
                                     <BannerCard 
                                         key={b._id || b.id} 
@@ -263,23 +266,23 @@ const EditSite = () => {
 
                 return (
                     <div className="max-w-[1200px] mx-auto w-full px-0 md:px-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                        <div className={`flex ${isMobile ? 'flex-col' : 'flex-row items-center justify-between'} mb-10`}>
-                            <div>
+                        <div className={`flex ${isMobile ? 'flex-col items-center text-center' : 'flex-row items-center justify-between'} mb-10`}>
+                            <div className={isMobile ? 'mb-6' : ''}>
                                 <h2 style={{ 
                                     fontFamily: FONT_ROBOTO_BOLD, 
                                     fontWeight: 700, 
-                                    fontSize: isMobile ? '1.75rem' : '1.85rem',
+                                    fontSize: isMobile ? '1.5rem' : '1.85rem',
                                     margin: 0
                                 }}>
                                     Categories
                                 </h2>
-                                <p className="text-gray-500 mt-2 font-roboto font-normal">Manage your luxury collections and product assignments.</p>
+                                <p className="text-gray-500 mt-2 font-roboto font-normal text-sm">Manage your luxury collections and product assignments.</p>
                             </div>
                             <button 
                                 onClick={() => { setEditingCategory(null); setIsCategoryModalOpen(true); }}
                                 className={`
                                     bg-black text-white hover:bg-gray-800 transition-all rounded-xl font-bold flex items-center justify-center gap-2
-                                    ${isMobile ? 'w-full py-4 text-base mt-4' : 'w-fit py-2.5 px-6 text-sm'}
+                                    ${isMobile ? 'w-fit px-10 py-3.5 text-sm' : 'w-fit py-2.5 px-6 text-sm'}
                                 `}
                                 style={{ fontFamily: FONT_ROBOTO_BOLD }}
                             >
@@ -287,47 +290,53 @@ const EditSite = () => {
                             </button>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ${isMobile ? 'px-2' : ''}`}>
                             {siteCategories.map((cat, idx) => {
                                 const catName = typeof cat === 'string' ? cat : cat.name;
                                 const count = getProductCount(catName);
                                 
                                 return (
-                                    <div key={cat._id || idx} className="bg-white p-8 rounded-[20px] border border-gray-100 hover:border-gray-200 hover:shadow-2xl hover:shadow-black/[0.03] transition-all duration-300 flex flex-col h-full group relative">
-                                        <div className="absolute top-6 right-6 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                                    <div 
+                                        key={cat._id || idx} 
+                                        className={`
+                                            bg-white rounded-[20px] border border-gray-100 shadow-sm hover:border-gray-200 hover:shadow-md transition-all duration-300 flex flex-col items-center text-center group relative
+                                            ${isMobile ? 'py-6 px-6 mx-auto w-full max-w-[90%]' : 'p-8'}
+                                        `}
+                                    >
+                                        <div className="absolute top-4 right-4 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-300">
                                             <button 
                                                 onClick={() => { setEditingCategory(cat); setIsCategoryModalOpen(true); }}
-                                                className="w-9 h-9 flex items-center justify-center border border-gray-100 text-gray-400 hover:text-black hover:border-black rounded-full transition-all duration-200 bg-white"
-                                                title="Rename Category"
+                                                className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-black hover:bg-gray-50 rounded-full transition-all duration-200"
+                                                title="Rename"
                                             >
-                                                <Edit2 size={12} strokeWidth={1.2} />
+                                                <Edit2 size={12} strokeWidth={1.5} />
                                             </button>
                                             <button 
                                                 onClick={() => handleDeleteCategory(cat._id || cat, catName)}
-                                                className="w-9 h-9 flex items-center justify-center text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-full transition-all duration-200"
+                                                className="w-8 h-8 flex items-center justify-center text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-full transition-all duration-200"
                                                 title="Delete"
                                             >
-                                                <Trash2 size={13} strokeWidth={1.2} />
+                                                <Trash2 size={12} strokeWidth={1.5} />
                                             </button>
                                         </div>
 
-                                        <div className="mb-0">
-                                            <h3 className="text-black text-[22px] font-bold leading-tight tracking-tight" style={{ fontFamily: '"Roboto", sans-serif' }}>
+                                        <div className="mb-1">
+                                            <h3 className="text-black text-xl font-bold leading-tight" style={{ fontFamily: '"Roboto", sans-serif' }}>
                                                 {catName}
                                             </h3>
-                                            <p className="text-sm text-gray-400 font-light mt-1.5" style={{ fontFamily: '"Roboto", sans-serif' }}>
+                                            <p className="text-sm text-gray-400 font-roboto font-normal mt-1">
                                                 {count} {count === 1 ? 'item' : 'items'}
                                             </p>
                                         </div>
 
-                                        <div className="mt-14">
+                                        <div className="mt-4 w-full">
                                             <button 
                                                 onClick={() => { setEditingCategory(cat); setIsManageProductsModalOpen(true); }}
-                                                className="inline-flex items-center gap-3 text-[11px] font-bold text-black hover:text-gray-600 transition-all duration-300 border-b border-black/20 hover:border-black pb-1 tracking-[0.05em]"
-                                                style={{ fontFamily: FONT_ROBOTO_BOLD }}
+                                                className="inline-flex items-center justify-center gap-2 text-sm font-normal text-gray-600 hover:text-black transition-all duration-300 min-h-[44px] w-full"
+                                                style={{ fontFamily: '"Roboto", sans-serif' }}
                                             >
                                                 Assign Products 
-                                                <ArrowRight size={11} strokeWidth={1.2} />
+                                                <ArrowRight size={14} strokeWidth={1.5} />
                                             </button>
                                         </div>
                                     </div>
@@ -394,9 +403,9 @@ const EditSite = () => {
     const getTabLabel = (tab) => {
         if (!isMobile) return tab.label;
         switch(tab.id) {
-            case 'scent': return 'AOS';
+            case 'trends': return 'Trends';
             case 'influencers': return 'People';
-            case 'categories': return 'Cats';
+            case 'categories': return 'Categories';
             default: return tab.label;
         }
     };
@@ -408,54 +417,82 @@ const EditSite = () => {
     };
 
     return (
-        <div style={{ paddingBottom: '100px', animation: 'fadeIn 0.4s ease-out' }}>
+        <div className="w-full max-w-full overflow-x-hidden" style={{ paddingBottom: '100px', animation: 'fadeIn 0.4s ease-out' }}>
             <style>{`
                 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
                 .scrollbar-hide::-webkit-scrollbar { display: none; }
                 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
             `}</style>
  
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: isMobile ? '16px' : '32px', maxWidth: '1200px', margin: '0 auto 32px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: isMobile ? '16px' : '32px', maxWidth: '1200px', margin: '0 auto 32px', padding: isMobile ? '0 4px' : '0' }}>
                 <div className="flex items-center gap-4">
                     <button 
                         onClick={() => navigate('/admin')}
-                        className="text-gray-500 hover:text-black transition-colors font-roboto text-sm flex items-center gap-1"
+                        className="hidden md:flex text-gray-500 hover:text-black transition-colors font-roboto text-sm items-center gap-1"
                     >
                         ← Back
                     </button>
-                    <h1 style={{ fontFamily: FONT_ROBOTO_BOLD, fontWeight: 700, fontSize: isMobile ? '1.5rem' : '1.75rem', margin: 0 }}>Edit Site</h1>
+                    <h1 style={{ fontFamily: FONT_ROBOTO_BOLD, fontWeight: 700, fontSize: isMobile ? '1.5rem' : '1.85rem', margin: 0 }}>Edit Site</h1>
                 </div>
             </div>
  
-            {/* Sticky Horizontal Navigation Ribbon */}
+            {/* Sticky Horizontal Navigation Ribbon - LUXURY PILL SCROLLER (Step 65) */}
             <div className={`
-                ${isMobile ? 'sticky top-[64px] z-40 bg-white/95 backdrop-blur-md border-b border-gray-100 flex overflow-x-auto whitespace-nowrap scrollbar-hide snap-x px-4' : 'flex border-b border-gray-100 mb-8 gap-8 max-w-[1200px] mx-auto'}
+                ${isMobile 
+                    ? 'sticky top-[64px] z-40 bg-white border-b border-gray-100 py-4 mb-6 overflow-hidden relative' 
+                    : 'flex border-b border-gray-100 mb-8 gap-8 max-w-[1200px] mx-auto'}
             `}>
-                {tabs.map(t => {
-                    const isActive = activeTab === t.id;
-                    return (
-                        <button
-                            key={t.id}
-                            onClick={() => handleTabChange(t.id)}
-                            className={`
-                                relative py-4 px-4 transition-all duration-300 snap-center
-                                ${isMobile ? 'text-[13px]' : 'text-sm'}
-                            `}
-                            style={{
-                                border: 'none', background: 'none', cursor: 'pointer',
-                                fontFamily: isActive ? FONT_ROBOTO_BOLD : '"Roboto", sans-serif',
-                                fontWeight: isActive ? 700 : 400,
-                                color: isActive ? '#000' : '#888',
-                            }}
-                        >
-                            {getTabLabel(t)}
-                            {/* Active Tab Indicator */}
-                            {isActive && (
-                                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-black animate-in fade-in slide-in-from-bottom-1 duration-300"></div>
-                            )}
-                        </button>
-                    );
-                })}
+                {isMobile ? (
+                    <>
+                        {/* Scroll Container */}
+                        <div className="flex overflow-x-auto whitespace-nowrap scrollbar-hide snap-x px-4 gap-3">
+                            {tabs.map(t => {
+                                const isActive = activeTab === t.id;
+                                return (
+                                    <button
+                                        key={t.id}
+                                        onClick={() => handleTabChange(t.id)}
+                                        className={`
+                                            snap-center px-6 py-2 rounded-full transition-all duration-300 text-[13px] border
+                                            ${isActive 
+                                                ? 'bg-black text-white border-black shadow-md font-bold' 
+                                                : 'bg-transparent text-gray-400 border-gray-100 font-normal'}
+                                        `}
+                                        style={{ 
+                                            fontFamily: isActive ? FONT_ROBOTO_BOLD : '"Roboto", sans-serif',
+                                        }}
+                                    >
+                                        {getTabLabel(t)}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                        {/* Right Fade Mask */}
+                        <div className="absolute top-0 right-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent pointer-events-none z-10"></div>
+                    </>
+                ) : (
+                    tabs.map(t => {
+                        const isActive = activeTab === t.id;
+                        return (
+                            <button
+                                key={t.id}
+                                onClick={() => handleTabChange(t.id)}
+                                className="relative py-4 px-4 transition-all duration-300 text-sm"
+                                style={{
+                                    border: 'none', background: 'none', cursor: 'pointer',
+                                    fontFamily: isActive ? FONT_ROBOTO_BOLD : '"Roboto", sans-serif',
+                                    fontWeight: isActive ? 700 : 400,
+                                    color: isActive ? '#000' : '#888',
+                                }}
+                            >
+                                {t.label}
+                                {isActive && (
+                                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-black animate-in fade-in slide-in-from-bottom-1 duration-300"></div>
+                                )}
+                            </button>
+                        );
+                    })
+                )}
             </div>
  
             <div className={`mt-8 ${isMobile ? 'px-4' : ''}`}>

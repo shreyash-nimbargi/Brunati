@@ -47,7 +47,7 @@ const AdminLayout = () => {
     }, [location.pathname, isMobile]);
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: '#f9fafb', fontFamily: '"Roboto", sans-serif' }}>
+        <div style={{ display: 'flex', minHeight: '100vh', background: '#f9fafb', fontFamily: '"Roboto", sans-serif', overflowX: 'hidden', maxWidth: '100vw' }}>
             <Sidebar 
                 isOpen={isMobile ? isSidebarOpen : true} 
                 isExpanded={isSidebarExpanded}
@@ -56,7 +56,7 @@ const AdminLayout = () => {
                 isMobile={isMobile}
             />
 
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative' }}>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', minWidth: 0 }}>
                 {/* Mobile Header Bar - Only visible on small screens */}
                 {isMobile && (
                     <header style={{
