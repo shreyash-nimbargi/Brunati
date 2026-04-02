@@ -3,7 +3,7 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, ShoppingCart, Package, Users, LogOut, ChevronLeft, ChevronRight } from 'lucide-react';
 import useAdminAuth from './hooks/useAdminAuth';
 
-const Sidebar = ({ isOpen, onClose, isExpanded, onToggleExpand, isMobile }) => {
+const Sidebar = ({ isOpen, onClose, isExpanded, onToggleExpand, isMobile, onMouseEnter, onMouseLeave }) => {
     const FONT_ROBOTO = '"Roboto", sans-serif';
 
     const location = useLocation();
@@ -13,8 +13,9 @@ const Sidebar = ({ isOpen, onClose, isExpanded, onToggleExpand, isMobile }) => {
     const [hoveredPath, setHoveredPath] = useState(null);
 
     const menuItems = [
-        { name: 'Sales', path: '/admin/orders', icon: ShoppingCart, pathsPrefix: '/admin/orders' },
-        { name: 'My Items', path: '/admin/inventory', icon: Package, pathsPrefix: '/admin/inventory' },
+        { name: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard, pathsPrefix: '/admin/dashboard' },
+        { name: 'Orders', path: '/admin/orders', icon: ShoppingCart, pathsPrefix: '/admin/orders' },
+        { name: 'Inventory', path: '/admin/inventory', icon: Package, pathsPrefix: '/admin/inventory' },
         { name: 'Customers', path: '/admin/customers', icon: Users, pathsPrefix: '/admin/customers' },
         { name: 'Edit Site', path: '/admin/editsite', icon: LayoutDashboard, pathsPrefix: '/admin/editsite' },
     ];
@@ -31,7 +32,10 @@ const Sidebar = ({ isOpen, onClose, isExpanded, onToggleExpand, isMobile }) => {
     };
 
     return (
-        <aside style={{
+        <aside 
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+            style={{
             width: isExpanded ? '256px' : '80px',
             background: '#ffffff',
             borderRight: '1px solid #EEEEEE',
@@ -39,7 +43,7 @@ const Sidebar = ({ isOpen, onClose, isExpanded, onToggleExpand, isMobile }) => {
             position: 'fixed',
             left: isOpen ? 0 : (isExpanded ? '-256px' : '-80px'),
             top: 0,
-            zIndex: 50,
+            zIndex: 100,
             transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
             display: 'flex',
             flexDirection: 'column',
@@ -79,30 +83,7 @@ const Sidebar = ({ isOpen, onClose, isExpanded, onToggleExpand, isMobile }) => {
                             Admin Access
                         </h1>
                     )}
-                    
-                    {!isMobile && (
-                        <button 
-                            onClick={onToggleExpand} 
-                            style={{ 
-                                background: '#f5f5f7', 
-                                border: 'none', 
-                                cursor: 'pointer', 
-                                borderRadius: '50%',
-                                width: '28px',
-                                height: '28px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                transition: 'background 0.2s',
-                                position: isExpanded ? 'relative' : 'absolute',
-                                right: isExpanded ? '0' : 'auto'
-                            }}
-                            onMouseEnter={e => e.currentTarget.style.background = '#e8e8ed'}
-                            onMouseLeave={e => e.currentTarget.style.background = '#f5f5f7'}
-                        >
-                            {isExpanded ? <ChevronLeft size={16} color="#666" /> : <ChevronRight size={16} color="#666" />}
-                        </button>
-                    )}
+                    {/* Desktop Toggle Hidden per Step 81 */}
                 </div>
             </div>
 
@@ -128,7 +109,7 @@ const Sidebar = ({ isOpen, onClose, isExpanded, onToggleExpand, isMobile }) => {
                                 textDecoration: 'none',
                                 fontSize: '14px',
                                 fontFamily: FONT_ROBOTO,
-                                fontWeight: isActive ? 500 : 400,
+                                fontWeight: isActive ? 700 : 400,
                                 borderLeft: isActive ? '2px solid #000000' : '2px solid transparent',
                                 transition: 'all 0.15s ease-in-out',
                                 gap: isExpanded ? '14px' : '0'

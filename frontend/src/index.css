@@ -4,6 +4,45 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+  
+  body {
+    overflow-x: hidden;
+    width: 100vw;
+    position: relative;
+  }
+
+  /* Luxury Minimalist Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #d1d1d6; /* Subtle Apple-style gray */
+    border-radius: 10px;
+    transition: background 0.3s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #1d1d1f; /* Darker on hover */
+  }
+
+  /* Firefox Fallback */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #d1d1d6 transparent;
+  }
+}
+
 /* ========================================
    CORE DESIGN SYSTEM & VARIABLES
    (Restored from Legacy)

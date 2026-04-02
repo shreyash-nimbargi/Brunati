@@ -49,8 +49,9 @@ const OlfactoryTrends = () => {
     const trends = trendProducts;
 
     const handleProductClick = (id) => {
-        // Navigate to product detail page
-        navigate(`/product/${id}`);
+        const productInfo = productsData[id];
+        const identifier = productInfo?.slug || id;
+        navigate(`/product/${identifier}`);
     };
 
     const scroll = (direction) => {

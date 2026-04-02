@@ -54,7 +54,7 @@ const Summary = () => {
                 display: 'flex', justifyContent: 'space-between', alignItems: 'center' 
             }}>
                 <div style={{ paddingRight: 20 }}>
-                    <h1 style={{ fontFamily: FONT, fontSize: '1.4rem', fontWeight: 700, color: '#000', margin: 0, textTransform: 'none', letterSpacing: 'normal' }}>Sales</h1>
+                    <h1 style={{ fontFamily: FONT, fontSize: '1.4rem', fontWeight: 700, color: '#000', margin: 0, textTransform: 'none', letterSpacing: 'normal' }}>Dashboard</h1>
                     <p style={{ fontSize: '0.85rem', color: '#6e6e73', marginTop: 4, fontWeight: 400 }}>Analytics Overview</p>
                 </div>
                 <button 
@@ -120,8 +120,7 @@ const Summary = () => {
 
                 <div style={{ 
                     width: '100%', 
-                    aspectRatio: '16 / 9',
-                    minHeight: viewMode === 'mobile' ? 180 : 250,
+                    height: viewMode === 'mobile' ? 220 : 320,
                     maxHeight: 400
                 }}>
                     <ResponsiveContainer width="100%" height="100%">

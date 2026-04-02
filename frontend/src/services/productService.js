@@ -15,7 +15,9 @@ export const productService = {
     // Get a specific product by slug
     getProductBySlug: async (slug) => {
         try {
-            const response = await api.get(`/products/${slug}`);
+            const encodedSlug = encodeURIComponent(slug);
+            console.log("[productService] Fetching product with identifier:", encodedSlug);
+            const response = await api.get(`/products/${encodedSlug}`);
             return response.data;
         } catch (error) {
             console.error(`Error fetching product with slug ${slug}:`, error);

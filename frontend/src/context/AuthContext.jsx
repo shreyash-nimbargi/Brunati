@@ -13,17 +13,22 @@ export const useAuth = () => {
  * isAdmin is toggled via the admin login flow in AdminLayout.
  */
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState({
-        name: 'Shreyash Nimbargi',
-        email: 'shreyash@example.com',
-        isAdmin: false,
-        isLoggedIn: false,
+    const [user, setUser] = useState(() => {
+        const adminToken = localStorage.getItem('adminToken');
+        return {
+            name: 'Shreyash Nimbargi',
+            email: 'shreyash@example.com',
+            isAdmin: !!adminToken,
+            isLoggedIn: !!adminToken,
+        };
     });
 
     const adminLogin = (email, password) => {
         // Mock credentials — swap for real API call in production
         if (email === 'admin@brunati.com' && password === 'brunati2026') {
-            setUser(prev => ({ ...prev, isAdmin: true, isLoggedIn: true }));
+            const adminUser = { ...user, isAdmin: true, isLoggedIn: true };
+            setUser(adminUser);
+            localStorage.setItem('adminToken', 'mock_token_2026'); // Persist token for services/api.js
             return true;
         }
         return false;
@@ -31,6 +36,7 @@ export const AuthProvider = ({ children }) => {
 
     const adminLogout = () => {
         setUser(prev => ({ ...prev, isAdmin: false, isLoggedIn: false }));
+        localStorage.removeItem('adminToken');
     };
 
     return (
