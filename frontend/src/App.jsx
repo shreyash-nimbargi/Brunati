@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import Home from './pages/Home';
@@ -69,6 +69,7 @@ function App() {
                   Hidden management route behind secret key sequence.
                 */}
                 <Route path="/admin/login" element={<AdminLogin />} />
+                <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
                 <Route path="/admin/*" element={<AdminLayout />} />
 
                 {/* Storefront Routes */}

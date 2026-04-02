@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams, Link, useLocation } from 'react-router-dom';
+import { useStorefront } from '../../context/StorefrontContext';
 
 const FONT = '"Roboto", sans-serif';
 
@@ -12,6 +13,7 @@ const getMockProduct = (id) => ({
     compareAtPrice: 4200,
     stock: 12,
     status: 'Active',
+    category: 'Men',
     image: 'https://via.placeholder.com/80'
 });
 
@@ -19,29 +21,30 @@ const EditProduct = () => {
     const { id } = useParams();
     const location = useLocation();
     const navigate = useNavigate();
+    const { categories } = useStorefront();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [toast, setToast] = useState('');
-    const fileInputRef = React.useRef(null);
+    const [isMobile] = useState(window.innerWidth <= 768);
+    const fileInputRef = useRef(null);
 
     useEffect(() => {
         if (location.state && location.state.product) {
-            // Priority: Prefill from React Router State
             const p = location.state.product;
             setProduct({
                 id: p.id || id,
                 name: p.name || '',
-                description: p.description || '', // Default if missing
+                description: p.description || '',
                 price: p.price || 0,
                 compareAtPrice: p.compareAtPrice || '',
                 stock: p.stock !== undefined ? p.stock : 0,
                 status: p.status || 'Active',
+                category: p.category || '',
                 image: p.image || 'https://via.placeholder.com/80'
             });
             setLoading(false);
         } else {
-            // Mock fetch fallback
             setTimeout(() => {
                 setProduct(getMockProduct(id));
                 setLoading(false);
@@ -56,9 +59,7 @@ const EditProduct = () => {
 
     const handleSave = (e) => {
         if (e) e.preventDefault();
-        
         setSaving(true);
-        // Mock save API Call
         setTimeout(() => {
             setSaving(false);
             setToast('Product updated successfully');
@@ -70,25 +71,22 @@ const EditProduct = () => {
         if (window.confirm("Are you sure you want to discard your changes?")) {
             if (location.state && location.state.product) {
                 const p = location.state.product;
-                setProduct({ ...p, description: p.description || '', compareAtPrice: p.compareAtPrice || '' });
+                setProduct({ ...p, description: p.description || '', compareAtPrice: p.compareAtPrice || '', category: p.category || '' });
             } else {
                 setProduct(getMockProduct(id));
             }
         }
     };
 
-    // Validation: Disable Save if price is empty
     const isSaveDisabled = saving || !product?.price || product.price === '';
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            // Check size (max 5MB)
             if (file.size > 5 * 1024 * 1024) {
                 alert("File size exceeds 5MB limit.");
                 return;
             }
-            // FileReader to preview instantly
             const reader = new FileReader();
             reader.onload = (event) => {
                 setProduct(prev => ({ ...prev, image: event.target.result }));
@@ -131,8 +129,8 @@ const EditProduct = () => {
                 display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                 marginBottom: 24, paddingBottom: 24, borderBottom: '1px solid rgba(0,0,0,0.08)'
             }}>
-                <h1 style={{ fontFamily: FONT, fontSize: '1.4rem', fontWeight: 700, color: '#1d1d1f', margin: 0, textTransform: 'none', letterSpacing: 'normal' }}>
-                    Edit product
+                <h1 style={{ fontFamily: 'Roboto', fontSize: isMobile ? '1.5rem' : '1.75rem', fontWeight: 700, color: '#1d1d1f', margin: 0, textTransform: 'none', letterSpacing: 'normal' }}>
+                    Edit Product
                 </h1>
                 
                 <div style={{ display: 'flex', gap: 12 }}>
@@ -153,13 +151,13 @@ const EditProduct = () => {
                         disabled={isSaveDisabled}
                         style={{
                             background: isSaveDisabled ? '#e5e7eb' : '#111', color: isSaveDisabled ? '#9ca3af' : '#fff', border: 'none',
-                            padding: '8px 20px', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 500,
-                            cursor: isSaveDisabled ? 'not-allowed' : 'pointer', transition: 'all 0.15s', fontFamily: FONT
+                            padding: '8px 20px', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 700,
+                            cursor: isSaveDisabled ? 'not-allowed' : 'pointer', transition: 'all 0.15s', fontFamily: 'Roboto'
                         }}
                         onMouseEnter={e => { if(!isSaveDisabled) e.currentTarget.style.background = '#333'; }}
                         onMouseLeave={e => { if(!isSaveDisabled) e.currentTarget.style.background = '#111'; }}
                     >
-                        {saving ? 'Saving...' : 'Save changes'}
+                        <span style={{ textTransform: 'none' }}>{saving ? 'Saving...' : 'Save Changes'}</span>
                     </button>
                 </div>
             </div>
@@ -167,11 +165,11 @@ const EditProduct = () => {
             <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: 24, paddingBottom: 60 }}>
                 
                 {/* Basic Info */}
-                <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', padding: '24px', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
-                    <h2 style={{ fontSize: '1rem', fontWeight: 600, color: '#111827', margin: '0 0 16px', fontFamily: FONT }}>Basic info</h2>
+                <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', padding: isMobile ? '20px' : '24px', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
+                    <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#111827', margin: '0 0 16px', fontFamily: 'Roboto', textTransform: 'none' }}>Basic Info</h2>
                     
                     <div style={{ marginBottom: 16 }}>
-                        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: '#374151', marginBottom: 8 }}>Product name</label>
+                        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: '#374151', marginBottom: 8, fontFamily: 'Roboto' }}>Product name</label>
                         <input 
                             type="text" 
                             value={product.name}
@@ -179,7 +177,7 @@ const EditProduct = () => {
                             required
                             style={{ 
                                 width: '100%', padding: '10px 14px', border: '1px solid #d1d5db', borderRadius: '6px', 
-                                fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box', fontFamily: FONT 
+                                fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box', fontFamily: 'Roboto' 
                             }}
                             onFocus={e => e.currentTarget.style.borderColor = '#9ca3af'}
                             onBlur={e => e.currentTarget.style.borderColor = '#d1d5db'}
@@ -187,14 +185,14 @@ const EditProduct = () => {
                     </div>
 
                     <div>
-                        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: '#374151', marginBottom: 8 }}>Description</label>
+                        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: '#374151', marginBottom: 8, fontFamily: 'Roboto' }}>Description</label>
                         <textarea 
                             value={product.description}
                             onChange={e => setProduct({...product, description: e.target.value})}
                             rows={4}
                             style={{ 
                                 width: '100%', padding: '10px 14px', border: '1px solid #d1d5db', borderRadius: '6px', 
-                                fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box', fontFamily: FONT, resize: 'vertical' 
+                                fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box', fontFamily: 'Roboto', resize: 'vertical' 
                             }}
                             onFocus={e => e.currentTarget.style.borderColor = '#9ca3af'}
                             onBlur={e => e.currentTarget.style.borderColor = '#d1d5db'}
@@ -203,12 +201,12 @@ const EditProduct = () => {
                 </div>
 
                 {/* Pricing & Stock */}
-                <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', padding: '24px', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
-                    <h2 style={{ fontSize: '1rem', fontWeight: 600, color: '#111827', margin: '0 0 16px', fontFamily: FONT }}>Pricing & Stock</h2>
+                <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', padding: isMobile ? '20px' : '24px', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
+                    <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#111827', margin: '0 0 16px', fontFamily: 'Roboto', textTransform: 'none' }}>Pricing & Stock</h2>
                     
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 16, marginBottom: 16 }}>
                         <div>
-                            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: '#374151', marginBottom: 8 }}>Price (₹)</label>
+                            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: '#374151', marginBottom: 8, fontFamily: 'Roboto' }}>Price (₹)</label>
                             <input 
                                 type="number" 
                                 min="0"
@@ -217,14 +215,14 @@ const EditProduct = () => {
                                 required
                                 style={{ 
                                     width: '100%', padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', 
-                                    fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box', fontFamily: FONT 
+                                    fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box', fontFamily: 'Roboto' 
                                 }}
                                 onFocus={e => e.currentTarget.style.borderColor = '#9ca3af'}
                                 onBlur={e => e.currentTarget.style.borderColor = '#e5e7eb'}
                             />
                         </div>
                         <div>
-                            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: '#374151', marginBottom: 8 }}>Compare-at price</label>
+                            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: '#374151', marginBottom: 8, fontFamily: 'Roboto' }}>Compare-at price</label>
                             <input 
                                 type="number" 
                                 min="0"
@@ -232,7 +230,7 @@ const EditProduct = () => {
                                 onChange={e => setProduct({...product, compareAtPrice: parseFloat(e.target.value)})}
                                 style={{ 
                                     width: '100%', padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', 
-                                    fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box', fontFamily: FONT 
+                                    fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box', fontFamily: 'Roboto' 
                                 }}
                                 onFocus={e => e.currentTarget.style.borderColor = '#9ca3af'}
                                 onBlur={e => e.currentTarget.style.borderColor = '#e5e7eb'}
@@ -241,7 +239,7 @@ const EditProduct = () => {
                     </div>
 
                     <div>
-                        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: '#374151', marginBottom: 8 }}>Stock quantity</label>
+                        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: '#374151', marginBottom: 8, fontFamily: 'Roboto' }}>Stock quantity</label>
                         <input 
                             type="number" 
                             min="0"
@@ -250,7 +248,7 @@ const EditProduct = () => {
                             required
                             style={{ 
                                 width: '100%', padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', 
-                                fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box', fontFamily: FONT 
+                                fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box', fontFamily: 'Roboto' 
                             }}
                             onFocus={e => e.currentTarget.style.borderColor = '#9ca3af'}
                             onBlur={e => e.currentTarget.style.borderColor = '#e5e7eb'}
@@ -264,8 +262,8 @@ const EditProduct = () => {
                 </div>
 
                 {/* Media */}
-                <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', padding: '24px', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
-                    <h2 style={{ fontSize: '1rem', fontWeight: 600, color: '#111827', margin: '0 0 16px', fontFamily: FONT }}>Media</h2>
+                <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', padding: isMobile ? '20px' : '24px', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
+                    <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#111827', margin: '0 0 16px', fontFamily: 'Roboto', textTransform: 'none' }}>Media</h2>
                     
                     <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
                         <div style={{ width: 80, height: 80, border: '1px solid #e5e7eb', borderRadius: '8px', overflow: 'hidden', background: '#f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -278,7 +276,7 @@ const EditProduct = () => {
                                 style={{
                                     background: '#fff', color: '#111827', border: '1px solid #d1d5db',
                                     padding: '8px 16px', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 500,
-                                    cursor: 'pointer', transition: 'all 0.15s', fontFamily: FONT
+                                    cursor: 'pointer', transition: 'all 0.15s', fontFamily: 'Roboto'
                                 }}
                                 onMouseEnter={e => { e.currentTarget.style.background = '#f9fafb'; }}
                                 onMouseLeave={e => { e.currentTarget.style.background = '#fff'; }}
@@ -298,25 +296,47 @@ const EditProduct = () => {
                 </div>
 
                 {/* Organization */}
-                <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', padding: '24px', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
-                    <h2 style={{ fontSize: '1rem', fontWeight: 600, color: '#111827', margin: '0 0 16px', fontFamily: FONT }}>Organization</h2>
+                <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', padding: isMobile ? '20px' : '24px', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
+                    <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#111827', margin: '0 0 16px', fontFamily: 'Roboto', textTransform: 'none' }}>Organization</h2>
                     
-                    <div>
-                        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: '#374151', marginBottom: 8 }}>Status</label>
-                        <select 
-                            value={product.status}
-                            onChange={e => setProduct({...product, status: e.target.value})}
-                            style={{ 
-                                width: '100%', padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', 
-                                fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box', fontFamily: FONT, background: '#fff', cursor: 'pointer' 
-                            }}
-                            onFocus={e => e.currentTarget.style.borderColor = '#9ca3af'}
-                            onBlur={e => e.currentTarget.style.borderColor = '#e5e7eb'}
-                        >
-                            <option value="Active">Active</option>
-                            <option value="Draft">Draft</option>
-                            <option value="Archived">Archived</option>
-                        </select>
+                    <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 16 }}>
+                        <div>
+                            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 400, color: '#6b7280', marginBottom: 8, fontFamily: 'Roboto' }}>Product Category</label>
+                            <select 
+                                value={product.category || ''}
+                                onChange={e => setProduct({...product, category: e.target.value})}
+                                style={{ 
+                                    width: '100%', padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', 
+                                    fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box', fontFamily: 'Roboto', background: '#fff', cursor: 'pointer' 
+                                }}
+                                onFocus={e => e.currentTarget.style.borderColor = '#9ca3af'}
+                                onBlur={e => e.currentTarget.style.borderColor = '#e5e7eb'}
+                            >
+                                <option value="" disabled>Select Category</option>
+                                {(categories || []).map((cat, idx) => (
+                                    <option key={idx} value={typeof cat === 'string' ? cat : cat.name}>
+                                        {typeof cat === 'string' ? cat : cat.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div>
+                            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 400, color: '#6b7280', marginBottom: 8, fontFamily: 'Roboto' }}>Status</label>
+                            <select 
+                                value={product.status}
+                                onChange={e => setProduct({...product, status: e.target.value})}
+                                style={{ 
+                                    width: '100%', padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', 
+                                    fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box', fontFamily: 'Roboto', background: '#fff', cursor: 'pointer' 
+                                }}
+                                onFocus={e => e.currentTarget.style.borderColor = '#9ca3af'}
+                                onBlur={e => e.currentTarget.style.borderColor = '#e5e7eb'}
+                            >
+                                <option value="Active">Active</option>
+                                <option value="Draft">Draft</option>
+                                <option value="Archived">Archived</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </form>

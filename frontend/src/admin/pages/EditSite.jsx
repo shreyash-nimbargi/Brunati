@@ -1,24 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Camera, Edit2, Trash2, Save, Plus, ChevronRight, Loader2, ArrowRight } from 'lucide-react';
 import { useStorefront } from '../../context/StorefrontContext';
 import BannerCard from '../components/banners/BannerCard';
 import AddBannerModal from '../components/banners/AddBannerModal';
-import AddCategoryModal from '../components/categories/AddCategoryModal';
-import ManageProductsModal from '../components/categories/ManageProductsModal';
 import { bannerService } from '../../services/bannerService';
+import { reviewService } from '../../services/reviewService';
 import { categoryService } from '../../services/categoryService';
 import { productService } from '../../services/productService';
 import { toast } from 'react-hot-toast';
 import OlfactoryTrends from '../components/trends/OlfactoryTrends';
+import Reviews from '../components/reviews/Reviews';
+import FamousPeople from '../components/influencers/FamousPeople';
+import { famousPeopleService } from '../../services/famousPeopleService';
 
 const EditSite = () => {
     const FONT_ROBOTO_BOLD = '"Roboto", sans-serif';
     const FONT_ROBOTO_REGULAR = '"Roboto", sans-serif';
     const navigate = useNavigate();
-    const { scentArt, setScentArt, reviews, setReviews, influencers, setInfluencers, setTopPhotos, categories: siteCategories, setCategories, inventoryProducts, setInventoryProducts } = useStorefront();
+    const { scentArt, setScentArt, reviews, setReviews, influencers, setInfluencers, setTopPhotos, inventoryProducts, setInventoryProducts } = useStorefront();
 
-    const [activeTab, setActiveTab] = useState('banners');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const activeTab = searchParams.get('tab') || 'banners';
+    
+    const setActiveTab = (tab) => {
+        setSearchParams({ tab });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
     
     // Banners State
@@ -27,16 +35,10 @@ const EditSite = () => {
     const [editingBanner, setEditingBanner] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    // Categories State
-    const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
-    const [isManageProductsModalOpen, setIsManageProductsModalOpen] = useState(false);
-    const [editingCategory, setEditingCategory] = useState(null);
-
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth <= 768);
         window.addEventListener('resize', handleResize);
         fetchBanners();
-        fetchCategories();
         fetchProducts();
         return () => window.removeEventListener('resize', handleResize);
     }, []);
@@ -53,34 +55,6 @@ const EditSite = () => {
         }
     };
 
-    const fetchCategories = async () => {
-        try {
-            const res = await categoryService.getAllCategories();
-            if (res.status && res.data) {
-                const names = res.data.map(c => c.name);
-                setCategories(names.length > 0 ? names : ['Men', 'Women', 'Unisex']);
-            }
-        } catch (err) {
-            console.error('Categories fetch error:', err);
-        }
-    };
-
-    const handleSaveCategory = async (name, id) => {
-        try {
-            if (id) {
-                await categoryService.updateCategory(id, { name });
-                toast.success('Category updated');
-            } else {
-                await categoryService.createCategory({ name });
-                toast.success('Category added');
-            }
-            setIsCategoryModalOpen(false);
-            setEditingCategory(null);
-            fetchCategories();
-        } catch (err) {
-            toast.error('Save failed');
-        }
-    };
     const fetchBanners = async () => {
         setIsLoading(true);
         try {
@@ -132,7 +106,6 @@ const EditSite = () => {
 
     const tabs = [
         { id: 'banners', label: 'Banners' },
-        { id: 'categories', label: 'Categories' },
         { id: 'trends', label: 'Olfactory Trends' },
         { id: 'reviews', label: 'Reviews' },
         { id: 'influencers', label: 'Famous People' }
@@ -144,8 +117,8 @@ const EditSite = () => {
         padding: isMobile ? '20px' : '32px',
         boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
         border: '1px solid #f0f0f0',
-        maxWidth: '1200px',
-        margin: '0 auto'
+        width: '100%',
+        margin: '0'
     };
 
     const sectionHeaderStyle = {
@@ -165,14 +138,15 @@ const EditSite = () => {
         switch(id) {
             case 'banners':
                 return (
-                    <div className="max-w-[1200px] mx-auto w-full px-0 md:px-0 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                    <div className="w-full animate-in fade-in slide-in-from-bottom-2 duration-300">
                         <div className={`flex ${isMobile ? 'flex-col items-center text-center' : 'flex-row items-center justify-between'} mb-10`}>
                             <div className={isMobile ? 'mb-6' : ''}>
                                 <h2 style={{ 
                                     fontFamily: FONT_ROBOTO_BOLD, 
                                     fontWeight: 700, 
                                     fontSize: isMobile ? '1.5rem' : '1.85rem',
-                                    margin: 0
+                                    margin: 0,
+                                    textTransform: 'none'
                                 }}>
                                     Banners
                                 </h2>
@@ -186,7 +160,7 @@ const EditSite = () => {
                                 `}
                                 style={{ fontFamily: FONT_ROBOTO_BOLD }}
                             >
-                                <Plus size={18} /> Add Photo
+                                <Plus size={18} /> <span style={{ fontFamily: FONT_ROBOTO_BOLD }}>Add Photo</span>
                             </button>
                         </div>
                         
@@ -200,12 +174,12 @@ const EditSite = () => {
                                 <div className="p-4 bg-white rounded-full shadow-sm mb-4">
                                     <Camera size={24} className="text-gray-300" />
                                 </div>
-                                <h3 className="font-bold text-black" style={{ fontFamily: FONT_ROBOTO_BOLD }}>No active banners</h3>
+                                <h3 className="font-bold text-black" style={{ fontFamily: FONT_ROBOTO_BOLD }}>NO ACTIVE BANNERS</h3>
                                 <p className="text-sm text-gray-500 mt-1">Add your first banner to see it on the storefront</p>
                             </div>
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full mx-auto">
-                                {banners.map(b => (
+                                {(banners || []).map(b => (
                                     <BannerCard 
                                         key={b._id || b.id} 
                                         banner={b} 
@@ -217,185 +191,12 @@ const EditSite = () => {
                         )}
                     </div>
                 );
-            case 'categories':
-                const getProductCount = (catName) => {
-                    const name = typeof catName === 'string' ? catName : catName.name;
-                    return inventoryProducts.filter(p => p.category?.toLowerCase() === name.toLowerCase()).length;
-                };
-
-                const handleDeleteCategory = (catId, catName) => {
-                    const count = getProductCount(catName);
-                    if (count > 0) {
-                        toast.error(`Cannot delete category "${catName}" because it contains ${count} product(s). Remove products first.`, { duration: 4000 });
-                        return;
-                    }
-
-                    let shouldDelete = true;
-                    toast((t) => (
-                        <div className="flex items-center gap-4">
-                            <span style={{ fontFamily: '"Roboto", sans-serif' }}>Category "{catName}" deleted</span>
-                            <button 
-                                onClick={() => {
-                                    shouldDelete = false;
-                                    toast.dismiss(t.id);
-                                    toast.success('Restored', { duration: 2000 });
-                                }}
-                                className="bg-white text-black px-3 py-1 rounded text-xs font-bold border border-black hover:bg-black hover:text-white transition-colors"
-                            >
-                                Undo
-                            </button>
-                        </div>
-                    ), { 
-                        duration: 6000,
-                        position: 'bottom-center',
-                        style: { background: '#000', color: '#fff', padding: '12px 20px', borderRadius: '12px' }
-                    });
-
-                    setTimeout(async () => {
-                        if (shouldDelete) {
-                            try {
-                                await categoryService.deleteCategory(catId);
-                                fetchCategories();
-                                toast.success('Category removed');
-                            } catch (err) {
-                                toast.error('Delete failed');
-                            }
-                        }
-                    }, 6000);
-                };
-
-                return (
-                    <div className="max-w-[1200px] mx-auto w-full px-0 md:px-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                        <div className={`flex ${isMobile ? 'flex-col items-center text-center' : 'flex-row items-center justify-between'} mb-10`}>
-                            <div className={isMobile ? 'mb-6' : ''}>
-                                <h2 style={{ 
-                                    fontFamily: FONT_ROBOTO_BOLD, 
-                                    fontWeight: 700, 
-                                    fontSize: isMobile ? '1.5rem' : '1.85rem',
-                                    margin: 0
-                                }}>
-                                    Categories
-                                </h2>
-                                <p className="text-gray-500 mt-2 font-roboto font-normal text-sm">Manage your luxury collections and product assignments.</p>
-                            </div>
-                            <button 
-                                onClick={() => { setEditingCategory(null); setIsCategoryModalOpen(true); }}
-                                className={`
-                                    bg-black text-white hover:bg-gray-800 transition-all rounded-xl font-bold flex items-center justify-center gap-2
-                                    ${isMobile ? 'w-fit px-10 py-3.5 text-sm' : 'w-fit py-2.5 px-6 text-sm'}
-                                `}
-                                style={{ fontFamily: FONT_ROBOTO_BOLD }}
-                            >
-                                <Plus size={18} /> Add Category
-                            </button>
-                        </div>
-
-                        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ${isMobile ? 'px-2' : ''}`}>
-                            {siteCategories.map((cat, idx) => {
-                                const catName = typeof cat === 'string' ? cat : cat.name;
-                                const count = getProductCount(catName);
-                                
-                                return (
-                                    <div 
-                                        key={cat._id || idx} 
-                                        className={`
-                                            bg-white rounded-[20px] border border-gray-100 shadow-sm hover:border-gray-200 hover:shadow-md transition-all duration-300 flex flex-col items-center text-center group relative
-                                            ${isMobile ? 'py-6 px-6 mx-auto w-full max-w-[90%]' : 'p-8'}
-                                        `}
-                                    >
-                                        <div className="absolute top-4 right-4 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                                            <button 
-                                                onClick={() => { setEditingCategory(cat); setIsCategoryModalOpen(true); }}
-                                                className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-black hover:bg-gray-50 rounded-full transition-all duration-200"
-                                                title="Rename"
-                                            >
-                                                <Edit2 size={12} strokeWidth={1.5} />
-                                            </button>
-                                            <button 
-                                                onClick={() => handleDeleteCategory(cat._id || cat, catName)}
-                                                className="w-8 h-8 flex items-center justify-center text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-full transition-all duration-200"
-                                                title="Delete"
-                                            >
-                                                <Trash2 size={12} strokeWidth={1.5} />
-                                            </button>
-                                        </div>
-
-                                        <div className="mb-1">
-                                            <h3 className="text-black text-xl font-bold leading-tight" style={{ fontFamily: '"Roboto", sans-serif' }}>
-                                                {catName}
-                                            </h3>
-                                            <p className="text-sm text-gray-400 font-roboto font-normal mt-1">
-                                                {count} {count === 1 ? 'item' : 'items'}
-                                            </p>
-                                        </div>
-
-                                        <div className="mt-4 w-full">
-                                            <button 
-                                                onClick={() => { setEditingCategory(cat); setIsManageProductsModalOpen(true); }}
-                                                className="inline-flex items-center justify-center gap-2 text-sm font-normal text-gray-600 hover:text-black transition-all duration-300 min-h-[44px] w-full"
-                                                style={{ fontFamily: '"Roboto", sans-serif' }}
-                                            >
-                                                Assign Products 
-                                                <ArrowRight size={14} strokeWidth={1.5} />
-                                            </button>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-                );
             case 'trends':
                 return <OlfactoryTrends isMobile={isMobile} />;
             case 'reviews':
-                return (
-                    <div style={cardStyle} className="font-roboto">
-                        <div style={sectionHeaderStyle}>
-                            <span className="font-bold text-black text-xl">Reviews</span>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            {reviews.map(rev => (
-                                <div key={rev.id} className="bg-white border border-gray-100 rounded-[20px] p-8 shadow-sm hover:shadow-md transition-all">
-                                    <div className="flex justify-between items-start mb-4">
-                                        <div>
-                                            <h4 className="font-bold text-gray-900 text-[15px] mb-1">{rev.name}</h4>
-                                            <div className="flex gap-0.5">
-                                                {[...Array(5)].map((_, i) => <span key={i} className="text-amber-400 text-xs">★</span>)}
-                                            </div>
-                                        </div>
-                                        <div className="flex gap-2">
-                                            <button className="p-2 text-gray-300 hover:text-black hover:bg-gray-50 rounded-full transition-all"><Edit2 size={14} strokeWidth={1.5} /></button>
-                                            <button className="p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"><Trash2 size={14} strokeWidth={1.5} /></button>
-                                        </div>
-                                    </div>
-                                    <p className="text-[14px] text-gray-500 font-normal leading-relaxed italic" style={{ fontFamily: FONT_ROBOTO_REGULAR }}>
-                                        "{rev.text}"
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                );
+                return <Reviews isMobile={isMobile} />;
             case 'influencers':
-                return (
-                    <div style={cardStyle} className="font-roboto text-normal">
-                        <div style={sectionHeaderStyle}>
-                            <span className="font-bold text-black text-xl">Famous People</span>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                            {influencers.map(inf => (
-                                <div key={inf.id} className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm flex flex-col items-center text-center">
-                                    <div className="w-16 h-16 bg-gray-50 rounded-full mb-4 flex items-center justify-center text-gray-300 border border-gray-50">
-                                        <Plus size={24} strokeWidth={1} />
-                                    </div>
-                                    <h4 className="font-bold text-gray-900 text-[15px] mb-1">{inf.name}</h4>
-                                    <p className="text-[12px] text-gray-500 font-light mb-6">{inf.role}</p>
-                                    <button className="w-full py-2.5 text-[11px] font-bold text-red-500 border border-red-100 hover:bg-red-50 rounded-lg transition-all">Remove</button>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                );
+                return <FamousPeople isMobile={isMobile} />;
             default: return null;
         }
     };
@@ -403,9 +204,8 @@ const EditSite = () => {
     const getTabLabel = (tab) => {
         if (!isMobile) return tab.label;
         switch(tab.id) {
-            case 'trends': return 'Trends';
             case 'influencers': return 'People';
-            case 'categories': return 'Categories';
+            case 'trends': return 'Trends';
             default: return tab.label;
         }
     };
@@ -424,23 +224,31 @@ const EditSite = () => {
                 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
             `}</style>
  
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: isMobile ? '16px' : '32px', maxWidth: '1200px', margin: '0 auto 32px', padding: isMobile ? '0 4px' : '0' }}>
-                <div className="flex items-center gap-4">
+            <div className={`max-w-7xl mx-auto ${isMobile ? 'px-4' : 'px-8'} w-full mb-8 mt-6`}>
+                <div className="hidden md:flex mb-4">
                     <button 
                         onClick={() => navigate('/admin')}
-                        className="hidden md:flex text-gray-500 hover:text-black transition-colors font-roboto text-sm items-center gap-1"
+                        className="text-gray-400 hover:text-black transition-colors font-roboto font-normal text-sm flex items-center gap-1 group"
                     >
-                        ← Back
+                        <span className="transform group-hover:-translate-x-1 transition-transform duration-200">←</span> Back to Dashboard
                     </button>
-                    <h1 style={{ fontFamily: FONT_ROBOTO_BOLD, fontWeight: 700, fontSize: isMobile ? '1.5rem' : '1.85rem', margin: 0 }}>Edit Site</h1>
                 </div>
+                <h1 style={{ 
+                    fontFamily: FONT_ROBOTO_BOLD, 
+                    fontWeight: 700, 
+                    fontSize: isMobile ? '1.5rem' : '2rem', 
+                    margin: 0,
+                    textTransform: 'none'
+                }}>
+                    Edit Site
+                </h1>
             </div>
  
             {/* Sticky Horizontal Navigation Ribbon - LUXURY PILL SCROLLER (Step 65) */}
             <div className={`
                 ${isMobile 
                     ? 'sticky top-[64px] z-40 bg-white border-b border-gray-100 py-4 mb-6 overflow-hidden relative' 
-                    : 'flex border-b border-gray-100 mb-8 gap-8 max-w-[1200px] mx-auto'}
+                    : 'flex border-b border-gray-100 mb-10 gap-8 max-w-7xl mx-auto px-8'}
             `}>
                 {isMobile ? (
                     <>
@@ -495,7 +303,7 @@ const EditSite = () => {
                 )}
             </div>
  
-            <div className={`mt-8 ${isMobile ? 'px-4' : ''}`}>
+            <div className={`mt-4 ${isMobile ? 'px-4' : 'px-8 max-w-7xl mx-auto'}`}>
                 {renderSection(activeTab)}
             </div>
 
@@ -504,22 +312,6 @@ const EditSite = () => {
                 onClose={() => { setIsModalOpen(false); setEditingBanner(null); }}
                 onSave={handleSaveBanner}
                 editingBanner={editingBanner}
-            />
-
-            {/* Add/Edit Category Modal */}
-            <AddCategoryModal 
-                isOpen={isCategoryModalOpen}
-                onClose={() => { setIsCategoryModalOpen(false); setEditingCategory(null); }}
-                onSave={handleSaveCategory}
-                editingCategory={editingCategory}
-            />
-            {/* Manage Category Products Modal */}
-            <ManageProductsModal
-                isOpen={isManageProductsModalOpen}
-                onClose={() => { setIsManageProductsModalOpen(false); setEditingCategory(null); }}
-                category={editingCategory}
-                allProducts={inventoryProducts}
-                onUpdateComplete={fetchProducts}
             />
         </div>
     );
