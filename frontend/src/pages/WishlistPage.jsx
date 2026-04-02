@@ -114,7 +114,7 @@ const WishlistPage = () => {
                     }}>
                         {/* Image */}
                         <div
-                            onClick={() => navigate(`/product/${item.id}`)}
+                            onClick={() => navigate(`/product/${item.slug || item.id}`)}
                             style={{
                                 width: 90, height: 90, flexShrink: 0,
                                 background: '#f5f5f7', padding: 6,
@@ -134,7 +134,7 @@ const WishlistPage = () => {
                             {/* Name row + trash icon */}
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, marginBottom: 4 }}>
                                 <p
-                                    onClick={() => navigate(`/product/${item.id}`)}
+                                    onClick={() => navigate(`/product/${item.slug || item.id}`)}
                                     style={{ fontSize: '0.9rem', fontWeight: 600, color: '#1d1d1f', lineHeight: 1.4, cursor: 'pointer' }}
                                 >
                                     {item.name}

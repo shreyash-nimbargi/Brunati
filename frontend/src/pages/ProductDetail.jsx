@@ -145,6 +145,7 @@ const ProductDetail = () => {
                                     price: price,
                                     image: getImgSrc(product.images[0]),
                                     size: selectedSize,
+                                    slug: product.slug || product._id,
                                 })}
                                 title={isWishlisted(product._id) ? 'Remove from wishlist' : 'Add to wishlist'}
                                 style={{
