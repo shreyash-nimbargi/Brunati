@@ -15,11 +15,11 @@ const Hero = () => {
                 } else {
                     // FALLBACK: Match exactly with StorefrontContext defaults
                     setOriginalSlides([
-                        { id: 1, title: 'MISTIA', subtitle: 'An ethereal and captivating blend', imageUrl: 'media/mistia/1.png' },
-                        { id: 2, title: 'DOMINUS', subtitle: 'Commanding and powerful presence', imageUrl: 'media/dominus/1.png' },
-                        { id: 3, title: 'AQUA', subtitle: 'Fresh, vibrant, and deep oceanic notes', imageUrl: 'media/aqua/1.png' },
-                        { id: 4, title: 'MIDNIGHT', subtitle: 'A deep, mysterious evening experience', imageUrl: 'media/midnight/1.png' },
-                        { id: 5, title: 'DUSK', subtitle: 'Warm, woody notes for the bold', imageUrl: 'media/dusk/1.png' }
+                        { id: 1, title: 'Mistia', subtitle: 'An ethereal and captivating blend', imageUrl: 'media/mistia/1.png' },
+                        { id: 2, title: 'Dominus', subtitle: 'Commanding and powerful presence', imageUrl: 'media/dominus/1.png' },
+                        { id: 3, title: 'Aqua', subtitle: 'Fresh, vibrant, and deep oceanic notes', imageUrl: 'media/aqua/1.png' },
+                        { id: 4, title: 'Midnight Glimmer', subtitle: 'A deep, mysterious evening experience', imageUrl: 'media/midnight/1.png' },
+                        { id: 5, title: 'Citrine Dusk', subtitle: 'Warm, woody notes for the bold', imageUrl: 'media/dusk/1.png' }
                     ]);
                 }
             } catch (err) {

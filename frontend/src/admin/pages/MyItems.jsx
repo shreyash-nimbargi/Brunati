@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { productService } from '../../services/productService';
-import ProductModal from '../components/ProductModal';
 
 const FONT = '"Roboto", sans-serif';
 
@@ -11,8 +10,6 @@ const AdminInventory = () => {
     const [searchQuery, setSearchQuery] = useState(location.state?.filterCategory || '');
     const [viewMode, setViewMode] = useState(window.innerWidth <= 768 ? 'mobile' : 'desktop');
     const [loading, setLoading] = useState(true);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingProduct, setEditingProduct] = useState(null);
 
     useEffect(() => {
         const handleResize = () => setViewMode(window.innerWidth <= 768 ? 'mobile' : 'desktop');
@@ -36,30 +33,6 @@ const AdminInventory = () => {
         }
     };
 
-    const handleAddProduct = () => {
-        setEditingProduct(null);
-        setIsModalOpen(true);
-    };
-
-    const handleEditProduct = (product) => {
-        setEditingProduct(product);
-        setIsModalOpen(true);
-    };
-
-    const handleSaveProduct = async (productData) => {
-        try {
-            if (editingProduct) {
-                await productService.updateProduct(editingProduct._id, productData);
-            } else {
-                await productService.createProduct(productData);
-            }
-            await fetchProducts(); // Refresh list
-        } catch (err) {
-            console.error('Save error:', err);
-            throw err;
-        }
-    };
-
     const filteredProducts = products.filter(p => {
         const search = searchQuery.toLowerCase();
         return p.name.toLowerCase().includes(search) || 
@@ -80,7 +53,7 @@ const AdminInventory = () => {
                 paddingBottom: 24,
                 borderBottom: '1px solid rgba(0,0,0,0.08)'
             }}>
-                <h1 style={{ fontFamily: FONT, fontSize: viewMode === 'mobile' ? '1.5rem' : '1.75rem', fontWeight: 700, color: '#1d1d1f', margin: 0, letterSpacing: 'normal', textTransform: 'none' }}>Inventory</h1>
+                <h1 style={{ fontFamily: FONT, fontSize: isMobile ? '1.5rem' : '1.75rem', fontWeight: 700, color: '#1d1d1f', margin: 0, letterSpacing: 'normal', textTransform: 'none' }}>My Items</h1>
                 
                 <div style={{ display: 'flex', gap: 12, width: viewMode === 'mobile' ? '100%' : 'auto' }}>
                     <div style={{ position: 'relative', flex: 1, minWidth: viewMode === 'mobile' ? 'auto' : '280px' }}>
@@ -102,9 +75,7 @@ const AdminInventory = () => {
                         </svg>
                     </div>
                     
-                    <button 
-                        onClick={handleAddProduct}
-                        style={{
+                    <button style={{
                         padding: '10px 16px', background: '#111827', color: '#fff', border: 'none',
                         borderRadius: '6px', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
                         whiteSpace: 'nowrap', transition: 'background-color 0.2s', fontFamily: FONT, height: '100%',
@@ -161,14 +132,11 @@ const AdminInventory = () => {
                                 )}
                                 <td style={{ padding: '8px 16px', fontSize: '0.85rem', color: '#4b5563' }}>₹{p.sizes?.[0]?.price?.toLocaleString() || '0'}</td>
                                 <td style={{ padding: '8px 16px', textAlign: 'right' }}>
-                                    <button 
-                                        onClick={() => handleEditProduct(p)}
-                                        style={{
-                                            display: 'inline-block', background: 'none', border: 'none', color: '#2563eb', fontWeight: 500, fontSize: '0.85rem', cursor: 'pointer', padding: '10px'
-                                        }}
-                                    >
+                                    <Link to={`/admin/inventory/edit/${p._id}`} state={{ product: p }} style={{
+                                        display: 'inline-block', textDecoration: 'none', color: '#2563eb', fontWeight: 500, fontSize: '0.85rem', cursor: 'pointer', padding: '10px'
+                                    }}>
                                         Edit
-                                    </button>
+                                    </Link>
                                 </td>
                             </tr>
                         )) : (
@@ -181,17 +149,6 @@ const AdminInventory = () => {
                     </tbody>
                 </table>
             </div>
-
-            <ProductModal 
-                isOpen={isModalOpen}
-                onClose={() => {
-                    setIsModalOpen(false);
-                    setEditingProduct(null);
-                }}
-                product={editingProduct}
-                onSave={handleSaveProduct}
-            />
-
             <style>{`
                 @keyframes fadeIn {
                     from { opacity: 0; transform: translateY(5px); }

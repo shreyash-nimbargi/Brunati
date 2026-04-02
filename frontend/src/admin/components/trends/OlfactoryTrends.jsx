@@ -66,22 +66,22 @@ const OlfactoryTrends = ({ isMobile }) => {
     return (
         <div className="animate-in fade-in duration-500 w-full max-w-full overflow-x-hidden">
             {/* Module Heading Area */}
-            <div className={`mb-8 ${isMobile ? 'px-0' : ''}`}>
-                <h2 className={`text-black font-bold leading-tight tracking-tight font-roboto ${isMobile ? 'text-xl' : 'text-[22px]'}`}>
+            <div className={`mb-8 ${isMobile ? 'px-0 text-center' : ''}`}>
+                <h2 className={`text-black font-bold leading-tight tracking-tight font-roboto ${isMobile ? 'text-2xl' : 'text-3xl'}`} style={{ textTransform: 'none' }}>
                     Olfactory Trends
                 </h2>
-                <p className={`text-gray-500 font-normal mt-1.5 font-roboto ${isMobile ? 'text-sm' : 'text-sm'}`}>
+                <p className={`text-gray-500 font-normal mt-2 font-roboto ${isMobile ? 'text-sm' : 'text-base'}`}>
                     Manage featured video trends and associate them with your luxury products.
                 </p>
             </div>
 
             {/* Input Form Section (Mobile Optimized & Searchable) */}
-            <div className={`${isMobile ? 'p-6' : 'p-8'} bg-white rounded-[20px] border border-gray-100 mb-6 shadow-sm overflow-hidden`}>
+            <div className={`max-w-4xl mx-auto w-full ${isMobile ? 'p-6' : 'p-8'} bg-white rounded-3xl border border-gray-100 mb-10 shadow-md overflow-hidden relative z-0`}>
                 <div className={`flex flex-col gap-6 mb-8`}>
                     
                     {/* Select Product Area with Search */}
-                    <div className="flex flex-col gap-3 relative z-[60]">
-                        <label className="text-sm font-roboto font-normal text-gray-700 flex items-center gap-2">
+                    <div className="flex flex-col gap-3 relative z-10">
+                        <label className="text-[11px] font-bold text-gray-700 flex items-center gap-2 uppercase tracking-wider">
                             <Package size={14} /> Select Product
                         </label>
                         
@@ -92,7 +92,7 @@ const OlfactoryTrends = ({ isMobile }) => {
                                 placeholder="Search perfumes (e.g. Midnight)..."
                                 value={productSearch}
                                 onChange={(e) => setProductSearch(e.target.value)}
-                                className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-roboto focus:bg-white focus:border-black transition-all outline-none"
+                                className="w-full pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-xl text-sm font-roboto focus:border-black transition-all outline-none"
                             />
                         </div>
 
@@ -104,7 +104,7 @@ const OlfactoryTrends = ({ isMobile }) => {
                                     className="w-full bg-white border border-gray-300 rounded-xl px-4 py-3.5 text-sm font-roboto focus:outline-none focus:border-black transition-all appearance-none cursor-pointer hover:border-gray-400 pr-10"
                                 >
                                     <option value="">{filteredInventory.length > 0 ? '-- Select perfume from results --' : '-- No perfumes found --'}</option>
-                                    {filteredInventory.map(p => (
+                                    {(filteredInventory || []).map(p => (
                                         <option key={p._id || p.id} value={p._id || p.id}>
                                             {p.name} {p.category ? `(${p.category})` : ''}
                                         </option>
@@ -122,8 +122,8 @@ const OlfactoryTrends = ({ isMobile }) => {
                     </div>
 
                     {/* Video URL Field */}
-                    <div className="flex flex-col gap-2 relative z-10">
-                        <label className="text-sm font-roboto font-normal text-gray-700 flex items-center gap-2">
+                    <div className="flex flex-col gap-3 relative z-10">
+                        <label className="text-[11px] font-bold text-gray-700 flex items-center gap-2 uppercase tracking-wider">
                             <Video size={14} /> Upload Trend Video / URL
                         </label>
                         <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} gap-4`}>
@@ -132,13 +132,13 @@ const OlfactoryTrends = ({ isMobile }) => {
                                 placeholder="Paste Cloudinary URL..."
                                 value={videoUrl}
                                 onChange={(e) => setVideoUrl(e.target.value)}
-                                className="flex-1 bg-white border border-gray-300 rounded-xl px-4 py-3.5 text-sm font-roboto focus:outline-none focus:border-black transition-all"
+                                className="flex-1 bg-white border border-gray-300 rounded-xl px-4 py-3 text-sm font-roboto focus:outline-none focus:border-black transition-all"
                             />
                             <button 
                                 onClick={() => toast('Upload coming soon', { icon: '🚧' })}
                                 className={`
-                                    bg-white border border-gray-300 text-black rounded-xl text-xs font-bold hover:bg-gray-50 transition-all font-roboto
-                                    ${isMobile ? 'w-full py-4' : 'px-8'}
+                                    bg-white border border-gray-300 text-gray-500 rounded-xl text-xs font-bold hover:bg-gray-50 hover:text-black hover:border-black transition-all font-roboto
+                                    ${isMobile ? 'w-full py-3.5' : 'px-8'}
                                 `}
                             >
                                 Upload
@@ -152,10 +152,10 @@ const OlfactoryTrends = ({ isMobile }) => {
                         onClick={handleAddTrend}
                         className={`
                             bg-black text-white rounded-xl text-sm font-bold hover:bg-gray-900 transition-all flex items-center justify-center gap-2 font-roboto
-                            ${isMobile ? 'w-full py-4' : 'px-16 py-3.5'}
+                            ${isMobile ? 'w-full py-4' : 'px-16 py-3'}
                         `}
                     >
-                        Submit
+                        Add Trend
                     </button>
                 </div>
             </div>
@@ -165,7 +165,7 @@ const OlfactoryTrends = ({ isMobile }) => {
 
             {/* Trends List (Responsive Optimization) */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full mx-auto px-0 md:px-0">
-                {trends.map(trend => (
+                {(trends || []).map(trend => (
                     <div key={trend.id} className={`
                         bg-white rounded-[20px] border border-gray-100 flex overflow-hidden group 
                         hover:border-gray-200 hover:shadow-2xl hover:shadow-black/[0.03] transition-all duration-300

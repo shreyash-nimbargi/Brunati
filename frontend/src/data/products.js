@@ -9,6 +9,7 @@ export const productsData = {
         storyVisual: "media/banner/DEc.png",
         videoReel: "https://res.cloudinary.com/dlg3ofqcr/video/upload/v1773762424/Not_every_man_can_wear_this_crown___Dominus_Emperor__Your_signature_scent_arrives_soon___mensfragrances__boldfragrance__whiskynotes__TobaccoVanilla__Stron_nsb78j.mp4", // PASTE YOUR CLOUDINARY LINK HERE FOR DOMINUS
         accords: ["Warm Spicy", "Woody", "Tobacco", "Whiskey", "Oud", "Sweet", "Amber", "Balsamic", "Vanilla", "Smoky"],
+        slug: "dominus-emperor",
         topNotes: "Whiskey",
         middleNotes: "Spicy Notes, Cinnamon, Coriander",
         baseNotes: "Tobacco, Agarwood (Oud), Incense, Sandalwood, Patchouli, Benzoin, Vanilla, Cedar"
@@ -23,6 +24,7 @@ export const productsData = {
         storyVisual: "media/banner/BAc.png",
         videoReel: "https://res.cloudinary.com/dlg3ofqcr/video/upload/v1773762426/Unisex___Unique___Unforgettable__On_the_way...____brunati__Brunatiaqua__aquaticvibes__coolfragrances__summerready_MP4_kndck6.mp4", // PASTE YOUR CLOUDINARY LINK HERE FOR AQUA
         accords: ["Aromatic", "Marine", "Fresh Spicy", "Woody", "Citrus", "Earthy"],
+        slug: "brunati-aqua",
         topNotes: "Sea Notes, Bergamot",
         middleNotes: "Sage, Geranium, Rosemary",
         baseNotes: "Incense, Patchouli"
@@ -37,6 +39,7 @@ export const productsData = {
         storyVisual: "media/banner/Mc.png",
         videoReel: "https://res.cloudinary.com/dlg3ofqcr/video/upload/v1773762425/Something_fresh__floral__and_unforgettable__is_on_its_way___For_the_woman_who_blooms_with_grace____MISTEA__ComingSoon__FloralElegance__famininefragra_rppgyu.mp4", // PASTE YOUR CLOUDINARY LINK HERE FOR MISTIA
         accords: ["Floral", "White Floral", "Musky", "Powdery", "Woody"],
+        slug: "mestia",
         topNotes: "White Florals, Pear",
         middleNotes: "Tuberose, Jasmine",
         baseNotes: "Sandalwood, Musk"
@@ -51,6 +54,7 @@ export const productsData = {
         storyVisual: "media/banner/CDc.png",
         videoReel: "", // PASTE YOUR CLOUDINARY LINK HERE FOR DUSK
         accords: ["Citrus", "Amber", "Woody", "Powdery", "Fresh"],
+        slug: "citrine-dusk",
         topNotes: "Citrus Zest, Bergamot",
         middleNotes: "Amber, Spicy Notes",
         baseNotes: "Sandalwood, Oakmoss"
@@ -65,6 +69,7 @@ export const productsData = {
         storyVisual: "media/banner/MGc.png",
         videoReel: "https://res.cloudinary.com/dlg3ofqcr/video/upload/v1773762425/Sweet___Spicy___After_Dark___MIDNIGHT_GLIMMER___Launching_Soon___midnightglimmer__Brunati___UnisexFragrance__sweetspicyscent__vanillafragrance_MP4_ssal0p.mp4", // PASTE YOUR CLOUDINARY LINK HERE FOR MIDNIGHT
         accords: ["Fruity", "Sweet", "Vanilla", "Balsamic", "Smoky"],
+        slug: "midnight-glimmer",
         topNotes: "Dark Cherry, Almond",
         middleNotes: "Tonka Bean, Rose de Grasse",
         baseNotes: "Vetiver, Vanilla, Cedar"

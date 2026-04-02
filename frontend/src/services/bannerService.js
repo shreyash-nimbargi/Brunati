@@ -1,5 +1,13 @@
 import api from './api';
 
+const getAuthHeaders = (additionalHeaders = {}) => {
+    const token = localStorage.getItem('adminToken') || localStorage.getItem('admin_token');
+    return {
+        ...additionalHeaders,
+        Authorization: `Bearer ${token}`
+    };
+};
+
 export const bannerService = {
     // Public
     getActiveBanners: async () => {
@@ -14,7 +22,9 @@ export const bannerService = {
     // Admin
     getAllBanners: async () => {
         try {
-            const response = await api.get('/admin/banners');
+            const response = await api.get('/admin/banners', {
+                headers: getAuthHeaders()
+            });
             return response.data;
         } catch (error) {
             throw error.response?.data || error.message;
@@ -24,7 +34,7 @@ export const bannerService = {
     createBanner: async (formData) => {
         try {
             const response = await api.post('/admin/banners', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
+                headers: getAuthHeaders({ 'Content-Type': 'multipart/form-data' })
             });
             return response.data;
         } catch (error) {
@@ -35,7 +45,7 @@ export const bannerService = {
     updateBanner: async (id, formData) => {
         try {
             const response = await api.put(`/admin/banners/${id}`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
+                headers: getAuthHeaders({ 'Content-Type': 'multipart/form-data' })
             });
             return response.data;
         } catch (error) {
@@ -45,7 +55,9 @@ export const bannerService = {
 
     deleteBanner: async (id) => {
         try {
-            const response = await api.delete(`/admin/banners/${id}`);
+            const response = await api.delete(`/admin/banners/${id}`, {
+                headers: getAuthHeaders()
+            });
             return response.data;
         } catch (error) {
             throw error.response?.data || error.message;

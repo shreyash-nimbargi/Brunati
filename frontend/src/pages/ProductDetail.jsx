@@ -57,18 +57,19 @@ const ProductDetail = () => {
                     if (reviewsRes.status) setReviews(reviewsRes.data.data || reviewsRes.data);
 
                     if (allResponse.status) {
-                        setRelatedProducts(allResponse.data.filter(p => p.slug !== slug).slice(0, 4));
+                        const allProducts = allResponse.data.data || allResponse.data || [];
+                        setRelatedProducts(allProducts.filter(p => (p.slug || p._id) !== slug).slice(0, 4));
                     }
 
 
 
 
                 } else {
-                    setError('Product not found.');
+                    setError('Product not found');
                 }
             } catch (err) {
                 console.error('Fetch detail error:', err);
-                setError('Failed to load product details.');
+                setError('Product not found');
             } finally {
                 setLoading(false);
             }
@@ -97,8 +98,35 @@ const ProductDetail = () => {
         return () => clearInterval(interval);
     }, [isHovered]);
 
-    if (loading) return <div className="text-center py-20 font-inter">Opening the vault...</div>;
-    if (error) return <div className="text-center py-20 text-red-500 font-inter">{error}</div>;
+    if (loading) return (
+        <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4">
+            <div className="w-16 h-16 border-4 border-gray-100 border-t-black rounded-full animate-spin mb-6"></div>
+            <p className="font-roboto font-bold text-lg uppercase tracking-widest text-black animate-pulse" style={{ fontFamily: '"Roboto", sans-serif' }}>Opening the vault...</p>
+        </div>
+    );
+
+    if (error) return (
+        <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 text-center">
+            <div className="mb-8 p-12 bg-gray-50 rounded-full">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-gray-100">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+            </div>
+            <h1 className="font-roboto font-bold text-3xl text-black mb-3" style={{ textTransform: 'none', fontFamily: '"Roboto", sans-serif' }}>Product not found</h1>
+            <p className="font-roboto font-normal text-gray-500 max-w-sm mb-10 leading-relaxed" style={{ fontFamily: '"Roboto", sans-serif' }}>
+                The fragrance you are looking for may have been moved or renamed in our collection.
+            </p>
+            <button 
+                onClick={() => navigate('/shop')}
+                className="bg-black text-white px-10 py-4 font-roboto font-bold uppercase tracking-widest hover:bg-gray-900 transition-all shadow-xl"
+                style={{ fontFamily: '"Roboto", sans-serif' }}
+            >
+                Back to Shop
+            </button>
+        </div>
+    );
     if (!product) return null;
 
     const getImgSrc = (src) => {
