@@ -95,6 +95,7 @@ exports.createOrder = async (req, res) => {
                 freeSample = {
                     sampleId: sample._id,
                     productName: sample.productId.name,
+                    productImage: sample.productId.images,
                     size: sample.size
                 };
                 

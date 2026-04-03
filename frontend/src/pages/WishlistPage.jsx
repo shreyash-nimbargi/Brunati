@@ -19,7 +19,7 @@ const WishlistPage = () => {
     }, []);
 
     const handleMoveToCart = (item) => {
-        addToCart({ ...item, quantity: 1, size: item.size || '100ml' });
+        addToCart({ ...item, quantity: 1, size: item.size || '100ml', slug: item.slug || item.id });
         removeFromWishlist(item.id);
         navigate('/cart');
     };

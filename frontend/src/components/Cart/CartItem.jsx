@@ -1,8 +1,16 @@
 import React from 'react';
 import { useCart } from '../../context/CartContext';
+import { useNavigate } from 'react-router-dom';
 
 const CartItem = ({ item }) => {
-  const { updateQuantity, removeFromCart } = useCart();
+  const { updateQuantity, removeFromCart, closeCart } = useCart();
+
+  const navigate = useNavigate();
+
+  const handleImageClick = () => {
+    closeCart();
+    navigate(`/product/${item.id || item.slug || ''}`);
+  };
 
   const handleDecrease = () => {
     if (item.quantity > 1) {
@@ -18,7 +26,7 @@ const CartItem = ({ item }) => {
 
   return (
     <div className="flex flex-row gap-4 py-4 border-b border-gray-100 box-border">
-      <div className="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 bg-gray-100 overflow-hidden">
+      <div className="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 bg-gray-100 overflow-hidden cursor-pointer" onClick={handleImageClick}>
         <img
           src={item.image}
           alt={item.name}
@@ -28,7 +36,10 @@ const CartItem = ({ item }) => {
       <div className="flex-1 flex flex-col justify-between box-border overflow-hidden">
         <div>
           <div className="flex justify-between items-start gap-2">
-            <h3 className="font-medium text-sm text-gray-900 leading-snug line-clamp-2">
+            <h3 
+              className="font-medium text-sm text-gray-900 leading-snug line-clamp-2 cursor-pointer hover:underline"
+              onClick={handleImageClick}
+            >
               {item.name}
             </h3>
             <button 

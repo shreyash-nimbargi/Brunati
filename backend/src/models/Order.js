@@ -28,6 +28,8 @@ const freeSampleSchema = new mongoose.Schema({
 
     productName: String,
 
+    productImage: [String],
+
     size: String
 
 });

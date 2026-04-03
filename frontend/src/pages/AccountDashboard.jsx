@@ -707,15 +707,24 @@ const AccountDashboard = () => {
                     const mappedOrders = ordersRes.data.map(o => ({
                         id: o.orderId,
                         date: new Date(o.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+                        createdAt: o.createdAt,
                         status: o.orderStatus ? o.orderStatus.charAt(0).toUpperCase() + o.orderStatus.slice(1) : 'Placed',
-                        items: o.items.map(i => ({
-                            name: i.productName,
-                            size: i.size,
-                            price: i.price,
-                            image: i.productImage?.[0] || ''
-                        })),
+                        items: [
+                            ...o.items.map(i => ({
+                                name: i.productName,
+                                size: i.size,
+                                price: i.price,
+                                image: i.productImage?.[0] || ''
+                            })),
+                            ...(o.freeSample ? [{
+                                name: o.freeSample.productName + ' (Complimentary Gift)',
+                                size: o.freeSample.size || 'Sample',
+                                price: 0,
+                                image: o.freeSample.productImage?.[0] || '/media/dominus/1.png'
+                            }] : [])
+                        ],
                         total: o.totalAmount,
-                    }));
+                    })).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
                     setUserOrders(mappedOrders);
                 }
@@ -736,15 +745,24 @@ const AccountDashboard = () => {
                 const mappedOrders = ordersRes.data.map(o => ({
                     id: o.orderId,
                     date: new Date(o.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+                    createdAt: o.createdAt,
                     status: o.orderStatus ? o.orderStatus.charAt(0).toUpperCase() + o.orderStatus.slice(1) : 'Placed',
-                    items: o.items.map(i => ({
-                        name: i.productName,
-                        size: i.size,
-                        price: i.price,
-                        image: i.productImage?.[0] || ''
-                    })),
+                    items: [
+                        ...o.items.map(i => ({
+                            name: i.productName,
+                            size: i.size,
+                            price: i.price,
+                            image: i.productImage?.[0] || ''
+                        })),
+                        ...(o.freeSample ? [{
+                            name: o.freeSample.productName + ' (Complimentary Gift)',
+                            size: o.freeSample.size || 'Sample',
+                            price: 0,
+                            image: o.freeSample.productImage?.[0] || '/media/dominus/1.png'
+                        }] : [])
+                    ],
                     total: o.totalAmount,
-                }));
+                })).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
                 setUserOrders(mappedOrders);
             }
         } catch (error) {

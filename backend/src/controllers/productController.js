@@ -46,8 +46,15 @@ exports.getProducts = async (req, res) => {
 };
 
 exports.getProductBySlug = async (req, res) => {
-
-    const product = await Product.findOne({ slug: req.params.slug });
+    
+    let product;
+    const mongoose = require('mongoose');
+    if (mongoose.isValidObjectId(req.params.slug)) {
+        product = await Product.findById(req.params.slug);
+    }
+    if (!product) {
+        product = await Product.findOne({ slug: req.params.slug });
+    }
 
     if (!product) {
         return res.status(404).json({ status: false, message: "Product not found", data: null });

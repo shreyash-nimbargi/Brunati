@@ -250,6 +250,7 @@ const Collections = () => {
                                     price: parseFloat(currentProduct.price.replace(/[^0-9.]/g, '')),
                                     quantity: 1,
                                     image: currentProduct.img1,
+                                    slug: currentProduct.slug || currentProduct.id,
                                 });
                                 navigate('/cart');
                             }}

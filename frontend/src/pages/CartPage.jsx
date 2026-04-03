@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { productService } from '../services/productService';
+
 const CartPage = () => {
     const navigate = useNavigate();
     const { cartItems, cartCount, updateQuantity, removeFromCart, getSubtotal } = useCart();
@@ -10,6 +12,23 @@ const CartPage = () => {
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'instant' });
     }, []);
+
+    const handleProductClick = async (item) => {
+        if (item.slug) {
+            navigate(`/product/${item.slug}`);
+            return;
+        }
+        try {
+            const res = await productService.getProductBySlug(item.id);
+            if (res.status && res.data?.slug) {
+                navigate(`/product/${res.data.slug}`);
+            } else {
+                navigate(`/product/${item.id}`);
+            }
+        } catch (err) {
+            navigate(`/product/${item.id}`);
+        }
+    };
 
     return (
         <div style={{
@@ -101,10 +120,13 @@ const CartPage = () => {
                         borderBottom: '1px solid #e5e5e5',
                     }}>
                         {/* Image */}
-                        <div style={{
+                        <div 
+                            onClick={() => handleProductClick(item)}
+                            style={{
                             width: 90, height: 90, flexShrink: 0,
                             background: '#f5f5f7', padding: 6,
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            cursor: 'pointer'
                         }}>
                             <img
                                 src={item.image}
@@ -116,7 +138,13 @@ const CartPage = () => {
                         {/* Details */}
                         <div style={{ flex: 1 }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, marginBottom: 4 }}>
-                                <p style={{ fontSize: '0.9rem', fontWeight: 600, color: '#1d1d1f', lineHeight: 1.4 }}>
+                                <p 
+                                    onClick={() => handleProductClick(item)}
+                                    style={{ fontSize: '0.9rem', fontWeight: 600, color: '#1d1d1f', lineHeight: 1.4, cursor: 'pointer' }}
+                                    className="hover-underline"
+                                    onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
+                                    onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}
+                                >
                                     {item.name}
                                 </p>
                                 {/* Delete */}

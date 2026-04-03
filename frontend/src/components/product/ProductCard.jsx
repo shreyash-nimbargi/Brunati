@@ -79,6 +79,7 @@ const ProductCard = ({ id, name, meta, price, img1, img2, accords, description, 
                         price: parseFloat(String(price).replace(/[^0-9.]/g, '')),
                         quantity: 1,
                         image: img1,
+                        slug: slug || String(id),
                     });
                     navigate('/cart');
                 }}>

@@ -225,7 +225,8 @@ const ProductDetail = () => {
                                         price: parseFloat(String(price).replace(/[^0-9.]/g, '')),
                                         quantity: 1,
                                         image: getImgSrc(mainImg),
-                                        stock: product.sizes.find(s => s.size === selectedSize)?.stock || 0
+                                        stock: product.sizes.find(s => s.size === selectedSize)?.stock || 0,
+                                        slug: product.slug || product._id
                                     });
                                     navigate('/cart');
                                 }}

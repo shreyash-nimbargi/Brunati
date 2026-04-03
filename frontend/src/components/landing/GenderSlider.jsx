@@ -139,6 +139,7 @@ const GenderSlider = () => {
                                 price: parseFloat(currentProduct.price.replace(/[^0-9.]/g, '')),
                                 quantity: 1,
                                 image: currentProduct.image,
+                                slug: currentProduct.name.toLowerCase().replace(/\s+/g, '-'),
                             });
                             navigate('/cart');
                         }}
