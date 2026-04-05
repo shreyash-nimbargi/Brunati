@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { productService } from '../../services/productService';
 import ProductModal from '../components/ProductModal';
+import CategoryManagement from '../components/CategoryManagement';
 
 const FONT = '"Roboto", sans-serif';
 
@@ -114,6 +115,9 @@ const AdminInventory = () => {
                     </button>
                 </div>
             </div>
+
+            {/* Category Management Section */}
+            <CategoryManagement />
 
             {/* Products Table */}
             <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', overflowX: 'auto', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
