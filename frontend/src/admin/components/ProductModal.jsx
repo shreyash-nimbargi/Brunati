@@ -184,8 +184,13 @@ const ProductModal = ({ isOpen, onClose, product: initialProduct, onSave }) => {
         
         setSaving(true);
         setError('');
+        
+        // Auto-generate slug from name
+        const slug = product.name.toLowerCase().trim().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-');
+        const finalProduct = { ...product, slug };
+
         try {
-            await onSave(product);
+            await onSave(finalProduct);
             onClose();
         } catch (err) {
             console.error('Save error:', err);
@@ -198,20 +203,21 @@ const ProductModal = ({ isOpen, onClose, product: initialProduct, onSave }) => {
     if (!isOpen) return null;
 
     const isValid = product.name && product.price;
+    const isMobile = window.innerWidth < 768;
 
     return (
         <div style={{
-            position: 'fixed', inset: 0, zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            padding: '20px', background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)', animation: 'fadeIn 0.2s ease-out'
+            position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: isMobile ? 'flex-end' : 'center', justifyContent: 'center',
+            padding: isMobile ? '0' : '20px', background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(12px)', animation: 'fadeIn 0.2s ease-out'
         }}>
             <div style={{
-                background: '#fff', width: '100%', maxWidth: '720px', maxHeight: '90vh', overflowY: 'auto',
-                borderRadius: '12px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', position: 'relative',
-                animation: 'slideUp 0.3s ease-out'
+                background: '#fff', width: isMobile ? '100%' : '100%', maxWidth: isMobile ? '100%' : '720px', maxHeight: isMobile ? '92vh' : '90vh', overflowY: 'auto',
+                borderRadius: isMobile ? '20px 20px 0 0' : '12px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', position: 'relative',
+                animation: isMobile ? 'slideUpMobile 0.3s cubic-bezier(0.4, 0, 0.2, 1)' : 'slideUp 0.3s ease-out'
             }}>
                 {/* Header */}
                 <div style={{
-                    padding: '24px 32px', borderBottom: '1px solid #f3f4f6', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                    padding: isMobile ? '20px 24px' : '24px 32px', borderBottom: '1px solid #f3f4f6', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                     position: 'sticky', top: 0, background: '#fff', zIndex: 10
                 }}>
                     <h2 style={{ fontFamily: FONT, fontSize: '1.25rem', fontWeight: 700, margin: 0, color: '#111827', textTransform: 'none' }}>
@@ -222,7 +228,7 @@ const ProductModal = ({ isOpen, onClose, product: initialProduct, onSave }) => {
                     </button>
                 </div>
 
-                <form onSubmit={handleSave} style={{ padding: '32px' }}>
+                <form onSubmit={handleSave} style={{ padding: isMobile ? '24px' : '32px' }}>
                     {/* Error Banner */}
                     {error && (
                         <div style={{ padding: '12px 16px', background: '#fef2f2', border: '1px solid #fee2e2', borderRadius: '8px', color: '#b91c1c', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
@@ -235,40 +241,45 @@ const ProductModal = ({ isOpen, onClose, product: initialProduct, onSave }) => {
                         {/* Basic Info */}
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 20 }}>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 400, color: '#6b7280', marginBottom: 8, fontFamily: FONT }}>Product Name</label>
+                                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#000', marginBottom: 8, fontFamily: FONT }}>Product Name</label>
                                 <input name="name" value={product.name} onChange={handleChange} placeholder="e.g. Brunati Aqua 100ml" required
-                                    style={{ width: '100%', padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '0.9rem', outline: 'none', fontFamily: FONT }} />
+                                    className="admin-input"
+                                    style={{ width: '100%', padding: '12px 14px', fontSize: '0.9rem', outline: 'none', fontFamily: FONT, boxSizing: 'border-box' }} />
                             </div>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 400, color: '#6b7280', marginBottom: 8, fontFamily: FONT }}>Description</label>
+                                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#000', marginBottom: 8, fontFamily: FONT }}>Description</label>
                                 <textarea name="description" value={product.description} onChange={handleChange} rows={3} placeholder="Tell us more about this fragrance..."
-                                    style={{ width: '100%', padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '0.9rem', outline: 'none', fontFamily: FONT, resize: 'none' }} />
+                                    className="admin-input"
+                                    style={{ width: '100%', padding: '12px 14px', fontSize: '0.9rem', outline: 'none', fontFamily: FONT, resize: 'none', boxSizing: 'border-box' }} />
                             </div>
                         </div>
 
                         {/* Pricing & Stock */}
-                        <div style={{ display: 'grid', gridTemplateColumns: window.innerWidth < 768 ? '1fr' : '1fr 1fr 1fr', gap: 20 }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr 1fr', gap: 20 }}>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 400, color: '#6b7280', marginBottom: 8, fontFamily: FONT }}>Price (₹)</label>
+                                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#000', marginBottom: 8, fontFamily: FONT }}>Price (₹)</label>
                                 <input name="price" type="number" value={product.price} onChange={handleChange} required
-                                    style={{ width: '100%', padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '0.9rem', outline: 'none', fontFamily: FONT }} />
+                                    className="admin-input"
+                                    style={{ width: '100%', padding: '12px 14px', fontSize: '0.9rem', outline: 'none', fontFamily: FONT, boxSizing: 'border-box' }} />
                             </div>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 400, color: '#6b7280', marginBottom: 8, fontFamily: FONT }}>Compare at Price (₹)</label>
+                                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#000', marginBottom: 8, fontFamily: FONT }}>Compare at Price (₹)</label>
                                 <input name="compareAtPrice" type="number" value={product.compareAtPrice} onChange={handleChange}
-                                    style={{ width: '100%', padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '0.9rem', outline: 'none', fontFamily: FONT }} />
+                                    className="admin-input"
+                                    style={{ width: '100%', padding: '12px 14px', fontSize: '0.9rem', outline: 'none', fontFamily: FONT, boxSizing: 'border-box' }} />
                             </div>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 400, color: '#6b7280', marginBottom: 8, fontFamily: FONT }}>Inventory</label>
+                                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#000', marginBottom: 8, fontFamily: FONT }}>Inventory</label>
                                 <input name="stock" type="number" value={product.stock} onChange={handleChange}
-                                    style={{ width: '100%', padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '0.9rem', outline: 'none', fontFamily: FONT }} />
+                                    className="admin-input"
+                                    style={{ width: '100%', padding: '12px 14px', fontSize: '0.9rem', outline: 'none', fontFamily: FONT, boxSizing: 'border-box' }} />
                             </div>
                         </div>
 
                         {/* Organization */}
-                        <div style={{ display: 'grid', gridTemplateColumns: window.innerWidth < 768 ? '1fr' : '1fr 1fr', gap: 20 }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 20 }}>
                             <div style={{ position: 'relative' }}>
-                                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 400, color: '#6b7280', marginBottom: 8, fontFamily: FONT }}>Category</label>
+                                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#000', marginBottom: 8, fontFamily: FONT }}>Category</label>
                                 <CategoryDropdown 
                                     value={product.category} 
                                     options={categories || []} 
@@ -276,9 +287,10 @@ const ProductModal = ({ isOpen, onClose, product: initialProduct, onSave }) => {
                                 />
                             </div>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 400, color: '#6b7280', marginBottom: 8, fontFamily: FONT }}>Status</label>
+                                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#000', marginBottom: 8, fontFamily: FONT }}>Status</label>
                                 <select name="status" value={product.status} onChange={handleChange}
-                                    style={{ width: '100%', padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '0.9rem', outline: 'none', fontFamily: FONT, background: '#fff' }}>
+                                    className="admin-input"
+                                    style={{ width: '100%', padding: '12px 14px', fontSize: '0.9rem', outline: 'none', fontFamily: FONT, background: '#fff' }}>
                                     <option value="Active">Active</option>
                                     <option value="Draft">Draft</option>
                                 </select>
@@ -287,11 +299,12 @@ const ProductModal = ({ isOpen, onClose, product: initialProduct, onSave }) => {
 
                         {/* Media */}
                         <div>
-                            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 400, color: '#6b7280', marginBottom: 8, fontFamily: FONT }}>Product Media (Cloudinary URL)</label>
+                            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#000', marginBottom: 8, fontFamily: FONT }}>Product Media (Cloudinary URL)</label>
                             <div style={{ display: 'flex', gap: 12 }}>
                                 <input name="image" value={product.image} onChange={handleChange} placeholder="https://res.cloudinary.com/..."
-                                    style={{ flex: 1, padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '0.9rem', outline: 'none', fontFamily: FONT }} />
-                                <button type="button" onClick={() => fileInputRef.current?.click()} style={{ padding: '10px', background: '#f3f4f6', border: 'none', borderRadius: '6px', cursor: 'pointer', color: '#4b5563' }}>
+                                    className="admin-input"
+                                    style={{ flex: 1, padding: '12px 14px', fontSize: '0.9rem', outline: 'none', fontFamily: FONT }} />
+                                <button type="button" onClick={() => fileInputRef.current?.click()} style={{ padding: '12px', background: '#f3f4f6', border: 'none', borderRadius: '8px', cursor: 'pointer', color: '#000' }}>
                                     <Upload size={20} />
                                 </button>
                                 <input type="file" ref={fileInputRef} hidden />
@@ -300,16 +313,17 @@ const ProductModal = ({ isOpen, onClose, product: initialProduct, onSave }) => {
                     </div>
 
                     {/* Footer Actions */}
-                    <div style={{ marginTop: 40, paddingTop: 24, borderTop: '1px solid #f3f4f6', display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
-                        <button type="button" onClick={onClose} style={{ padding: '12px 24px', background: 'none', border: '1px solid #e5e7eb', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 700, color: '#374151', cursor: 'pointer', fontFamily: FONT, textTransform: 'none' }}>
-                            Cancel
-                        </button>
+                    <div style={{ marginTop: 40, paddingTop: 24, borderTop: '1px solid #f3f4f6', display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'flex-end', gap: 12 }}>
                         <button type="submit" disabled={!isValid || saving} style={{
-                            padding: '12px 32px', background: isValid ? '#111827' : '#9ca3af', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '0.9rem', 
-                            fontWeight: 700, cursor: isValid ? 'pointer' : 'not-allowed', fontFamily: FONT, textTransform: 'none', display: 'flex', alignItems: 'center', gap: 8, transition: 'all 0.2s'
+                            padding: '14px 32px', background: isValid ? '#000' : '#E5E7EB', color: isValid ? '#fff' : '#9CA3AF', border: 'none', borderRadius: '8px', fontSize: '0.9rem', 
+                            fontWeight: 700, cursor: isValid ? 'pointer' : 'not-allowed', fontFamily: FONT, textTransform: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s',
+                            order: isMobile ? 1 : 2
                         }}>
                             {saving ? 'Saving...' : (isEdit ? 'Update Product' : 'Add Product')}
                             {saving && <svg className="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>}
+                        </button>
+                        <button type="button" onClick={onClose} style={{ padding: '14px 24px', background: 'none', border: '1px solid #D1D5DB', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 700, color: '#000', cursor: 'pointer', fontFamily: FONT, textTransform: 'none', order: isMobile ? 2 : 1 }}>
+                            Cancel
                         </button>
                     </div>
                 </form>
@@ -317,6 +331,7 @@ const ProductModal = ({ isOpen, onClose, product: initialProduct, onSave }) => {
             <style>{`
                 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
                 @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+                @keyframes slideUpMobile { from { transform: translateY(100%); } to { transform: translateY(0); } }
                 @keyframes slideDownFade { from { transform: translateY(-10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
                 .animate-spin { animation: spin 1s linear infinite; }
                 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }

@@ -69,15 +69,17 @@ const AdminLayout = () => {
 
     return (
         <div style={{ display: 'flex', minHeight: '100vh', background: '#f9fafb', fontFamily: '"Roboto", sans-serif', overflowX: 'hidden', maxWidth: '100vw' }}>
-            <Sidebar 
-                isOpen={isSidebarOpen} 
-                isExpanded={isSidebarExpanded}
-                onToggleExpand={() => setIsSidebarExpanded(!isSidebarExpanded)}
-                onClose={() => isMobile && setIsSidebarOpen(false)} 
-                isMobile={isMobile}
-                onMouseEnter={() => setIsSidebarHovered(true)}
-                onMouseLeave={() => setIsSidebarHovered(false)}
-            />
+            {!isMobile && (
+                <Sidebar 
+                    isOpen={isSidebarOpen} 
+                    isExpanded={isSidebarExpanded}
+                    onToggleExpand={() => setIsSidebarExpanded(!isSidebarExpanded)}
+                    onClose={() => isMobile && setIsSidebarOpen(false)} 
+                    isMobile={isMobile}
+                    onMouseEnter={() => setIsSidebarHovered(true)}
+                    onMouseLeave={() => setIsSidebarHovered(false)}
+                />
+            )}
 
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', minWidth: 0 }}>
                 {/* Header Bar - Permanently Visible (Step 76) */}
@@ -96,19 +98,22 @@ const AdminLayout = () => {
                     zIndex: 40,
                     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
                 }}>
-                    <button 
-                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 5, position: 'absolute', left: '16px' }}
-                    >
-                        {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
-                    </button>
+                    {!isMobile && (
+                        <button 
+                            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 5, position: 'absolute', left: '16px' }}
+                        >
+                            {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+                        </button>
+                    )}
                     <span style={{ 
                         fontFamily: '"Roboto", sans-serif', 
                         fontSize: '1.25rem',
                         fontWeight: 700, 
                         color: '#000000',
-                        letterSpacing: '-0.02em',
-                        textTransform: 'none'
+                        letterSpacing: '-0.01em',
+                        textTransform: 'none', // Enforce Normal Case
+                        textAlign: 'center'
                     }}>
                         Admin Access
                     </span>
@@ -116,7 +121,7 @@ const AdminLayout = () => {
 
                 <main style={{
                     marginLeft: isMobile || !isSidebarOpen ? 0 : (isSidebarExpanded ? '256px' : '80px'),
-                    padding: '104px 16px 120px', 
+                    padding: isMobile ? '80px 0 120px' : '104px 16px 120px', 
                     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                     minHeight: '100vh',
                     background: '#fcfcfc',

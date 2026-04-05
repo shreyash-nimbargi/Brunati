@@ -33,99 +33,93 @@ const Customers = () => {
     };
 
     return (
-        <div style={{ fontFamily: FONT, width: '100%', animation: 'fadeIn 0.3s ease-in-out' }}>
+        <div style={{ fontFamily: FONT, width: '100%', animation: 'fadeIn 0.3s ease-in-out', padding: viewMode === 'mobile' ? '0 16px' : '0' }}>
             {/* Header Area */}
             <div style={{ 
                 display: 'flex', 
                 flexDirection: viewMode === 'mobile' ? 'column' : 'row', 
                 justifyContent: 'space-between', 
                 alignItems: viewMode === 'mobile' ? 'flex-start' : 'center',
-                gap: 16,
-                marginBottom: 24,
-                paddingBottom: 24,
-                borderBottom: '1px solid rgba(0,0,0,0.08)'
+                gap: 20,
+                marginBottom: 24
             }}>
-                <h1 style={{ fontFamily: FONT, fontSize: '1.4rem', fontWeight: 700, color: '#1d1d1f', margin: 0, letterSpacing: 'normal', textTransform: 'none' }}>Customers</h1>
+                <h1 style={{ fontFamily: FONT, fontSize: '1.5rem', fontWeight: 700, color: '#000', margin: 0, letterSpacing: '-0.01em', textTransform: 'none' }}>Customers</h1>
                 
                 <div style={{ display: 'flex', gap: 16, width: viewMode === 'mobile' ? '100%' : 'auto', alignItems: 'center' }}>
                     <div style={{ position: 'relative', flex: 1, minWidth: viewMode === 'mobile' ? 'auto' : '280px' }}>
                         <input 
                             type="text" 
-                            placeholder="Find customers..." 
+                            placeholder="Search customers..." 
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             style={{
-                                width: '100%', padding: '10px 12px 10px 32px', border: '1px solid #d1d5db',
-                                borderRadius: '6px', fontSize: '0.85rem', outline: 'none', background: '#fff',
-                                boxSizing: 'border-box', transition: 'border-color 0.2s', fontFamily: FONT
+                                width: '100%', padding: '12px 12px 12px 36px', border: '1px solid #D1D5DB', // High contrast
+                                borderRadius: '8px', fontSize: '0.9rem', outline: 'none', background: '#fff',
+                                boxSizing: 'border-box', transition: 'all 0.2s', fontFamily: FONT
                             }}
-                            onFocus={e => e.currentTarget.style.borderColor = '#9ca3af'}
-                            onBlur={e => e.currentTarget.style.borderColor = '#d1d5db'}
+                            onFocus={e => e.currentTarget.style.borderColor = '#000'}
+                            onBlur={e => e.currentTarget.style.borderColor = '#D1D5DB'}
                         />
-                        <svg style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }} width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                        <svg style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }} width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </div>
 
-                    <a href="#" onClick={handleExport} style={{
-                        fontSize: '0.85rem', fontWeight: 500, color: '#2563eb', textDecoration: 'none', whiteSpace: 'nowrap', fontFamily: FONT
+                    <button onClick={handleExport} style={{
+                        background: 'none', border: 'none', fontSize: '0.85rem', fontWeight: 700, color: '#000', cursor: 'pointer', fontFamily: FONT, textTransform: 'none'
                     }}>
-                        Export CSV
-                    </a>
+                        Export
+                    </button>
                 </div>
             </div>
 
-            {/* Customers Table */}
-            <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', overflowX: 'auto', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: viewMode === 'mobile' ? '100%' : '800px' }}>
-                    <thead>
-                        <tr style={{ borderBottom: '1px solid #e5e7eb', background: '#f9fafb' }}>
-                            <th style={{ fontFamily: FONT, padding: '10px 16px', fontSize: '0.8rem', fontWeight: 700, color: '#4b5563' }}>Customer Name</th>
-                            {viewMode === 'desktop' && (
-                                <th style={{ fontFamily: FONT, padding: '10px 16px', fontSize: '0.8rem', fontWeight: 700, color: '#4b5563' }}>Email</th>
-                            )}
-                            {viewMode === 'desktop' && (
-                                <th style={{ fontFamily: FONT, padding: '10px 16px', fontSize: '0.8rem', fontWeight: 700, color: '#4b5563' }}>Location</th>
-                            )}
-                            {viewMode === 'desktop' && (
-                                <th style={{ fontFamily: FONT, padding: '10px 16px', fontSize: '0.8rem', fontWeight: 700, color: '#4b5563' }}>Orders Count</th>
-                            )}
-                            <th style={{ fontFamily: FONT, padding: '10px 16px', fontSize: '0.8rem', fontWeight: 700, color: '#4b5563', textAlign: 'right' }}>Total Spent</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredCustomers.length > 0 ? filteredCustomers.map((c, idx) => (
-                            <tr key={c.id} style={{ borderBottom: idx === filteredCustomers.length - 1 ? 'none' : '1px solid #e5e7eb', transition: 'background-color 0.15s' }} onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f9fafb'} onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}>
-                                <td style={{ padding: '12px 16px' }}>
-                                    <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#111827', fontFamily: FONT }}>{c.name}</div>
-                                </td>
-                                {viewMode === 'desktop' && (
-                                    <td style={{ padding: '12px 16px' }}>
-                                        <div style={{ fontSize: '0.85rem', color: '#6b7280', fontFamily: FONT }}>{c.email}</div>
-                                    </td>
-                                )}
-                                {viewMode === 'desktop' && (
-                                    <td style={{ padding: '12px 16px', fontSize: '0.85rem', color: '#374151', fontFamily: FONT }}>
-                                        {c.location}
-                                    </td>
-                                )}
-                                {viewMode === 'desktop' && (
-                                    <td style={{ padding: '12px 16px', fontSize: '0.85rem', color: '#374151', fontFamily: FONT }}>
-                                        {c.ordersCount} {c.ordersCount === 1 ? 'order' : 'orders'}
-                                    </td>
-                                )}
-                                <td style={{ padding: '12px 16px', fontSize: '0.85rem', fontWeight: 700, color: '#111827', textAlign: 'right', fontFamily: FONT }}>₹{c.totalSpent.toLocaleString()}</td>
+            {/* Customers Layout: Table for Desktop, 1-Column Grid for Mobile */}
+            {viewMode === 'desktop' ? (
+                <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                        <thead>
+                            <tr style={{ borderBottom: '1px solid #e5e7eb', background: '#f9fafb' }}>
+                                <th style={{ fontFamily: FONT, padding: '14px 20px', fontSize: '0.8rem', fontWeight: 700, color: '#6b7280' }}>Customer</th>
+                                <th style={{ fontFamily: FONT, padding: '14px 20px', fontSize: '0.8rem', fontWeight: 700, color: '#6b7280' }}>Email</th>
+                                <th style={{ fontFamily: FONT, padding: '14px 20px', fontSize: '0.8rem', fontWeight: 700, color: '#6b7280' }}>Location</th>
+                                <th style={{ fontFamily: FONT, padding: '14px 20px', fontSize: '0.8rem', fontWeight: 700, color: '#6b7280' }}>Orders</th>
+                                <th style={{ fontFamily: FONT, padding: '14px 20px', fontSize: '0.8rem', fontWeight: 700, color: '#6b7280', textAlign: 'right' }}>Spent</th>
                             </tr>
-                        )) : (
-                            <tr>
-                                <td colSpan={viewMode === 'desktop' ? 5 : 2} style={{ padding: '32px 16px', textAlign: 'center', fontSize: '0.85rem', color: '#6b7280', fontFamily: FONT }}>
-                                    No customers yet.
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            {filteredCustomers.length > 0 ? filteredCustomers.map((c, idx) => (
+                                <tr key={c.id} style={{ borderBottom: idx === filteredCustomers.length - 1 ? 'none' : '1px solid #e5e7eb' }}>
+                                    <td style={{ padding: '14px 20px', fontSize: '0.85rem', fontWeight: 700, color: '#000' }}>{c.name}</td>
+                                    <td style={{ padding: '14px 20px', fontSize: '0.85rem', color: '#666' }}>{c.email}</td>
+                                    <td style={{ padding: '14px 20px', fontSize: '0.85rem', color: '#666' }}>{c.location}</td>
+                                    <td style={{ padding: '14px 20px', fontSize: '0.85rem', color: '#000' }}>{c.ordersCount}</td>
+                                    <td style={{ padding: '14px 20px', fontSize: '0.85rem', fontWeight: 700, color: '#000', textAlign: 'right' }}>₹{c.totalSpent.toLocaleString()}</td>
+                                </tr>
+                            )) : (
+                                <tr><td colSpan={5} style={{ padding: '48px', textAlign: 'center', color: '#9ca3af' }}>No customers found.</td></tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            ) : (
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 16 }}>
+                    {filteredCustomers.length > 0 ? filteredCustomers.map((c) => (
+                        <div key={c.id} style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '16px', boxShadow: '0 1px 2px rgba(0,0,0,0.03)' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                                <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#000' }}>{c.name}</div>
+                                <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#000' }}>₹{c.totalSpent.toLocaleString()}</div>
+                            </div>
+                            <div style={{ fontSize: '0.8rem', color: '#666', marginBottom: 12 }}>{c.email}</div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 12, borderTop: '1px solid #f9fafb' }}>
+                                <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>{c.location}</div>
+                                <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#666' }}>{c.ordersCount} {c.ordersCount === 1 ? 'Order' : 'Orders'}</div>
+                            </div>
+                        </div>
+                    )) : (
+                        <div style={{ padding: '48px', textAlign: 'center', color: '#9ca3af', border: '1px dashed #e5e7eb', borderRadius: 12 }}>No customers found.</div>
+                    )}
+                </div>
+            )}
             <style>{`
                 @keyframes fadeIn {
                     from { opacity: 0; transform: translateY(5px); }

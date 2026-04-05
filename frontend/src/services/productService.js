@@ -44,6 +44,28 @@ export const productService = {
             console.error(`Error fetching reviews for product ${productId}:`, error);
             throw error;
         }
+    },
+
+    // Update product
+    updateProduct: async (id, data) => {
+        try {
+            const response = await api.put(`/products/${id}`, data);
+            return response.data;
+        } catch (error) {
+            console.error(`Error updating product ${id}:`, error);
+            throw error;
+        }
+    },
+
+    // Create product
+    createProduct: async (data) => {
+        try {
+            const response = await api.post('/products', data);
+            return response.data;
+        } catch (error) {
+            console.error('Error creating product:', error);
+            throw error;
+        }
     }
 };
 

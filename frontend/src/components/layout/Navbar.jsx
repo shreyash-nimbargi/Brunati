@@ -59,7 +59,7 @@ const Navbar = () => {
 
                 <Link to="/" className="logo-text">Brunati</Link>
 
-                <div className="nav-group right">
+                <div className="nav-group right pr-6">
                     {/* Desktop wishlist → /wishlist */}
                     <Link to="/wishlist" className="icon-btn wishlist-desktop-btn" aria-label="Wishlist">
                         <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>

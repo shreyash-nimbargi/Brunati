@@ -129,7 +129,7 @@ const FamousPeople = ({ isMobile }) => {
             ) : people.length === 0 ? (
                 <div className="py-24 flex flex-col items-center justify-center bg-gray-50/50 rounded-3xl border border-dashed border-gray-200">
                     <User size={32} className="text-gray-300 mb-4" />
-                    <h3 className="font-bold text-black uppercase" style={{ fontFamily: FONT_ROBOTO_BOLD }}>NO ENTRIES FOUND</h3>
+                    <h3 className="font-bold text-black normal-case" style={{ fontFamily: FONT_ROBOTO_BOLD }}>No Entries Found</h3>
                     <p className="text-sm text-gray-500 mt-1">Add your first famous person entry to populate the storefront.</p>
                 </div>
             ) : (
@@ -151,7 +151,7 @@ const FamousPeople = ({ isMobile }) => {
                                         <User size={32} className="text-gray-200" />
                                     )}
                                 </div>
-                                <p className="text-[12px] text-gray-400 font-normal uppercase tracking-widest mb-1" style={{ fontFamily: FONT_ROBOTO_REGULAR }}>
+                                <p className="text-[12px] text-gray-400 font-normal normal-case tracking-widest mb-1" style={{ fontFamily: FONT_ROBOTO_REGULAR }}>
                                     {person.profession || person.role || 'Brand Influencer'}
                                 </p>
                                 <h4 className="font-bold text-black text-lg mb-2" style={{ fontFamily: FONT_ROBOTO_BOLD, textTransform: 'none' }}>
@@ -181,7 +181,7 @@ const FamousPeople = ({ isMobile }) => {
                         </div>
                         <form onSubmit={handleSave} className="p-6 space-y-5">
                             <div className="group">
-                                <label className="text-[11px] font-bold text-gray-700 pl-1 mb-1.5 block uppercase tracking-wider" style={{ fontFamily: FONT_ROBOTO_BOLD }}>
+                                <label className="text-[11px] font-bold text-gray-700 pl-1 mb-1.5 block normal-case tracking-wider" style={{ fontFamily: FONT_ROBOTO_BOLD }}>
                                     Full Name
                                 </label>
                                 <input 
@@ -194,7 +194,7 @@ const FamousPeople = ({ isMobile }) => {
                             </div>
 
                             <div className="group">
-                                <label className="text-[11px] font-bold text-gray-700 pl-1 mb-1.5 block uppercase tracking-wider" style={{ fontFamily: FONT_ROBOTO_BOLD }}>
+                                <label className="text-[11px] font-bold text-gray-700 pl-1 mb-1.5 block normal-case tracking-wider" style={{ fontFamily: FONT_ROBOTO_BOLD }}>
                                     Profession / Role
                                 </label>
                                 <input 
@@ -207,7 +207,7 @@ const FamousPeople = ({ isMobile }) => {
                             </div>
 
                             <div className="group">
-                                <label className="text-[11px] font-bold text-gray-700 pl-1 mb-1.5 block uppercase tracking-wider" style={{ fontFamily: FONT_ROBOTO_BOLD }}>
+                                <label className="text-[11px] font-bold text-gray-700 pl-1 mb-1.5 block normal-case tracking-wider" style={{ fontFamily: FONT_ROBOTO_BOLD }}>
                                     Wearing (Perfume Name)
                                 </label>
                                 <input 
@@ -220,7 +220,7 @@ const FamousPeople = ({ isMobile }) => {
                             </div>
 
                             <div className="group">
-                                <label className="text-[11px] font-bold text-gray-700 pl-1 mb-1.5 block uppercase tracking-wider" style={{ fontFamily: FONT_ROBOTO_BOLD }}>
+                                <label className="text-[11px] font-bold text-gray-700 pl-1 mb-1.5 block normal-case tracking-wider" style={{ fontFamily: FONT_ROBOTO_BOLD }}>
                                     Image URL (Cloudinary)
                                 </label>
                                 <div className="relative">

@@ -81,7 +81,7 @@ const OlfactoryTrends = ({ isMobile }) => {
                     
                     {/* Select Product Area with Search */}
                     <div className="flex flex-col gap-3 relative z-10">
-                        <label className="text-[11px] font-bold text-gray-700 flex items-center gap-2 uppercase tracking-wider">
+                        <label className="text-[11px] font-bold text-gray-700 flex items-center gap-2 normal-case tracking-wider">
                             <Package size={14} /> Select Product
                         </label>
                         
@@ -123,7 +123,7 @@ const OlfactoryTrends = ({ isMobile }) => {
 
                     {/* Video URL Field */}
                     <div className="flex flex-col gap-3 relative z-10">
-                        <label className="text-[11px] font-bold text-gray-700 flex items-center gap-2 uppercase tracking-wider">
+                        <label className="text-[11px] font-bold text-gray-700 flex items-center gap-2 normal-case tracking-wider">
                             <Video size={14} /> Upload Trend Video / URL
                         </label>
                         <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} gap-4`}>

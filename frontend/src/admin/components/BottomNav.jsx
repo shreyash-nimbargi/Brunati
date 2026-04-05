@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, ShoppingCart, Package, Users, Settings } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, Package, Users, Grid } from 'lucide-react';
 
 const BottomNav = () => {
     const location = useLocation();
@@ -8,10 +8,10 @@ const BottomNav = () => {
 
     const navItems = [
         { name: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
-        { name: 'Orders',    path: '/admin/orders',    icon: ShoppingCart },
+        { name: 'Orders',    path: '/admin/orders',    icon: ShoppingBag },
         { name: 'Inventory', path: '/admin/inventory', icon: Package },
         { name: 'Customers', path: '/admin/customers', icon: Users },
-        { name: 'Edit Site', path: '/admin/editsite',  icon: Settings }
+        { name: 'Edit Site', path: '/admin/editsite',  icon: Grid }
     ];
 
     return (
@@ -22,12 +22,13 @@ const BottomNav = () => {
             width: '100%',
             height: '64px',
             background: '#ffffff',
-            borderTop: '1px solid #f0f0f0',
+            borderTop: '1px solid rgba(0,0,0,0.05)', // Thin top border
             display: 'flex',
             justifyContent: 'space-around',
             alignItems: 'center',
             zIndex: 50,
-            paddingBottom: 'env(safe-area-inset-bottom)'
+            paddingBottom: 'env(safe-area-inset-bottom)',
+            boxShadow: '0 -4px 12px rgba(0,0,0,0.03)'
         }}>
             {navItems.map((item) => {
                 const isActive = location.pathname.startsWith(item.path);
@@ -40,17 +41,19 @@ const BottomNav = () => {
                             flexDirection: 'column',
                             alignItems: 'center',
                             textDecoration: 'none',
-                            color: isActive ? '#000000' : '#9ca3af',
+                            color: isActive ? '#000000' : '#9ca3af', // Active: Black, Inactive: Gray-400
                             gap: '4px',
-                            minWidth: '60px'
+                            minWidth: '64px',
+                            transition: 'color 0.2s ease'
                         }}
                     >
-                        <item.icon size={20} strokeWidth={isActive ? 2.5 : 2} />
+                        <item.icon size={20} className="shrink-0" strokeWidth={isActive ? 2.5 : 2} />
                         <span style={{ 
                             fontSize: '10px', 
                             fontFamily: FONT_ROBOTO,
                             fontWeight: isActive ? 700 : 400,
-                            letterSpacing: '0.02em'
+                            letterSpacing: '0.01em',
+                            textTransform: 'none'
                         }}>
                             {item.name}
                         </span>

@@ -10,6 +10,7 @@ import { useWishlist } from '../context/WishlistContext';
 
 import { productService } from '../services/productService';
 import { userService } from '../services/userService';
+import { productsData } from '../data/products';
 
 
 const ProductDetail = () => {
@@ -60,16 +61,29 @@ const ProductDetail = () => {
                         const allProducts = allResponse.data.data || allResponse.data || [];
                         setRelatedProducts(allProducts.filter(p => (p.slug || p._id) !== slug).slice(0, 4));
                     }
-
-
-
-
                 } else {
-                    setError('Product not found');
+                    // Fallback to static data
+                    const staticProduct = Object.values(productsData).find(p => p.slug === slug);
+                    if (staticProduct) {
+                        setProduct(staticProduct);
+                        setMainImg(staticProduct.images[0]);
+                        setPrice(staticProduct.price || 0);
+                        setSelectedSize('100ml');
+                    } else {
+                        setError('Product not found');
+                    }
                 }
             } catch (err) {
                 console.error('Fetch detail error:', err);
-                setError('Product not found');
+                const staticProduct = Object.values(productsData).find(p => p.slug === slug);
+                if (staticProduct) {
+                    setProduct(staticProduct);
+                    setMainImg(staticProduct.images[0]);
+                    setPrice(staticProduct.price || 0);
+                    setSelectedSize('100ml');
+                } else {
+                    setError('Product not found');
+                }
             } finally {
                 setLoading(false);
             }
@@ -106,24 +120,24 @@ const ProductDetail = () => {
     );
 
     if (error) return (
-        <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 text-center">
-            <div className="mb-8 p-12 bg-gray-50 rounded-full">
-                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-gray-100">
+        <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 text-center" style={{ fontFamily: '"Roboto", sans-serif' }}>
+            <div className="mb-12">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="10" />
                     <line x1="12" y1="8" x2="12" y2="12" />
                     <line x1="12" y1="16" x2="12.01" y2="16" />
                 </svg>
             </div>
-            <h1 className="font-roboto font-bold text-3xl text-black mb-3" style={{ textTransform: 'none', fontFamily: '"Roboto", sans-serif' }}>Product not found</h1>
-            <p className="font-roboto font-normal text-gray-500 max-w-sm mb-10 leading-relaxed" style={{ fontFamily: '"Roboto", sans-serif' }}>
-                The fragrance you are looking for may have been moved or renamed in our collection.
+            <h1 className="font-roboto font-bold text-4xl text-black mb-4" style={{ textTransform: 'none', fontWeight: 700 }}>Exclusive Product Not Found</h1>
+            <p className="font-roboto font-normal text-gray-500 max-w-sm mb-12 text-lg leading-relaxed">
+                The fragrance you are looking for may have been archived or belongs to an invitation-only collection.
             </p>
             <button 
                 onClick={() => navigate('/shop')}
-                className="bg-black text-white px-10 py-4 font-roboto font-bold uppercase tracking-widest hover:bg-gray-900 transition-all shadow-xl"
-                style={{ fontFamily: '"Roboto", sans-serif' }}
+                className="bg-black text-white px-12 py-5 font-roboto font-bold uppercase tracking-widest hover:bg-gray-800 transition-all shadow-2xl active:scale-95"
+                style={{ fontWeight: 700 }}
             >
-                Back to Shop
+                Return to Shop
             </button>
         </div>
     );
@@ -191,9 +205,9 @@ const ProductDetail = () => {
                         </div>
                         <div className="price" style={{
                             fontSize: '1.8rem',
-                            fontWeight: 360,
+                            fontWeight: 700,
                             marginBottom: '24px',
-                            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+                            fontFamily: '"Roboto", sans-serif',
                             color: '#1d1d1f'
                         }}>₹ {price}.00</div>
 
@@ -303,14 +317,14 @@ const ProductDetail = () => {
                 `}</style>
                     <h2 className="strict-casing-override" style={{
                         textAlign: 'left',
-                        fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
+                        fontFamily: '"Roboto", sans-serif',
                         fontWeight: 700,
                         fontSize: 'clamp(2rem, 5vw, 2.5rem)',
                         marginBottom: '40px',
                         color: '#111',
-                        letterSpacing: '0.05em'
+                        letterSpacing: '-0.01em'
                     }}>
-                        Our Story
+                        The Olfactory Story
                     </h2>
 
                     <div style={{ width: '100%', borderRadius: '16px', overflow: 'hidden', marginBottom: '60px' }}>
@@ -333,15 +347,14 @@ const ProductDetail = () => {
                         {product.story?.sections?.map((section, idx) => (
                             <div key={idx}>
                                 <h3 className="strict-casing-override" style={{
-                                    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
+                                    fontFamily: '"Roboto", sans-serif',
                                     fontWeight: 700,
                                     fontSize: '19px',
                                     marginBottom: '14px',
-                                    color: '#000000',
-                                    letterSpacing: '0.02em'
+                                    color: '#000000'
                                 }}>{section.title}</h3>
                                 <p style={{
-                                    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
+                                    fontFamily: '"Roboto", sans-serif',
                                     color: '#8e8e93',
                                     lineHeight: '1.6',
                                     fontSize: '1rem',

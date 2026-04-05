@@ -50,20 +50,21 @@ const Summary = () => {
         <div style={{ fontFamily: FONT, opacity: loading ? 0.6 : 1, transition: 'opacity 0.2s' }}>
             {/* Header */}
             <div style={{ 
-                marginBottom: 24, paddingBottom: 24, borderBottom: '1px solid rgba(0,0,0,0.08)',
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center' 
+                marginBottom: 32, paddingBottom: 24, borderBottom: '1px solid #eee',
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                flexDirection: viewMode === 'mobile' ? 'column' : 'row', gap: 16
             }}>
-                <div style={{ paddingRight: 20 }}>
-                    <h1 style={{ fontFamily: FONT, fontSize: '1.4rem', fontWeight: 700, color: '#000', margin: 0, textTransform: 'none', letterSpacing: 'normal' }}>Dashboard</h1>
-                    <p style={{ fontSize: '0.85rem', color: '#6e6e73', marginTop: 4, fontWeight: 400 }}>Analytics Overview</p>
+                <div style={{ textAlign: viewMode === 'mobile' ? 'center' : 'left', width: viewMode === 'mobile' ? '100%' : 'auto' }}>
+                    <h1 style={{ fontFamily: FONT, fontSize: '1.5rem', fontWeight: 700, color: '#000', margin: 0, textTransform: 'none', letterSpacing: '-0.01em' }}>Dashboard</h1>
+                    <p style={{ fontSize: '0.85rem', color: '#666', marginTop: 4, fontWeight: 400 }}>Analytics Overview</p>
                 </div>
                 <button 
                     onClick={handleRefresh}
                     style={{
-                        padding: '10px 20px', minHeight: 44, background: '#fff', border: '1px solid #eee',
-                        borderRadius: 0, fontWeight: 700, fontSize: '0.8rem', cursor: 'pointer',
+                        padding: '12px 24px', background: '#fff', border: '1px solid #D1D5DB', // High contrast
+                        borderRadius: '8px', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
                         display: 'flex', alignItems: 'center', gap: 8, transition: 'all 0.2s',
-                        flexShrink: 0
+                        fontFamily: FONT, width: viewMode === 'mobile' ? '100%' : 'auto', justifyContent: 'center'
                     }}
                     onMouseEnter={e => { e.currentTarget.style.borderColor = '#111'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)'; }}
                     onMouseLeave={e => { e.currentTarget.style.borderColor = '#eee'; e.currentTarget.style.boxShadow = 'none'; }}

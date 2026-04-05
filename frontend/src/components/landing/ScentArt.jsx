@@ -102,7 +102,7 @@ const ScentArt = () => {
                                     key={`${product?._id || idx}-${idx}`} 
                                     className="scent-slide-wrapper" 
                                     style={{ cursor: 'pointer' }}
-                                    onClick={() => navigate(`/product/${product?.slug}`)}
+                                    onClick={() => navigate(`/product/${product?.slug || product?._id}`)}
                                 >
                                     <img src={imgPath} className="scent-slide-img" alt={product?.name} />
                                 </div>

@@ -127,7 +127,7 @@ const Reviews = ({ isMobile }) => {
             ) : reviews.length === 0 ? (
                 <div className="py-24 flex flex-col items-center justify-center bg-gray-50/50 rounded-3xl border border-dashed border-gray-200">
                     <Star size={32} className="text-gray-300 mb-4" />
-                    <h3 className="font-bold text-black" style={{ fontFamily: FONT_ROBOTO_BOLD }}>NO REVIEWS YET</h3>
+                    <h3 className="font-bold text-black" style={{ fontFamily: FONT_ROBOTO_BOLD }}>No Reviews Yet</h3>
                     <p className="text-sm text-gray-500 mt-1">Be the first to add a customer testimonial</p>
                 </div>
             ) : (
@@ -186,7 +186,7 @@ const Reviews = ({ isMobile }) => {
                         </div>
                         <form onSubmit={handleSave} className="p-6 space-y-5">
                             <div className="group">
-                                <label className="text-[11px] font-bold text-gray-700 pl-1 mb-1.5 block uppercase tracking-wider" style={{ fontFamily: FONT_ROBOTO_BOLD }}>
+                                <label className="text-[11px] font-bold text-gray-700 pl-1 mb-1.5 block normal-case tracking-wider" style={{ fontFamily: FONT_ROBOTO_BOLD }}>
                                     Customer Name
                                 </label>
                                 <input 
@@ -199,7 +199,7 @@ const Reviews = ({ isMobile }) => {
                             </div>
 
                             <div className="group">
-                                <label className="text-[11px] font-bold text-gray-700 pl-1 mb-1.5 block uppercase tracking-wider" style={{ fontFamily: FONT_ROBOTO_BOLD }}>
+                                <label className="text-[11px] font-bold text-gray-700 pl-1 mb-1.5 block normal-case tracking-wider" style={{ fontFamily: FONT_ROBOTO_BOLD }}>
                                     Rating (1-5 Stars)
                                 </label>
                                 <div className="flex gap-2 p-2 bg-gray-50 rounded-xl border border-gray-100 justify-center">
@@ -221,7 +221,7 @@ const Reviews = ({ isMobile }) => {
                             </div>
 
                             <div className="group">
-                                <label className="text-[11px] font-bold text-gray-700 pl-1 mb-1.5 block uppercase tracking-wider" style={{ fontFamily: FONT_ROBOTO_BOLD }}>
+                                <label className="text-[11px] font-bold text-gray-700 pl-1 mb-1.5 block normal-case tracking-wider" style={{ fontFamily: FONT_ROBOTO_BOLD }}>
                                     Review Text
                                 </label>
                                 <textarea 
